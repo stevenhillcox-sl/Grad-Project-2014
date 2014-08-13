@@ -1,7 +1,10 @@
 {
-      "name": "Grad-Project-2014",
-      "version": "0.0.1",
-      "description": "A game with no name",
-      "main": "server.js",
-      "dependencies": {}
+  "name": "Grad-Project-2014",
+  "version": "0.0.1",
+  "description": "A game with no name",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.8.3",
+    "socket.io": "^1.0.6"
+  }
 }
