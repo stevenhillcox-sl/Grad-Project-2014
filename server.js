@@ -19,12 +19,22 @@ app.use(express.static("/home/ubuntu/workspace/html"));
 var sockets = [];
 var wss = new ws({server : http});
 
-var clients = [];
-function findClientBySocket(socket)
+var players = [];
+
+function findPlayerBySocket(socket)
 {
-    return clients.filter(function(element){
+    return players.filter(function(element){
        return element.socket == socket;
     });
+}
+
+function getPlayerNames()
+{
+    var playerNames = [];
+    players.forEach(function(player){
+        playerNames.push(player.userName);
+    });
+    return playerNames;
 }
 
 // Listen for socket connections
@@ -47,7 +57,7 @@ wss.on('connection', function(socket){
     {
         sockets.splice(sockets.indexOf(socket));
         
-        clients.splice(clients.indexOf(findClientBySocket(socket)));
+        players.splice(players.indexOf(findPlayerBySocket(socket)));
     });
 });
 
@@ -71,20 +81,20 @@ function handleMessage(socketMessage, socket)
 {
     var message = JSON.parse(""+socketMessage);
     
-    if (clients.length < 2)
+    if (players.length < 2)
     {
-        clients.push({'userName': message.messageData, 'socket': socket});
+        players.push({'userName': message.messageData, 'socket': socket});
         
         socket.send(createMessage('info', "Waiting for The Game to start"));
         
-        if (clients.length == 2)
+        if (players.length == 2)
         {
             broadcastMessage(createMessage('info', "The Game is starting"));
+            broadcastMessage(createMessage('playerInfo', getPlayerNames()));
         }
     }
     else 
     {
         socket.send(createMessage('info', "Server is currently full"));
     }
-    //console.log(message);
 }

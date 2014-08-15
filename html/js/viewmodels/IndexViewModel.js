@@ -3,6 +3,7 @@ function IndexViewModel() {
     // Create observables
     this.userName = ko.observable('User' + Math.floor(Math.random()*1000));
     this.serverMessages = ko.observableArray();
+    this.players = ko.observableArray();
     //this.connectionStatus = ko.observable();
     
     var self = this;
@@ -14,7 +15,14 @@ function IndexViewModel() {
     // Display information messages to the user
     var onMessage = function(message)
     {
-        self.serverMessages.unshift(message.messageData);
+        if(message.messageType == 'playerInfo')
+        {
+            self.players(message.messageData);
+        }
+        else
+        {
+            self.serverMessages.unshift(message.messageData);
+        }
     };
     
     var onConnected = function()

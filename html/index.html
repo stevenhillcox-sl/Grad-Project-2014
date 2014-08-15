@@ -20,6 +20,9 @@
                 <div id="messageArea" data-bind="foreach: serverMessages">
                     <div data-bind="text: $data"></div>
                 </div>
+                <div id="players" data-bind="foreach: players">
+                    <div data-bind="text: $data"></div>
+                </div>
                 <!--<p id="connectMessage" data-bind="visible: connectionStatus() != null, text:connectionStatus"></p>-->
             </span>
         </div>
