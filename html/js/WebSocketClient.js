@@ -10,7 +10,7 @@ function WebSocketClient(onConnected, onMessage)
     
     this.connect = function()
     {
-        var ws = new WebSocket(config.socketURL);
+        var ws = new WebSocket("ws://"+window.location.hostname);                                      
         
         ws.onopen = function()
         {
