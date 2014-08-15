@@ -1,4 +1,4 @@
 var config = 
 {
-    socketURL : "localhost"   
+    socketURL : "localhost"
 }
