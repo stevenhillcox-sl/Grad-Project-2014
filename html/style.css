@@ -1,4 +1,9 @@
 h1 {
     text-align: center;
     font-family: 'Muli', sans-serif;
-}   
+}
+
+#messageArea {
+    max-height: 200px;
+    overflow-y: auto;
+}

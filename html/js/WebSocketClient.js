@@ -1,30 +1,34 @@
-function WebSocketClient()
+function WebSocketClient(onConnected, onMessage)
 {
-    this.onConnected = null;
     var self = this;
+    this.sendMessage = null;
     
-    this.connect = function(connectionStatus)
+    this.createMessage = function(messageType, messageData)
+    {
+        return JSON.stringify({'messageType': messageType, 'messageData' : messageData});
+    }
+    
+    this.connect = function()
     {
         var ws = new WebSocket("ws://grad-project-2014-dev-c9-shillcox.c9.io");
         
         ws.onopen = function()
         {
-            self.onConnected && self.onConnected();
+            // Send a message to the server
+            self.sendMessage = function(message)
+            {
+                ws.send(message);
+            }
+            
+            onConnected && onConnected();
         }
         
-        ws.onclose = function()
+        // Handle incoming messages
+        ws.onmessage = function(socketMessage)
         {
-            console.log("Connection closed");
-        }
-        
-        ws.onerror = function()
-        {
-            console.log("Problem with connection");
-        }
-        
-        ws.onmessage = function(message)
-        {
-            console.log("MESSAGE: " + message.data);
+            var message = JSON.parse(socketMessage.data);
+            
+            onMessage && onMessage(message);
         }
     }
 };

@@ -19,32 +19,72 @@ app.use(express.static("/home/ubuntu/workspace/html"));
 var sockets = [];
 var wss = new ws({server : http});
 
+var clients = [];
+function findClientBySocket(socket)
+{
+    return clients.filter(function(element){
+       return element.socket == socket;
+    });
+}
+
 // Listen for socket connections
 wss.on('connection', function(socket){
-    console.log('Connection established');
+    console.log("Client connected");
+    // Add the new socket to our list of sockets
     sockets.push(socket);
     
-    socket.send('Welcome to the server');
+    // Send a success message to the client
+    socket.send(createMessage('info', 'Connected'));
     
+    // Set up handler for incoming messages
     socket.on('message', function(message)
     {
        handleMessage(message, socket);
     });
-});
-
-wss.on('close', function(socket){
-     sockets.splice(sockets.indexOf(socket));
-});
-
-function broadcastMessage(message)
-{
-    for(var i in sockets)
+    
+    // Handle socket closes by removing the socket from our list
+    socket.on('close', function()
     {
-        sockets[i].send(message)
-    }
+        sockets.splice(sockets.indexOf(socket));
+        
+        clients.splice(clients.indexOf(findClientBySocket(socket)));
+    });
+});
+
+// Create a JSON message to be sent to the user
+function createMessage(messageType, messageData)
+{
+    return JSON.stringify({'messageType': messageType, 'messageData' : messageData});
 }
 
-function handleMessage(message, socket)
+// Send a message to all sockets
+function broadcastMessage(message)
 {
-    broadcastMessage(message);
+    sockets.forEach(function(socket)
+    {
+        socket.send(message);
+    });
+}
+
+// Handle an incoming message
+function handleMessage(socketMessage, socket)
+{
+    var message = JSON.parse(""+socketMessage);
+    
+    if (clients.length < 2)
+    {
+        clients.push({'userName': message.messageData, 'socket': socket});
+        
+        socket.send(createMessage('info', "Waiting for The Game to start"));
+        
+        if (clients.length == 2)
+        {
+            broadcastMessage(createMessage('info', "The Game is starting"));
+        }
+    }
+    else 
+    {
+        socket.send(createMessage('info', "Server is currently full"));
+    }
+    //console.log(message);
 }
