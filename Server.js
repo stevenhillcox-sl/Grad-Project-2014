@@ -59,7 +59,7 @@ function Server() {
     this.findPlayerBySocket = function(socket) {
         return self.players.filter(function(element){
            return element.socket == socket;
-        });
+        })[0];
     }
     
     this.getPlayerNames = function() {
