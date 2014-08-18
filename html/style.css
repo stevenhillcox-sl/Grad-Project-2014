@@ -7,3 +7,7 @@ h1 {
     max-height: 200px;
     overflow-y: auto;
 }
+
+#players {
+    background-color: #ffff00;
+}

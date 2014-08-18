@@ -1,18 +1,41 @@
 /* global describe, it, expect */
-// var WebSocket = require('ws');
+describe("Server ", function() {
+    var s = require('../Server.js').Server;
+    var server;
 
-// describe("Websocket ", function(){
-//   it("creates a websocket", function()
-//   {
-//       var testMessage = "Hello";
-//       var ws = new WebSocket("ws://grad-project-2014-dev-c9-shillcox.c9.io");
-//       ws.onopen = function()
-//       {
-//           ws.send(testMessage);
-//           ws.onmessage = function(message)
-//           {
-//              expect(message.data).toBe(testMessage);
-//           };
-//       };
-//   }); 
-// });
+    beforeEach(function(){
+        server = new s();
+    });
+    
+    it("can create a messsage", function() {
+        var testMessage = server.createMessage('type', 'Hello World!');
+        expect(testMessage).toBe('{"messageType":"type","messageData":"Hello World!"}');
+    });
+    
+    it("broadcast to sockets", function() {
+        
+        var messages = []
+        var sendFunction = function(message){
+            messages.push(message);
+        }
+        
+        server.sockets = [
+                { send: sendFunction },
+                { send: sendFunction },
+                { send: sendFunction }
+            ];
+            
+        server.broadcastMessage('Hello');
+        expect(messages).toEqual(['Hello', 'Hello', 'Hello']);
+        
+        // var testMessage = server.createMessage('type', 'Hello World!');
+        // expect(testMessage).toBe('{"messageType":"type","messageData":"Hello World!"}');
+        
+        
+    });
+    
+    it("is constructed with no sockets", function() {
+        expect(server.sockets.length).toBe(0);
+    });
+});
+
