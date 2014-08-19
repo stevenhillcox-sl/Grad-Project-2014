@@ -24,7 +24,6 @@ function Server() {
         
         // Listen for socket connections
         wss.on('connection', function(socket) {
-            console.log("Client connected");
             // Add the new socket to our list of sockets
             self.sockets.push(socket);
             
@@ -45,7 +44,7 @@ function Server() {
                 self.players.splice(self.players.indexOf(self.findPlayerBySocket(socket)));
             });
         });
-    }
+    };
     
     //
     /// --> Server logic
@@ -88,7 +87,9 @@ function Server() {
     this.handleMessage = function(socketMessage, socket) {
         var message = JSON.parse(""+socketMessage);
         
-        if(message.messageType == 'join') {
+        var messageType = message.messageType;
+        
+        if(messageType == 'join') {
             if (self.players.length < 2) {
                 self.players.push({'userName': message.messageData, 'socket': socket});
                 
@@ -103,10 +104,12 @@ function Server() {
             } else {
                 socket.send(self.createMessage('info', "Server is currently full"));
             }
-        } else if(message.messageType == 'answer') {
-            self.gameServer.checkAnswer(message.messageData);
+        } else if(messageType == 'answer') {
+            self.gameServer.checkAnswer(message.messageData, socket);
         }
     };
 }
 
+var module = module || {};
+module.exports = module.exports || {};
 module.exports.Server = Server;

@@ -33,4 +33,6 @@ function WebSocketClient(onConnected, onMessage)
     };
 }
 
+var module = module || {};
+module.exports = module.exports || {};
 module.exports.WebSocketClient = WebSocketClient;

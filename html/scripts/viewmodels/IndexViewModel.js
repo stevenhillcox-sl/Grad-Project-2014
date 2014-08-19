@@ -21,6 +21,7 @@ function IndexViewModel() {
         switch(message.messageType) {
             case 'playerInfo':
                 self.players(message.messageData);
+                
                 break;
             case 'questionOptions':
                 self.questionOptions.removeAll()
@@ -50,6 +51,7 @@ function IndexViewModel() {
     {
         // console.log(self.selectedAnswer());
         webSocketClient.sendMessage(webSocketClient.createMessage('answer', self.selectedAnswer()));
+        self.questionOptions.removeAll();
     }
 };
 
