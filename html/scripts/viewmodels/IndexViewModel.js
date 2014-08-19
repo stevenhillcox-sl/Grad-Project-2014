@@ -6,7 +6,6 @@ function IndexViewModel() {
     this.players = ko.observableArray();
     this.questionOptions = ko.observableArray();
     this.selectedAnswer = ko.observable();
-    this.gameAcive = ko.observable(false);
     //this.connectionStatus = ko.observable();
     
     var self = this;
@@ -16,12 +15,10 @@ function IndexViewModel() {
     //
     
     // Display information messages to the user
-    var onMessage = function(message)
-    {
+    var onMessage = function(message){
         switch(message.messageType) {
             case 'playerInfo':
                 self.players(message.messageData);
-                
                 break;
             case 'questionOptions':
                 self.questionOptions.removeAll()
@@ -33,22 +30,25 @@ function IndexViewModel() {
                 break;
         }
     };
-    var onConnected = function()
-    {
+    
+    var onConnected = function(){
         // Start the game
         var joinMessage = webSocketClient.createMessage('join', self.userName());
         webSocketClient.sendMessage(joinMessage);
     };
     
-    var webSocketClient = new WebSocketClient(onConnected, onMessage);
+    var onClose = function(){
+        self.players.removeAll();
+        self.questionOptions.removeAll();
+    }
     
-    this.connectWebSocket = function() 
-    {
+    var webSocketClient = new WebSocketClient(onConnected, onMessage, onClose);
+    
+    this.connectWebSocket = function() {
         webSocketClient.connect();
     };
     
-    this.sendAnswer = function()
-    {
+    this.sendAnswer = function() {
         // console.log(self.selectedAnswer());
         webSocketClient.sendMessage(webSocketClient.createMessage('answer', self.selectedAnswer()));
         self.questionOptions.removeAll();

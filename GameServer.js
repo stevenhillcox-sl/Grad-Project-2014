@@ -8,10 +8,10 @@ function GameServer(server)
     
     this.questions = [
         { questionText : 'Is France a flavour?', questionOptions :  ['Yes', 'No', 'Maybe'], correctAnswer : 2 },
-        { questionText : 'What is the capital of London?', questionOptions :  ['England', 'No', 'L'], correctAnswer : 2 },
-        { questionText : 'What is love?', questionOptions :  ['Baby don\'t hurt me', 'Baby don\'t hurt me', 'No more'], correctAnswer : 1 },
-        { questionText : 'Hablas Espanol?', questionOptions :  ['Si', 'Huh?', 'Oui'], correctAnswer : 0 },
-        { questionText : 'What is the second derivative of ln(e^x)?', questionOptions :  ['1', 'x', '0'], correctAnswer : 2 },
+        //{ questionText : 'What is the capital of London?', questionOptions :  ['England', 'No', 'L'], correctAnswer : 2 },
+        //{ questionText : 'What is love?', questionOptions :  ['Baby don\'t hurt me', 'Baby don\'t hurt me', 'No more'], correctAnswer : 1 },
+        //{ questionText : 'Hablas Espanol?', questionOptions :  ['Si', 'Huh?', 'Oui'], correctAnswer : 0 },
+        //{ questionText : 'What is the second derivative of ln(e^x)?', questionOptions :  ['1', 'x', '0'], correctAnswer : 2 },
         ];
     
     this.checkAnswer = function(answer, socket){
@@ -28,10 +28,12 @@ function GameServer(server)
         self.playersAnswered ++;
         
         if(self.playersAnswered == server.players.length &&
-           self.currentQuestionNumber < self.questions.length) {
+            ++ self.currentQuestionNumber < self.questions.length) {
                 self.playersAnswered = 0;
-                self.currentQuestionNumber ++;
+                //self.currentQuestionNumber ++;
                 self.sendQuestion();
+        } else if(self.currentQuestionNumber >= self.questions.length) {
+            server.closeGame(self);
         }
     };
     
@@ -42,7 +44,7 @@ function GameServer(server)
     };
     
      // Send first question
-     this.sendQuestion();
+    this.sendQuestion();
 }
 
 var module = module || {};

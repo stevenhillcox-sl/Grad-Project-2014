@@ -24,25 +24,44 @@ function Server() {
         
         // Listen for socket connections
         wss.on('connection', function(socket) {
-            // Add the new socket to our list of sockets
-            self.sockets.push(socket);
             
-            // Send a success message to the client
-            socket.send(self.createMessage('info', 'Connected'));
+            if(self.players.length < 2) {
             
-            // Set up handler for incoming messages
-            socket.on('message', function(message)
-            {
-               self.handleMessage(message, socket);
-            });
-            
-            // Handle socket closes by removing the socket from our list
-            socket.on('close', function()
-            {
-                self.sockets.splice(self.sockets.indexOf(socket));
+                // Add the new socket to our list of sockets
+                self.sockets.push(socket);
                 
-                self.players.splice(self.players.indexOf(self.findPlayerBySocket(socket)));
-            });
+                // Send a success message to the client
+                socket.send(self.createMessage('info', 'Connected'));
+                
+                // Set up handler for incoming messages
+                socket.on('message', function(message)
+                {
+                   self.handleMessage(message, socket);
+                });
+                
+                // Handle socket closes by removing the socket from our list
+                socket.on('close', function()
+                {
+                    var socketIndex = self.sockets.indexOf(socket);
+                    var playerIndex = self.players.indexOf(self.findPlayerBySocket(socket));
+                    
+                    if(socketIndex != -1){
+                        self.sockets.splice(socketIndex, 1);
+                    }
+                    
+                    if(playerIndex != -1){
+                        self.players.splice(playerIndex, 1);
+                    }
+                    
+                    if(self.gameServer != null && socketIndex != -1)
+                    {
+                        self.closeGame(self.gameServer);
+                    }
+                });
+            } else {
+                socket.send(self.createMessage('info', "Server is currently full"));
+                socket.close();
+            }
         });
     };
     
@@ -59,7 +78,7 @@ function Server() {
         return self.players.filter(function(element){
            return element.socket == socket;
         })[0];
-    }
+    };
     
     this.getPlayerNames = function() {
         var playerNames = [];
@@ -67,12 +86,12 @@ function Server() {
             playerNames.push(player.userName);
         });
         return playerNames;
-    }
+    };
     
     // Create a JSON message to be sent to the user
     this.createMessage = function(messageType, messageData) {
         return JSON.stringify({'messageType': messageType, 'messageData' : messageData});
-    }
+    };
     
     // Send a message to all sockets
     this.broadcastMessage = function(message)
@@ -81,7 +100,7 @@ function Server() {
         {
             socket.send(message);
         });
-    }
+    };
     
     // Handle an incoming message
     this.handleMessage = function(socketMessage, socket) {
@@ -101,12 +120,18 @@ function Server() {
                     self.broadcastMessage(self.createMessage('playerInfo', self.getPlayerNames()));
                     self.gameServer = new gs.GameServer(self);
                 }
-            } else {
-                socket.send(self.createMessage('info', "Server is currently full"));
-            }
+            } 
         } else if(messageType == 'answer') {
             self.gameServer.checkAnswer(message.messageData, socket);
         }
+    };
+    
+    this.closeGame = function(gameServer)
+    {
+        gameServer = null;
+        self.sockets.forEach(function(socket){
+            socket.close();
+        });
     };
 }
 

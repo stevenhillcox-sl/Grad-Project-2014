@@ -1,4 +1,4 @@
-function WebSocketClient(onConnected, onMessage)
+function WebSocketClient(onConnected, onMessage, onClose)
 {
     var self = this;
     this.sendMessage = null;
@@ -6,7 +6,7 @@ function WebSocketClient(onConnected, onMessage)
     this.createMessage = function(messageType, messageData)
     {
         return JSON.stringify({'messageType': messageType, 'messageData' : messageData});
-    }
+    };
     
     this.connect = function()
     {
@@ -30,6 +30,11 @@ function WebSocketClient(onConnected, onMessage)
             
             onMessage && onMessage(message);
         };
+        
+        ws.onclose = function()
+        {
+            onClose && onClose();
+        }
     };
 }
 
