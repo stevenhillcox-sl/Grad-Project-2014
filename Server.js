@@ -52,7 +52,7 @@ function Server() {
                 
                 //if(client){
                     // Remove the client from our list
-                    self.clients.splice(self.clients.indexOf(client));
+                    self.clients.splice(self.clients.indexOf(client), 1);
                     
                     // Remove the client from the queue (if they are in it)
                     var clientQueueIndex = self.clientQueue.indexOf(client);
