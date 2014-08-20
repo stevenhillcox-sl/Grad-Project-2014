@@ -21,9 +21,9 @@
                 <button type="button" data-bind="click: connectWebSocket">Connect</button>
             </span>
             <div>
-                 <span>
-                    <select id="answerArea" data-bind="options: questionOptions, visible: players().length != 0, value: selectedAnswer"></select>
-                    <button data-bind="click: sendAnswer, visible: players().length != 0">Send Answer</button>
+                 <span data-bind="visible: gameActive">
+                    <select id="answerArea" data-bind="options: questionOptions, optionsText: 'text', optionsValue: 'id', value: selectedAnswer"></select>
+                    <button data-bind="click: sendAnswer">Send Answer</button>
                 </span>
             </div>
             <div id="messageArea" data-bind="foreach: serverMessages">
@@ -32,7 +32,5 @@
             <div id="players" data-bind="foreach: players">
                 <span data-bind="text: $data"></span>
             </div>
-            <!--<p id="connectMessage" data-bind="visible: connectionStatus() != null, text:connectionStatus"></p>-->
-            
         </div>
 </html>

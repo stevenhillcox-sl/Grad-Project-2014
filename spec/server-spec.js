@@ -19,17 +19,13 @@ describe("Server", function() {
             messages.push(message);
         };
         
-        server.sockets = [
-                { send: sendFunction },
-                { send: sendFunction },
-                { send: sendFunction }
-            ];
+        var mocket = { send: sendFunction };
+        var mockClient = {'socket' : mocket};
+        
+        server.clients.push(mockClient, mockClient, mockClient);
             
         server.broadcastMessage('Hello');
         expect(messages).toEqual(['Hello', 'Hello', 'Hello']);
-        
-        // var testMessage = server.createMessage('type', 'Hello World!');
-        // expect(testMessage).toBe('{"messageType":"type","messageData":"Hello World!"}');
     });
     
     it("is constructed with no sockets", function() {
@@ -61,5 +57,4 @@ describe("Server", function() {
         expect(player).toBe(undefined);
     });
 });
-
 
