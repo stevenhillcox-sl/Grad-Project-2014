@@ -7,7 +7,8 @@ function IndexViewModel() {
     this.questionOptions = ko.observableArray();
     this.selectedAnswer = ko.observable();
     this.gameActive = ko.observable(false);
-    //this.connectionStatus = ko.observable();
+    this.connected = ko.observable(false);
+    this.activeQuestion = ko.observable(false);
     
     var self = this;
 
@@ -22,8 +23,9 @@ function IndexViewModel() {
                 self.players(message.messageData);
                 break;
             case 'questionOptions':
-                self.questionOptions.removeAll()
+                self.questionOptions.removeAll();
                 self.questionOptions(message.messageData);
+                self.activeQuestion(true);
                 break;
             case 'gameStart':
                 self.gameActive(true);
@@ -40,11 +42,13 @@ function IndexViewModel() {
     
     var onConnected = function(){
         // Start the game
+        self.connected(true);
         var joinMessage = webSocketClient.createMessage('join', self.userName());
         webSocketClient.sendMessage(joinMessage);
     };
     
     var onClose = function(){
+        self.connected(false);
         self.players.removeAll();
         self.questionOptions.removeAll();
     }
@@ -56,9 +60,9 @@ function IndexViewModel() {
     };
     
     this.sendAnswer = function() {
-        console.log(self.selectedAnswer());
         webSocketClient.sendMessage(webSocketClient.createMessage('answer', self.selectedAnswer()));
         self.questionOptions.removeAll();
+        self.activeQuestion(false);
     }
 };
 

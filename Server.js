@@ -33,7 +33,8 @@ function Server() {
             self.clients.push(
                 { 
                     'socket' : socket,
-                    'user' : null
+                    'user' : null,
+                    'gameServer' : null
                 }
             );
             
@@ -49,7 +50,7 @@ function Server() {
             // Handle socket closes by removing the socket from our list
             socket.on('close', function()
             {
-                var client = self.findClientBySocket(socket);
+                var client = self.getClientBySocket(socket);
                 
                 // Remove the client from our list
                 self.clients.splice(self.clients.indexOf(client));
@@ -69,7 +70,7 @@ function Server() {
         });
     };
     
-    this.findClientBySocket = function(socket) {
+    this.getClientBySocket = function(socket) {
         return self.clients.filter(function(client){
            return client.socket == socket;
         })[0];
@@ -106,7 +107,7 @@ function Server() {
         var message = JSON.parse(""+socketMessage);
         var messageType = message.messageType;
         
-        var client = self.findClientBySocket(socket);
+        var client = self.getClientBySocket(socket);
         
         if(messageType == 'join') {
             

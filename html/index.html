@@ -12,25 +12,26 @@
         <script type="text/javascript" src="scripts/viewmodels/IndexViewModel.js"></script>
         <script type="text/javascript" src="scripts/WebSocketClient.js"></script>
         
-        <!--<script type="text/javascript" src="js/GameClient.js"></script>-->
-        
         <div id="Content">
             <h1>Welcome to the Game</h1>
             <span>
-                <input type="text" data-bind="value: userName"/>
-                <button type="button" data-bind="click: connectWebSocket">Connect</button>
+                <input type="text" data-bind="value: userName, enable: !connected()"/>
+                <button type="button" data-bind="click: connectWebSocket, visible: !connected()">Connect</button>
             </span>
             <div>
                  <span data-bind="visible: gameActive">
                     <select id="answerArea" data-bind="options: questionOptions, optionsText: 'text', optionsValue: 'id', value: selectedAnswer"></select>
-                    <button data-bind="click: sendAnswer">Send Answer</button>
+                    <button data-bind="click: sendAnswer, enable: activeQuestion">Send Answer</button>
                 </span>
             </div>
             <div id="messageArea" data-bind="foreach: serverMessages">
                 <div data-bind="text: $data"></div>
             </div>
-            <div id="players" data-bind="foreach: players">
-                <span data-bind="text: $data"></span>
+            <div data-bind="visible: players().length != 0">
+                Users:
+                <div id="players" data-bind="foreach: players">
+                    <span data-bind="text: $data"></span>
+                </div>
             </div>
         </div>
 </html>

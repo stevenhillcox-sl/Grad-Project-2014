@@ -4,25 +4,44 @@ function GameServer(server, clients)
     
     this.currentQuestionNumber = 0;
     this.playersAnswered = 0;
+    this.scores = [];
     
     this.broadcastToClients = function(message){
+        
         clients.forEach(function(client){
             client.socket.send(message);
         });
     };
     
+    this.broadcastToAllClientsExcept = function(message, exceptedClient){
+        
+        clients.forEach(function(client){
+            if(client != exceptedClient){
+                client.socket.send(message);
+            }
+        });
+    };
+    
     this.handleMessage = function(message, messageType, client) {
+        
         if(messageType == 'answer'){
             this.checkAnswer(message.messageData, client);
         }
     };
     
     this.getUserNames = function(){
+        
         var userNames = [];
         clients.forEach(function(client){
             client.user && userNames.push(client.user.userName);
         });
         return userNames;
+    };
+    
+    this.getScoreByClient = function(client){
+         return self.scores.filter(function(score){
+           return score.client == client;
+        })[0];
     };
     
     this.questions = [
@@ -40,6 +59,7 @@ function GameServer(server, clients)
         
         if (answer == currentQuestion.correctAnswerId) {
             client.socket.send(server.createMessage('info', 'Correct'));
+            self.getScoreByClient(client).value ++;
         } else {
             client.socket.send(server.createMessage('info', 'Incorrect! The correct answer is: ' + currentQuestion.questionOptions[correctAnswerId].text));
         }
@@ -48,11 +68,12 @@ function GameServer(server, clients)
         
         if(self.playersAnswered == clients.length &&
             ++ self.currentQuestionNumber < self.questions.length) {
+                
                 self.playersAnswered = 0;
                 self.sendQuestion();
         } else if(self.currentQuestionNumber >= self.questions.length) {
-            //server.closeGame(self);
-            self.close();
+            
+            self.endGame();
         }
     };
     
@@ -62,21 +83,51 @@ function GameServer(server, clients)
     };
     
     this.start = function(){
+        
+        // Set up scores
+        clients.forEach(function(client){
+            self.scores.push({'value' : 0, 'client' : client});
+        });
+        
         // Send first question
-        self.broadcastToClients(server.createMessage('gameStart', ''))
+        self.broadcastToClients(server.createMessage('gameStart', ''));
         self.broadcastToClients(server.createMessage('info', 'The Game is starting'));
         self.broadcastToClients(server.createMessage('playerInfo', self.getUserNames()));
         this.sendQuestion();
     };
     
-    this.killGame = function(droppedClient)
-    {
-        console.log("Game being killed");
+    this.endGame = function(){
+        
+        var possibleTie = true;
+        var highestScore = self.scores[0];
+        
+        self.scores.forEach(function(score){
+           score.client.socket.send(server.createMessage('info', 'Your score: ' + score.value));
+           if(score.value != highestScore.value){
+               possibleTie = false;
+               if(score.value > highestScore.value){
+                   highestScore = score;
+               }
+           }
+        });
+        
+        if(possibleTie) {
+            self.broadcastToClients(server.createMessage('info', 'Draw'));
+        } else {
+            highestScore.client.socket.send(server.createMessage('info', 'You win'));
+            self.broadcastToAllClientsExcept(server.createMessage('info', 'You lose'), highestScore.client);
+        }
+        self.close();
+    }
+    
+    this.killGame = function(droppedClient){
+        
         // Remove the dropped client from our client list
         clients.splice(clients.indexOf(droppedClient), 1);
         // Push the remaining clients back to the queue
         clients.forEach(function(client){
             server.clientQueue.push(client);
+            client.gameServer = null;
         });
         
         // Close the game
@@ -84,6 +135,7 @@ function GameServer(server, clients)
     }
     
     this.close = function() {
+        
         // Send closing down message to all clients
         self.broadcastToClients(server.createMessage('info', 'Game is closing'));
         self.broadcastToClients(server.createMessage('gameClose', ''));
