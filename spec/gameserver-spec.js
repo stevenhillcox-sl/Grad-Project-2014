@@ -20,7 +20,7 @@ describe ("Game Server", function() {
         var socket = {send: function(message) {
             responseMessage = message;
         }};
-        gameServer.checkAnswer('Maybe', socket);
+        gameServer.checkAnswer(1, socket);
         
         expect(responseMessage).toBe('{"messageType":"info","messageData":"Correct"}');
         expect(gameServer.currentQuestionNumber).toBe(0);

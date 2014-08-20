@@ -28,33 +28,22 @@ describe("Server", function() {
         expect(messages).toEqual(['Hello', 'Hello', 'Hello']);
     });
     
-    it("is constructed with no sockets", function() {
-        expect(server.sockets.length).toBe(0);
+    it("is constructed with no clients", function() {
+        expect(server.clients.length).toBe(0);
     });
     
-    it("can find player names", function(){
-        server.players = [{'userName': 'User1'}, {'userName': 'User2'}];
-        var playerNames = server.getPlayerNames();
-        expect(playerNames).toEqual(['User1', 'User2']);
-    });
-    
-    it("will return an empty array if there are no players", function(){
-        var playerNames = server.getPlayerNames();
-        expect(playerNames.length).toBe(0);
-    });
-    
-    it("can find a player associated with a socket", function(){
+    it("can find a client associated with a socket", function(){
         var fakeSocket1 = { item: 'blah' };
         var fakeSocket2 = { item: 'foo' };
-        server.players =  [{'userName': 'User1', 'socket': fakeSocket1}, {'userName': 'User2', 'socket': fakeSocket2}];
-        var player = server.findPlayerBySocket(fakeSocket2);
-        expect(player.userName).toBe('User2');
+        server.clients =  [{'user': {'userName': 'User1'}, 'socket': fakeSocket1}, {'user': {'userName': 'User2'}, 'socket': fakeSocket2}];
+        var client = server.getClientBySocket(fakeSocket2);
+        expect(client.user.userName).toBe('User2');
     });
     
     it("will return no player if a socket is not associated with one", function(){
         var fakeSocket = {};
-        var player = server.findPlayerBySocket(fakeSocket);
-        expect(player).toBe(undefined);
+        var client = server.getClientBySocket(fakeSocket);
+        expect(client).toBe(undefined);
     });
 });
 

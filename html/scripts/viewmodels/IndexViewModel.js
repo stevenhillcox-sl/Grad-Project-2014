@@ -32,6 +32,7 @@ function IndexViewModel() {
                 break;
             case 'gameClose':
                 self.gameActive(false);
+                self.players.removeAll();
                 break;
             case 'question':
             case 'info':
@@ -51,7 +52,7 @@ function IndexViewModel() {
         self.connected(false);
         self.players.removeAll();
         self.questionOptions.removeAll();
-    }
+    };
     
     var webSocketClient = new WebSocketClient(onConnected, onMessage, onClose);
     
@@ -63,8 +64,8 @@ function IndexViewModel() {
         webSocketClient.sendMessage(webSocketClient.createMessage('answer', self.selectedAnswer()));
         self.questionOptions.removeAll();
         self.activeQuestion(false);
-    }
-};
+    };
+}
 
 $(function(){
     ko.applyBindings(new IndexViewModel());

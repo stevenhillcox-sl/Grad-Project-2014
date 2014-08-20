@@ -31,7 +31,7 @@ function Server() {
             
             // Create a new client
             self.clients.push(
-                { 
+                {
                     'socket' : socket,
                     'user' : null,
                     'gameServer' : null
@@ -42,34 +42,35 @@ function Server() {
             socket.send(self.createMessage('info', 'Connected'));
             
             // Set up handler for incoming messages
-            socket.on('message', function(message)
-            {
+            socket.on('message', function(message) {
                self.handleMessage(message, socket);
             });
             
-            // Handle socket closes by removing the socket from our list
-            socket.on('close', function()
-            {
+            // Handle socket closes
+            socket.on('close', function(){
                 var client = self.getClientBySocket(socket);
                 
-                // Remove the client from our list
-                self.clients.splice(self.clients.indexOf(client));
-                
-                // Remove the client from the queue (if they are in it)
-                var clientQueueIndex = self.clientQueue.indexOf(client);
-                if(clientQueueIndex != -1)
-                {
-                    self.clientQueue.splice(clientQueueIndex, 1);
-                }
-                
-                // Close thier game (if they are in one)
-                if(client.gameServer){
-                    client.gameServer.killGame(client);
-                }
+                //if(client){
+                    // Remove the client from our list
+                    self.clients.splice(self.clients.indexOf(client));
+                    
+                    // Remove the client from the queue (if they are in it)
+                    var clientQueueIndex = self.clientQueue.indexOf(client);
+                    if(clientQueueIndex != -1)
+                    {
+                        self.clientQueue.splice(clientQueueIndex, 1);
+                    }
+                    
+                    // Close thier game (if they are in one)
+                    if(client.gameServer){
+                        client.gameServer.killGame(client);
+                    }
+                //}
             });
         });
     };
     
+    // Gets a client associated with a socket
     this.getClientBySocket = function(socket) {
         return self.clients.filter(function(client){
            return client.socket == socket;
@@ -90,6 +91,16 @@ function Server() {
         });
     };
     
+    // Adds a player to the queue and checks if there are any groupings
+    this.addToQueue = function(client){
+        
+        self.clientQueue.push(client);
+        client.socket.send(self.createMessage('info', 'Waiting for game partner'));
+        
+        self.checkQueue();
+    };
+    
+    // Check the queue for possible groupings
     this.checkQueue = function(){
         if(self.clientQueue.length >= 2){
             var gameClients = self.clientQueue.splice(0, 2);
@@ -99,6 +110,7 @@ function Server() {
             });
            
             gameServer.start();
+            self.checkQueue();
         }
     };
     
@@ -108,22 +120,19 @@ function Server() {
         var messageType = message.messageType;
         
         var client = self.getClientBySocket(socket);
-        
-        if(messageType == 'join') {
-            
-            if(!client.user){
-                client.user = { 'userName' : message.messageData };
+        //if(client) {
+            if(messageType == 'join') {
+                
+                if(!client.user){
+                    client.user = { 'userName' : message.messageData };
+                }
+                
+                self.addToQueue(client);
+                
+            } else if(client.gameServer !== null){
+                client.gameServer.handleMessage(message, messageType, client);
             }
-            
-            self.clientQueue.push(client);
-            
-            client.socket.send(self.createMessage('info', "Waiting for game partner"));
-            
-            self.checkQueue();
-            
-        } else if(client.gameServer !== null){
-            client.gameServer.handleMessage(message, messageType, client);
-        }
+        //}
     };
 }
 
