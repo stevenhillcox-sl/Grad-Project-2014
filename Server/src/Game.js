@@ -1,4 +1,4 @@
-function GameServer(server, clients)
+function Game(server, webSocketServer, clients)
 {
     var self = this;
     
@@ -65,10 +65,10 @@ function GameServer(server, clients)
         var correctAnswerId = currentQuestion.correctAnswerId;
         
         if (answer == currentQuestion.correctAnswerId) {
-            client.socket.send(server.createMessage('info', 'Correct'));
+            client.socket.send(webSocketServer.createSocketMessage('info', 'Correct'));
             self.getScoreByClient(client).value ++;
         } else {
-            client.socket.send(server.createMessage('info', 'Incorrect! The correct answer is: ' + currentQuestion.questionOptions[correctAnswerId].text));
+            client.socket.send(webSocketServer.createSocketMessage('info', 'Incorrect! The correct answer is: ' + currentQuestion.questionOptions[correctAnswerId].text));
         }
         
         self.playersAnswered ++;
@@ -86,8 +86,8 @@ function GameServer(server, clients)
     
     // Sends the current question to all game participants
     this.sendQuestion = function() {
-        self.broadcastToClients(server.createMessage('question', this.questions[self.currentQuestionNumber].questionText));
-        self.broadcastToClients(server.createMessage('questionOptions', this.questions[self.currentQuestionNumber].questionOptions));
+        self.broadcastToClients(webSocketServer.createSocketMessage('question', this.questions[self.currentQuestionNumber].questionText));
+        self.broadcastToClients(webSocketServer.createSocketMessage('questionOptions', this.questions[self.currentQuestionNumber].questionOptions));
     };
     
     // Starts the game
@@ -99,9 +99,9 @@ function GameServer(server, clients)
         });
         
         // Send first question
-        self.broadcastToClients(server.createMessage('gameStart', ''));
-        self.broadcastToClients(server.createMessage('info', 'The Game is starting'));
-        self.broadcastToClients(server.createMessage('playerInfo', self.getUserNames()));
+        self.broadcastToClients(webSocketServer.createSocketMessage('gameStart', ''));
+        self.broadcastToClients(webSocketServer.createSocketMessage('info', 'The Game is starting'));
+        self.broadcastToClients(webSocketServer.createSocketMessage('playerInfo', self.getUserNames()));
         this.sendQuestion();
     };
     
@@ -112,7 +112,7 @@ function GameServer(server, clients)
         var highestScore = self.scores[0];
         
         self.scores.forEach(function(score){
-           score.client.socket.send(server.createMessage('info', 'Your score: ' + score.value));
+           score.client.socket.send(webSocketServer.createSocketMessage('info', 'Your score: ' + score.value));
            if(score.value != highestScore.value){
                possibleTie = false;
                if(score.value > highestScore.value){
@@ -122,10 +122,10 @@ function GameServer(server, clients)
         });
         
         if(possibleTie) {
-            self.broadcastToClients(server.createMessage('info', 'Draw'));
+            self.broadcastToClients(webSocketServer.createSocketMessage('info', 'Draw'));
         } else {
-            highestScore.client.socket.send(server.createMessage('info', 'You win'));
-            self.broadcastToAllClientsExcept(server.createMessage('info', 'You lose'), highestScore.client);
+            highestScore.client.socket.send(webSocketServer.createSocketMessage('info', 'You win'));
+            self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage('info', 'You lose'), highestScore.client);
         }
         self.close();
     }
@@ -151,7 +151,7 @@ function GameServer(server, clients)
     this.close = function() {
         
         // Send closing down message to all clients
-        self.broadcastToClients(server.createMessage('gameClose', ''));
+        self.broadcastToClients(webSocketServer.createSocketMessage('gameClose', ''));
         
         server.closeGame(self);
     };
@@ -159,4 +159,4 @@ function GameServer(server, clients)
 
 var module = module || {};
 module.exports = module.exports || {};
-module.exports.GameServer = GameServer;
+module.exports.Game = Game;

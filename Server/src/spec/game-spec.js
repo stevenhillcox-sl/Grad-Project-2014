@@ -1,6 +1,6 @@
 /* global describe, it, expect, beforeEach */
-describe ("Game Server", function() {
-    var gs = require('../GameServer.js').GameServer;
+describe ("Game", function() {
+    var gs = require('../Game.js').Game;
     var s = require('../Server.js').Server;
     
     var gameServer;
@@ -27,7 +27,7 @@ describe ("Game Server", function() {
         expect(gameServer.playersAnswered).toBe(0);
     });
     
-     it("can correctly identify an incorrect answer", function() {
+    it("can correctly identify an incorrect answer", function() {
         
         var responseMessages = [];
         var socket = {send: function(message) {
