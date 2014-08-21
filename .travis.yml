@@ -3,3 +3,5 @@
    - "0.10"
  before_script:
    - cd Server
+ script:
+   - jasmine-node spec

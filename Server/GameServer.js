@@ -152,6 +152,8 @@ function GameServer(server, clients)
         
         // Send closing down message to all clients
         self.broadcastToClients(server.createMessage('gameClose', ''));
+        
+        server.closeGame(self);
     };
 }
 

@@ -8,6 +8,7 @@ function Server() {
     self.clients = [];
     self.players = [];
     self.clientQueue = [];
+    self.games = [];
     
     this.start = function(){
         // Requires
@@ -104,15 +105,30 @@ function Server() {
     this.checkQueue = function(){
         if(self.clientQueue.length >= 2){
             var gameClients = self.clientQueue.splice(0, 2);
-            var gameServer = new gs.GameServer(self, gameClients);
-            gameClients.forEach(function(client){
-                client.gameServer = gameServer;
-            });
-           
-            gameServer.start();
+            
+            self.createGame(gameClients);
+            
             self.checkQueue();
         }
     };
+    
+    // Creates a new game
+    this.createGame = function(clients){
+        var gameServer = new gs.GameServer(self, clients);
+        
+        self.games.push(gameServer);
+        
+        clients.forEach(function(client){
+            client.gameServer = gameServer;
+        });
+       
+        gameServer.start();
+    };
+    
+    // Closes off a game
+    this.closeGame = function(gameServer){
+        self.games.splice(self.games.indexOf(gameServer), 1);
+    }
     
     // Handle an incoming message
     this.handleMessage = function(socketMessage, socket) {

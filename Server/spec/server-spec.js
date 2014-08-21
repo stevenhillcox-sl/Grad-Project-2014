@@ -45,5 +45,12 @@ describe("Server", function() {
         var client = server.getClientBySocket(fakeSocket);
         expect(client).toBe(undefined);
     });
+    
+    it("can host multiple games", function(){
+        server.createGame([]);
+        server.createGame([]);
+        
+        expect(server.games.length).toBe(2);
+    })
 });
 
