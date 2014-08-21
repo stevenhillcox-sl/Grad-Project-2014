@@ -22,7 +22,7 @@ function Server() {
         });
         
         // Expose html folder as a static webserver
-        app.use(express.static("/home/ubuntu/workspace/html"));
+        app.use(express.static("/home/ubuntu/workspace/Client/html"));
         
         var wss = new ws({server : http});
         
