@@ -11,59 +11,36 @@ describe ("Game Server", function() {
         gameServer = new gs(server);
     });
     
-    // FINISH THIS
-    it("can verify if an answer is correct for the first question", function() {
-        
-        var responseMessage;
-       // var playersAnswred = 0;
-        
+    it("can verify a correct answer", function() {
+        var responseMessages = [];
         var socket = {send: function(message) {
-            responseMessage = message;
+            responseMessages.push(message);
         }};
-        gameServer.checkAnswer(1, socket);
+        var client = {'socket': socket};
+        gameServer.clients = [client];
+        gameServer.scores.push({'value' : 0, 'client' : client});
         
-        expect(responseMessage).toBe('{"messageType":"info","messageData":"Correct"}');
-        expect(gameServer.currentQuestionNumber).toBe(0);
-        expect(gameServer.playersAnswered).toBe(1);
-    });
-    
-     it("can verify if an answer is incorrect for the first question", function() {
+        gameServer.checkAnswer('2', client);
         
-        var responseMessage;
-       // var playersAnswred = 0;
-        
-        var socket = {send: function(message) {
-            responseMessage = message;
-        }};
-        gameServer.checkAnswer('No', socket);
-        
-        expect(responseMessage).toBe('{"messageType":"info","messageData":"Incorrect! The correct answer is: Maybe"}');
-        expect(gameServer.currentQuestionNumber).toBe(0);
-        expect(gameServer.playersAnswered).toBe(1);
-    });
-    
-    it("can proceeed to the next question when all players have answered", function() {
-        
-        var responseMessage;
-        var questionsSent = false;
-        
-        var socket = {send: function(message) {
-            responseMessage = message;
-        }};
-        
-        var sendQuestionfunction = function(){
-            questionsSent = true;
-        }
-        
-        gameServer.sendQuestion = sendQuestionfunction;
-        
-        server.players.push({}, {});
-        gameServer.checkAnswer('Maybe', socket);
-        
-        gameServer.checkAnswer('No', socket);
-        
+        expect(responseMessages[0]).toBe('{"messageType":"info","messageData":"Correct"}');
         expect(gameServer.currentQuestionNumber).toBe(1);
         expect(gameServer.playersAnswered).toBe(0);
-        expect(questionsSent).toBeTruthy();
+    });
+    
+     it("can correctly identify an incorrect answer", function() {
+        
+        var responseMessages = [];
+        var socket = {send: function(message) {
+            responseMessages.push(message);
+        }};
+        var client = {'socket': socket};
+        gameServer.clients = [client];
+        gameServer.scores.push({'value' : 0, 'client' : client});
+        
+        gameServer.checkAnswer('1', client);
+        
+        expect(responseMessages[0]).toBe('{"messageType":"info","messageData":"Incorrect! The correct answer is: Maybe"}');
+        expect(gameServer.currentQuestionNumber).toBe(1);
+        expect(gameServer.playersAnswered).toBe(0);
     });
 });
