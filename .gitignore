@@ -1,3 +1,4 @@
 .c9/*
-html/js/config.js
-node_modules/
+Client/html/js/config.js
+Server/node_modules/
+Server/data/
