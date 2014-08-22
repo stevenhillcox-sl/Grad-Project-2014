@@ -103,6 +103,4 @@ function Lobby(webSocketServer) {
     }
 }
 
-// var module = module || {};
-// module.exports = module.exports || {};
 module.exports.Lobby = Lobby;

@@ -157,6 +157,4 @@ function Game(server, webSocketServer, clients)
     };
 }
 
-var module = module || {};
-module.exports = module.exports || {};
 module.exports.Game = Game;
