@@ -5,7 +5,6 @@ function WebServices(httpServer, lobby) {
             return client.user.userName;
         }));
     });
-    
 };
 
 module.exports.WebServices = WebServices;
