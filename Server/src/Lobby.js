@@ -49,6 +49,13 @@ function Lobby(webSocketServer) {
         self.addToQueue(client);  
     };
     
+    webSocketServer.onClientChallenge = function(socket, userName){
+        var challengerClient = self.getClientBySocket(socket);
+        var challengedClient = self.getClientByUserName(userName);
+        
+        self.createGame([challengerClient, challengedClient]);
+    };
+    
     webSocketServer.onMessage = function(socket, message){
         var client = self.getClientBySocket(socket);
         
@@ -58,12 +65,22 @@ function Lobby(webSocketServer) {
             
         }
     };
-    
+
     // Gets a client associated with a socket
     this.getClientBySocket = function(socket) {
         
         return self.clients.filter(function(client){
            return client.socket == socket;
+        })[0];
+        
+    };
+    
+    // Gets a client associated with a userName
+    // Note: This will return the first client found with that username
+    this.getClientByUserName = function(userName) {
+        
+        return self.clients.filter(function(client){
+           return client.user.userName == userName;
         })[0];
         
     };

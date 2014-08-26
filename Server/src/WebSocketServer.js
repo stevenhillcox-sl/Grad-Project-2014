@@ -8,6 +8,7 @@ function WebSocketServer(httpServer){
     this.onClientClose = null;
     this.onClientJoin = null;
     this.onMessage = null;
+    this.onClientChallenge = null;
     
     // Start the web socket server
     console.log("Websocket server starting");
@@ -64,14 +65,15 @@ function WebSocketServer(httpServer){
         var message = JSON.parse(""+socketMessage);
         var messageType = message.messageType;
         
-        if(messageType == 'join') {
-            
-            self.onClientJoin(socket, message.messageData);
-            
-        } else {
-            
-            self.onMessage(socket, message);
-            
+        switch(messageType){
+            case 'join':
+                self.onClientJoin(socket, message.messageData);
+                break;
+            case 'challenge':
+                self.onClientChallenge(socket, message.messageData)
+                break;
+            default:
+                 self.onMessage(socket, message);
         }
     };
 }
