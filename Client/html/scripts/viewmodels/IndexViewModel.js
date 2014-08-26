@@ -38,7 +38,7 @@ function IndexViewModel() {
                 break;
             case 'userListPrompt': 
                 $.ajax( {
-                    url: 'http://grad-project-2014-dev-c9-tylerferguson.c9.io/users',
+                    url: window.location + 'users',
                     type: 'GET',
                     success: function(data) {
                         self.userList(data);
