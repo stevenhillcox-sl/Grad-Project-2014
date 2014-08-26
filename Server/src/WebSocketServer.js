@@ -70,7 +70,7 @@ function WebSocketServer(httpServer){
                 self.onClientJoin(socket, message.messageData);
                 break;
             case 'challenge':
-                self.onClientChallenge(socket, message.messageData)
+                self.onClientChallenge(socket, message.messageData);
                 break;
             default:
                  self.onMessage(socket, message);
