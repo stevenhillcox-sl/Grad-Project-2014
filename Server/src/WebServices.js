@@ -2,7 +2,9 @@ function WebServices(httpServer, lobby) {
     
     httpServer.app.get('/users', function(req, res) {
         res.send(lobby.clients.map( function(client) {
-            return client.user.userName;
+            return {userName: client.user.userName,
+                    inGame: client.gameServer === null ? 'Challenge' : 'In-Game'
+            };
         }));
     });
 };

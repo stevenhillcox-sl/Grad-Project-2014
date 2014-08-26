@@ -51,7 +51,7 @@ function Lobby(webSocketServer) {
             client.user = { 'userName' : userName };
         }
         
-        self.addToQueue(client);  
+        //self.addToQueue(client);  
     };
     
     webSocketServer.onClientChallenge = function(socket, userName){
@@ -117,11 +117,13 @@ function Lobby(webSocketServer) {
         });
        
         game.start();
+        self.displayUserList();
     };
     
     // Closes off a game
     this.closeGame = function(gameServer){
         self.games.splice(self.games.indexOf(gameServer), 1);
+        self.displayUserList();
     };
 }
 

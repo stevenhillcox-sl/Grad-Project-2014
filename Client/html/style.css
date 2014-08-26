@@ -37,8 +37,13 @@ h1 {
 #userListHeader {
     font-weight: bold;
     border-bottom: 1px solid black;
+    text-align:center;
 }
 
 #userBar {
     float: left;
+}
+
+#playerRow:hover {
+    background-color: #9CBA7F;
 }

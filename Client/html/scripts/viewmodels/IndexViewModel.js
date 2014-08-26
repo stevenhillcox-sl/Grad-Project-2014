@@ -74,11 +74,15 @@ function IndexViewModel() {
     };
     
     this.sendAnswer = function(id) {
-        console.log(id);
         webSocketClient.sendMessage(webSocketClient.createMessage('answer', id));
         self.questionOptions.removeAll();
         self.activeQuestion(false);
     };
+    
+    this.challengePlayer = function(userName) {
+        webSocketClient.sendMessage(webSocketClient.createMessage('challenge', userName));
+    };
+    
 }
 
 $(function(){

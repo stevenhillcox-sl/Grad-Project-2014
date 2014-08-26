@@ -16,12 +16,20 @@
             </span>
         
             <div>
-                <div id="userList">
-                    <span id="userListHeader"> Users Currently Online</span>
-                    <div data-bind="foreach: userList">
-                        <div data-bind="text: $data"></div>
-                    </div>
-                </div>
+                
+                <table id="userList">
+                    <thead>
+                        <tr>
+                            <th id="userListHeader" colspan="2">Users Currently Online</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: userList">
+                        <tr id="playerRow" data-bind="click: function() {$parent.challengePlayer($data.userName)}">
+                            <td data-bind="text: userName"></td><td data-bind="text: inGame"></td>
+                        </tr>
+                    </tbody>
+                </table> 
+        
                 <div id="quiz">
                     <span id="questionArea" data-bind="text: questions"></span>
                     <div id="answerArea" data-bind="visible: gameActive">
