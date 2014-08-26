@@ -20,7 +20,7 @@ function Lobby(webSocketServer) {
     };
     
     webSocketServer.onClientClose = function(socket){
-                    
+
         var client = self.getClientBySocket(socket);
         
         // Remove the client from our list
@@ -100,7 +100,7 @@ function Lobby(webSocketServer) {
     // Closes off a game
     this.closeGame = function(gameServer){
         self.games.splice(self.games.indexOf(gameServer), 1);
-    }
+    };
 }
 
 module.exports.Lobby = Lobby;

@@ -51,6 +51,6 @@ describe("Server", function() {
         server.createGame([]);
         
         expect(server.games.length).toBe(2);
-    })
+    });
 });
 

@@ -46,7 +46,8 @@ function Game(server, webSocketServer, clients)
         
         var userNames = [];
         self.clients.forEach(function(client){
-            client.user && userNames.push(client.user.userName);
+            if (client.user) 
+                userNames.push(client.user.userName);
         });
         return userNames;
     };
@@ -128,7 +129,7 @@ function Game(server, webSocketServer, clients)
             self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage('info', 'You lose'), highestScore.client);
         }
         self.close();
-    }
+    };
     
     // Kill off a game if there are not enough players
     this.killGame = function(droppedClient){
@@ -145,7 +146,7 @@ function Game(server, webSocketServer, clients)
         
         // Close the game
         self.close();
-    }
+    };
     
     // Closes off the game
     this.close = function() {
