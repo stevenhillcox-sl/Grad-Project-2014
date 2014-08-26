@@ -4,27 +4,19 @@ function IndexViewModel() {
     this.userName = ko.observable('User' + Math.floor(Math.random()*1000));
     this.serverMessages = ko.observableArray();
     this.players = ko.observableArray();
+    this.questions = ko.observable();
     this.questionOptions = ko.observableArray();
     this.selectedAnswer = ko.observable();
     this.gameActive = ko.observable(false);
     this.connected = ko.observable(false);
     this.activeQuestion = ko.observable(false);
-    this.userList = ko.observableArray();
+    this.userList = ko.observable();
     
     var self = this;
 
     //
     /// --> Server code
     //
-    //poll server for userList
-    setInterval(function(){$.ajax( {
-        url: 'http://grad-project-2014-dev-c9-tylerferguson.c9.io/users',
-        type: 'GET',
-        success: function(data) {
-            self.userList(data);
-        }
-        
-    })}, 300);
     
     // Display information messages to the user
     var onMessage = function(message){
@@ -44,7 +36,18 @@ function IndexViewModel() {
                 self.gameActive(false);
                 self.players.removeAll();
                 break;
+            case 'userListPrompt': 
+                $.ajax( {
+                    url: 'http://grad-project-2014-dev-c9-tylerferguson.c9.io/users',
+                    type: 'GET',
+                    success: function(data) {
+                        self.userList(data);
+                    }
+                });
+                break;
             case 'question':
+                self.questions(message.messageData);
+                break;
             case 'info':
                 self.serverMessages.unshift(message.messageData);
                 break;
@@ -70,8 +73,9 @@ function IndexViewModel() {
         webSocketClient.connect();
     };
     
-    this.sendAnswer = function() {
-        webSocketClient.sendMessage(webSocketClient.createMessage('answer', self.selectedAnswer()));
+    this.sendAnswer = function(id) {
+        console.log(id);
+        webSocketClient.sendMessage(webSocketClient.createMessage('answer', id));
         self.questionOptions.removeAll();
         self.activeQuestion(false);
     };

@@ -13,10 +13,14 @@ function Lobby(webSocketServer) {
     
     //this.httpServer = null;
     //this.webSocketServer = webSocketServer;
-    
+    this.displayUserList = function() {
+        webSocketServer.broadcastMessage(webSocketServer.createSocketMessage('userListPrompt', '' ), self.clients)
+    }
     // Set up callbacks
     webSocketServer.onNewClient = function(client) {
         self.clients.push(client);
+        //send message prompting ajax call for users 
+        self.displayUserList();
     };
     
     webSocketServer.onClientClose = function(socket){
@@ -25,7 +29,8 @@ function Lobby(webSocketServer) {
         
         // Remove the client from our list
         self.clients.splice(self.clients.indexOf(client), 1);
-        
+        //send message prompting ajax call for users 
+        self.displayUserList();
         // Remove the client from the queue (if they are in it)
         var clientQueueIndex = self.clientQueue.indexOf(client);
         if(clientQueueIndex != -1)
