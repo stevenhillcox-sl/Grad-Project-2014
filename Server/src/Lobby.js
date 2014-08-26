@@ -55,10 +55,15 @@ function Lobby(webSocketServer) {
     };
     
     webSocketServer.onClientChallenge = function(socket, userName){
+        
         var challengerClient = self.getClientBySocket(socket);
         var challengedClient = self.getClientByUserName(userName);
         
-        self.createGame([challengerClient, challengedClient]);
+        if(challengedClient.game !== null || challengerClient.game !== null){
+            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'Player can not be challenged at this time'));
+        } else {
+            self.createGame([challengerClient, challengedClient]);
+        }
     };
     
     webSocketServer.onMessage = function(socket, message){
