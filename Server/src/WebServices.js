@@ -3,7 +3,7 @@ function WebServices(httpServer, lobby) {
     httpServer.app.get('/users', function(req, res) {
         res.send(lobby.clients.map( function(client) {
             return {userName: client.user.userName,
-                    inGame: client.gameServer === null ? 'Challenge' : 'In-Game'
+                    inGame: client.game === null ? 'Challenge' : 'In-Game'
             };
         }));
     });

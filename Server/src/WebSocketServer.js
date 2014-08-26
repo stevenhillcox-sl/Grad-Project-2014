@@ -39,7 +39,7 @@ function WebSocketServer(httpServer){
         var newClient = {
             'socket' : socket,
             'user' : null,
-            'gameServer' : null
+            'game' : null
         };
         self.onNewClient(newClient);
         

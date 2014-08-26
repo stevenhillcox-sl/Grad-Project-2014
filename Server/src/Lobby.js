@@ -39,8 +39,8 @@ function Lobby(webSocketServer) {
         }
         
         // Close thier game (if they are in one)
-        if(client.gameServer){
-            client.gameServer.killGame(client);
+        if(client.game){
+            client.game.killGame(client);
         }
     };
     
@@ -59,8 +59,10 @@ function Lobby(webSocketServer) {
         var challengerClient = self.getClientBySocket(socket);
         var challengedClient = self.getClientByUserName(userName);
         
-        if(challengedClient.game !== null || challengerClient.game !== null){
-            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'Player can not be challenged at this time'));
+        if(challengedClient.game || challengerClient.game){
+            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'Player can not be challenged at this time'), challengerClient);
+        } else if ( challengerClient == challengedClient ) {
+            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'You can not challenge yourself'), challengerClient);
         } else {
             self.createGame([challengerClient, challengedClient]);
         }
@@ -69,9 +71,9 @@ function Lobby(webSocketServer) {
     webSocketServer.onMessage = function(socket, message){
         var client = self.getClientBySocket(socket);
         
-        if(client.gameServer !== null){
+        if(client.game !== null){
             
-            client.gameServer.handleMessage(message, message.messageType, client);
+            client.game.handleMessage(message, message.messageType, client);
             
         }
     };
@@ -118,7 +120,7 @@ function Lobby(webSocketServer) {
         self.games.push(game);
         
         clients.forEach(function(client){
-            client.gameServer = game;
+            client.game = game;
         });
        
         game.start();
@@ -126,8 +128,8 @@ function Lobby(webSocketServer) {
     };
     
     // Closes off a game
-    this.closeGame = function(gameServer){
-        self.games.splice(self.games.indexOf(gameServer), 1);
+    this.closeGame = function(game){
+        self.games.splice(self.games.indexOf(game), 1);
         self.displayUserList();
     };
 }
