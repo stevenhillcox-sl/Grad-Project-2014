@@ -52,7 +52,7 @@ function Game(server, webSocketServer, clients)
         return userNames;
     };
     
-    // Gets a score associates with a client
+    // Gets a score associated with a client
     this.getScoreByClient = function(client){
          return self.scores.filter(function(score){
            return score.client == client;

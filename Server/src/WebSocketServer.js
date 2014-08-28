@@ -11,8 +11,38 @@ function WebSocketServer(httpServer){
     this.onClientChallenge = null;
     
     // Start the web socket server
-    console.log("Websocket server starting");
-    this.webSocketServer = new this.ws({'server' : httpServer});
+    this.startServer = function(){
+        console.log("Websocket server starting");
+        this.webSocketServer = new this.ws({'server' : httpServer});
+        
+             // Listen for socket connections
+        this.webSocketServer.on('connection', function(socket) {
+            
+            // New client joins
+            var newClient = {
+                'socket' : socket,
+                'user' : null,
+                'game' : null
+            };
+            self.onNewClient(newClient);
+            
+            // Send a success message to the client
+            socket.send(self.createSocketMessage('info', 'Connected'));
+            
+            // Set up handler for incoming messages
+            socket.on('message', function(message) {
+                self.handleMessage(message, socket);
+            });
+            
+            // Handle socket closes
+            socket.on('close', function(){
+                
+                // Client closes
+                self.onClientClose(socket);
+                
+            });
+        });
+    }
     
     // Create a JSON message to be sent to the user
     this.createSocketMessage = function(messageType, messageData) {
@@ -31,34 +61,6 @@ function WebSocketServer(httpServer){
     this.sendMessage = function(message, client){
         client.socket.send(message);
     };
-    
-    // Listen for socket connections
-    this.webSocketServer.on('connection', function(socket) {
-        
-        // New client joins
-        var newClient = {
-            'socket' : socket,
-            'user' : null,
-            'game' : null
-        };
-        self.onNewClient(newClient);
-        
-        // Send a success message to the client
-        socket.send(self.createSocketMessage('info', 'Connected'));
-        
-        // Set up handler for incoming messages
-        socket.on('message', function(message) {
-            self.handleMessage(message, socket);
-        });
-        
-        // Handle socket closes
-        socket.on('close', function(){
-            
-            // Client closes
-            self.onClientClose(socket);
-            
-        });
-    });
     
     // Handle an incoming message
     this.handleMessage = function(socketMessage, socket) {

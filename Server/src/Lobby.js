@@ -32,11 +32,12 @@ function Lobby(webSocketServer) {
         //send message prompting ajax call for users 
         self.displayUserList();
         // Remove the client from the queue (if they are in it)
-        var clientQueueIndex = self.clientQueue.indexOf(client);
-        if(clientQueueIndex != -1)
-        {
-            self.clientQueue.splice(clientQueueIndex, 1);
-        }
+        //OBSOLETE QUEUEING SYSTEM
+        // var clientQueueIndex = self.clientQueue.indexOf(client);
+        // if(clientQueueIndex != -1)
+        // {
+        //     self.clientQueue.splice(clientQueueIndex, 1);
+        // }
         
         // Close thier game (if they are in one)
         if(client.game){
@@ -62,7 +63,7 @@ function Lobby(webSocketServer) {
         if(challengedClient.game || challengerClient.game){
             webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'Player can not be challenged at this time'), challengerClient);
         } else if ( challengerClient == challengedClient ) {
-            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'You can not challenge yourself'), challengerClient);
+            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'You cannot challenge yourself'), challengerClient);
         } else {
             self.createGame([challengerClient, challengedClient]);
         }
@@ -96,23 +97,24 @@ function Lobby(webSocketServer) {
         })[0];
         
     };
+    // Obsolete queueing system
     
-    // Adds a player to the queue and checks if there are any groupings
-    this.addToQueue = function(client){
+    // // Adds a player to the queue and checks if there are any groupings
+    // this.addToQueue = function(client){
         
-        self.clientQueue.push(client);
-        self.checkQueue();
-    };
+    //     self.clientQueue.push(client);
+    //     self.checkQueue();
+    // };
     
-    // Check the queue for possible groupings
-    this.checkQueue = function(){
+    // // Check the queue for possible groupings
+    // this.checkQueue = function(){
         
-        if(self.clientQueue.length >= 2){
-            var gameClients = self.clientQueue.splice(0, 2);
-            self.createGame(gameClients);
-            self.checkQueue();
-        }
-    };
+    //     if(self.clientQueue.length >= 2){
+    //         var gameClients = self.clientQueue.splice(0, 2);
+    //         self.createGame(gameClients);
+    //         self.checkQueue();
+    //     }
+    // };
     
     // Creates a new game
     this.createGame = function(clients){
@@ -130,6 +132,9 @@ function Lobby(webSocketServer) {
     // Closes off a game
     this.closeGame = function(game){
         self.games.splice(self.games.indexOf(game), 1);
+        self.clients.forEach(function(client){
+           client.game = null; 
+        });
         self.displayUserList();
     };
 }
