@@ -141,7 +141,7 @@ function Game(server, webSocketServer, clients)
         self.clients.forEach(function(client){
             
             client.gameServer = null;
-            server.addToQueue(client);
+            //server.addToQueue(client);
         });
         
         // Close the game
