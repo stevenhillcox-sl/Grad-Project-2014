@@ -5,8 +5,8 @@ function Repository(){
     var MongoClient = require('mongodb').MongoClient;
     
     this.persistUser = null;
-    this.getUser = null;
-    this.addUser = null;
+    this.addUser = function() {};
+    this.getUser = function() {};
     
     this.connect = function(){
     
@@ -15,7 +15,7 @@ function Repository(){
             if(err) 
             { 
                 setTimeout(self.start, 10000);
-                console.log('Failed to commect to db');
+                console.log('Failed to connect to db');
                 console.log('Trying again in 10 seconds');
                 return;
             }
@@ -23,20 +23,47 @@ function Repository(){
             console.log('Connected to db');
             
             self.addUser = function(user, callBack){
+                console.log(user);
                 db.collection('Users').insert(user, function(err, records){
-                    callBack(records);
+                    if (callBack) {
+                        callBack(records);
+                    }
+                });
+                console.log(user);
+            };
+            
+            self.getLeaderboard = function(callback) {
+                db.collection('Users').find(function(err, records) {
+                    records.sort({'winPercentage' : -1}).toArray(function(err, array) {
+                       callback(array); 
+                    });
                 });
             };
             
-            self.getUser = function(userName){
-                return (db.collection('Users').find({'userName' : userName}));
-            };
-            
-            self.persistUser = function(user, callBack){
-                db.collection('Users').update({'userName' : user.userName}, user, {upsert: true}, function(err, record){
-                   callBack(record); 
+            self.getUser = function(userName, callback){
+                db.collection('Users').findOne({'userName' : userName}, function(err, records) {
+                     if (callback) {
+                        callback(records);
+                    }
                 });
             };
+            
+            self.persistUser = function(user, callback){
+                //BIT ODD HAVING THIS HERE
+                user.winPercentage = 100 * user.wins / user.gamesPlayed;
+                db.collection('Users').update({'userName' : user.userName}, user, function(err, records){
+                    if (callback) {
+                        callback(records); 
+                    }
+                });
+            };
+            
+            
+            // GOT TO GO
+            self.clearUsers = function() {
+                db.collection('Users').drop();
+            };
+            
        });
     };
     

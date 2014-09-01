@@ -10,4 +10,4 @@ if ! [ -d "data/db" ]; then
 fi 
 # Start node and mongo
 nohup mongod -dbpath data/db/ --smallfiles >/dev/null & 
-nohup node src/main >/dev/null &
+nohup node src/main >output.log &
