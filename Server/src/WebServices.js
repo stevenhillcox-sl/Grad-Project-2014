@@ -1,4 +1,4 @@
-function WebServices(httpServer, lobby) {
+function WebServices(httpServer, lobby, repository) {
     
     httpServer.app.get('/users', function(req, res) {
         res.send(lobby.clients.map( function(client) {
@@ -7,6 +7,23 @@ function WebServices(httpServer, lobby) {
             };
         }));
     });
-};
+    
+    httpServer.app.get('/stats', function(req, res) {
+       repository.getLeaderboard( function(databaseUsers) {
+            res.send('Leaderboard: ' + JSON.stringify(databaseUsers)); 
+       });
+    });
+    
+    httpServer.app.get('/stats/:userName', function(req, res) {
+        repository.getUser(req.params.userName, function(databaseUser) {
+            res.send('Stats for ' + req.params.userName + ': ' + JSON.stringify({'Games Played': databaseUser.gamesPlayed, 
+                                                                                 'Games Won' : databaseUser.wins}));
+        });
+    });
+    
+    httpServer.app.get('/clear', function(req, res) {
+        repository.clearUsers();
+    });
+}
 
 module.exports.WebServices = WebServices;

@@ -9,5 +9,6 @@ if ! [ -d "data/db" ]; then
     
 fi 
 # Start node and mongo
+
 mongod -dbpath data/db/ --smallfiles& 
 node src/main &

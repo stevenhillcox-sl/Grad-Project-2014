@@ -114,6 +114,9 @@ function Game(server, webSocketServer, clients)
         
         self.scores.forEach(function(score){
            score.client.socket.send(webSocketServer.createSocketMessage('info', 'Your score: ' + score.value));
+           if (score.value > score.client.user.highScore) {
+               score.client.user.highScore = score.value;
+           }
            if(score.value != highestScore.value){
                possibleTie = false;
                if(score.value > highestScore.value){
@@ -125,6 +128,7 @@ function Game(server, webSocketServer, clients)
         if(possibleTie) {
             self.broadcastToClients(webSocketServer.createSocketMessage('info', 'Draw'));
         } else {
+            highestScore.client.user.wins++;
             highestScore.client.socket.send(webSocketServer.createSocketMessage('info', 'You win'));
             self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage('info', 'You lose'), highestScore.client);
         }
@@ -141,7 +145,8 @@ function Game(server, webSocketServer, clients)
         self.clients.forEach(function(client){
             
             client.gameServer = null;
-            //server.addToQueue(client);
+            
+            // server.addToQueue(client);
         });
         
         // Close the game

@@ -16,4 +16,4 @@ webSocketServer.startServer();
 
 var lobby = new l.Lobby(webSocketServer);
 
-var webServices = new webS.WebServices( httpServer, lobby);
+var webServices = new webS.WebServices( httpServer, lobby, repository);

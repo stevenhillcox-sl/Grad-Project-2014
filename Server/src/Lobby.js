@@ -5,7 +5,9 @@ function Lobby(webSocketServer) {
     
     // Requires 
     var g = require('./Game.js');
-
+    var r = require('./Repository.js');
+    var repository = new r.Repository();
+    repository.connect();
     this.clients = [];
     this.players = [];
     this.clientQueue = [];
@@ -14,8 +16,8 @@ function Lobby(webSocketServer) {
     //this.httpServer = null;
     //this.webSocketServer = webSocketServer;
     this.displayUserList = function() {
-        webSocketServer.broadcastMessage(webSocketServer.createSocketMessage('userListPrompt', '' ), self.clients)
-    }
+        webSocketServer.broadcastMessage(webSocketServer.createSocketMessage('userListPrompt', '' ), self.clients);
+    };
     // Set up callbacks
     webSocketServer.onNewClient = function(client) {
         self.clients.push(client);
@@ -31,6 +33,9 @@ function Lobby(webSocketServer) {
         self.clients.splice(self.clients.indexOf(client), 1);
         //send message prompting ajax call for users 
         self.displayUserList();
+        
+        
+        
         // Remove the client from the queue (if they are in it)
         //OBSOLETE QUEUEING SYSTEM
         // var clientQueueIndex = self.clientQueue.indexOf(client);
@@ -38,6 +43,7 @@ function Lobby(webSocketServer) {
         // {
         //     self.clientQueue.splice(clientQueueIndex, 1);
         // }
+        
         
         // Close thier game (if they are in one)
         if(client.game){
@@ -47,9 +53,25 @@ function Lobby(webSocketServer) {
     
     webSocketServer.onClientJoin = function(socket, userName){
         var client = self.getClientBySocket(socket);
+        
             
         if(!client.user){
-            client.user = { 'userName' : userName };
+            repository.getUser(userName, function(databaseUser){
+                console.log('result is : ' + JSON.stringify(databaseUser));
+                
+                if (databaseUser) {
+                    client.user = databaseUser;
+                    console.log('I am in the database: ' + JSON.stringify(client.user));
+                } else {
+                    client.user = { 'userName' : userName,
+                                    'gamesPlayed': 0,
+                                    'wins' : 0,
+                                    'highScore' : 0,
+                                    'winPercentage': 0
+                    };
+                    repository.addUser(client.user);
+                }
+            });
         }
         
         //self.addToQueue(client);  
@@ -123,6 +145,7 @@ function Lobby(webSocketServer) {
         
         clients.forEach(function(client){
             client.game = game;
+            client.user.gamesPlayed++;
         });
        
         game.start();
@@ -131,10 +154,11 @@ function Lobby(webSocketServer) {
     
     // Closes off a game
     this.closeGame = function(game){
-        self.games.splice(self.games.indexOf(game), 1);
-        self.clients.forEach(function(client){
+        game.clients.forEach(function(client){
            client.game = null; 
+           repository.persistUser(client.user);
         });
+        self.games.splice(self.games.indexOf(game), 1);
         self.displayUserList();
     };
 }

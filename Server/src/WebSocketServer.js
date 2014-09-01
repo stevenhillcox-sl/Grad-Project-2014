@@ -42,7 +42,7 @@ function WebSocketServer(httpServer){
                 
             });
         });
-    }
+    };
     
     // Create a JSON message to be sent to the user
     this.createSocketMessage = function(messageType, messageData) {
