@@ -22,6 +22,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
     this.viewModel = new GameViewModel();
     ko.applyBindings(self.viewModel);
 
+    var gameTick = 200;
     var gameWait = false;
 
     var players = [{
@@ -51,12 +52,20 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
         self.viewModel.playerTurnName(getCurrentPlayer().playerName);
     };
 
-    var increaseScore = function(player) {
-        player.score++;
-        player.viewModelScore(player.viewModelScore() + 1);
+    var setScore = function(player, score) {
+        player.score = score;
+        player.viewModelScore(score);
     };
 
-    var gui = new GUI($(".tile-container"));
+    var resetGame = function() {
+        gui.clear();
+        grid.clear();
+        players.forEach(function(player){
+            setScore(player, 0);
+        });
+    };
+
+    var gui = new GUI($(".tile-container"), gameTick);
     var grid = new Grid(4, gui);
 
     var currentPlayerTurn = 0;
@@ -69,7 +78,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
     grid.onTileMerge = function(tile) {
         var tilePlayer = getPlayerByTileType(tile.tileType);
         if (tilePlayer == getCurrentPlayer()) {
-            increaseScore(tilePlayer);
+            setScore(tilePlayer, tilePlayer.score + 1);
         }
     };
 
@@ -82,7 +91,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
             setTimeout(function() {
                 gameWait = false;
                 advancePlayerTurn();
-            }, 410);
+            }, gameTick + 10);
         }
     };
 

@@ -1,7 +1,8 @@
 define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
-	return function GUI($tileContainer) {
+	return function GUI($tileContainer, gameTick) {
 		var self = this;
 		var tileMaps = [];
+		var gameTick = gameTick || 200;
 
 		var findTileMap = function(gameTile) {
 			return tileMaps.filter(function(tileMap) {
@@ -29,7 +30,7 @@ define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
 
 			setTimeout(function() {
 				$tileContainer.append($newTile);
-			}, 400);
+			}, gameTick);
 		};
 
 		self.removeTile = function(gameTile) {
@@ -37,7 +38,14 @@ define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
 			setTimeout(function() {
 				tileMap.$uiTile.remove();
 				removeTileMap(tileMap);
-			}, 400);
+			}, gameTick);
+		};
+
+		self.clear = function(){
+			tileMaps.forEach(function(tileMap){
+				tileMap.$uiTile.remove();
+			});
+			tileMaps = [];
 		};
 
 		self.updateUI = function() {
