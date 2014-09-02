@@ -1,12 +1,59 @@
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
 body {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     color: #8D7966;
     background-color: #F8F1E9;
 }
 
+.container {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.game-info-container {
+
+    margin-top: 25px;
+    width: 500px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.player-turn {
+
+    position:absolute;
+    clear:both;
+    display: block;
+    padding-top: 0.25em;
+    font-size: 2em;
+    font-weight: 900;
+    text-align: center;
+    width:500px;
+    height:3.2em;
+}
+.red-score {
+    display: inline;
+    padding-left: 70px;
+    float: left;
+    font-size: 3em;
+    font-weight: 900;
+    color: #DF151A;
+}
+.blue-score {
+    float: right;
+    padding-right: 70px;
+    display: inline;
+    font-size: 3em;
+    font-weight: 900;
+    color: #00CBE7;
+}
 .game-container {
-    width: 470px;
-    height: 470px;
+    width: 500px;
+    height: 500px;
     padding: 15px;
     margin-top: 100px;
     margin-left: auto;
@@ -14,26 +61,23 @@ body {
     border-radius: 5px;
     background-color: #A8A39D;
 }
-
 .grid-container {
     position: absolute;
     z-index: 1;
 }
-
 .grid-row {
+    display: flex;
+    flex-wrap: nowrap;
     margin-bottom: 15px;
 }
-
 .grid-row:after {
     content: "";
-    display: block; 
+    display: block;
     clear: both;
 }
-
 .grid-row:last-child {
     margin-bottom: 0px;
 }
-
 .grid-cell {
     width: 106.25px;
     height: 106.25px;
@@ -42,16 +86,13 @@ body {
     border-radius: 5px;
     float: left;
 }
-
 .grid-cell:last-child {
     margin-right: 0px;
 }
-
 .tile-container {
-    position:absolute;
+    position: absolute;
     z-index: 2;
 }
-
 .tile {
     position: inherit;
     width: 106.25px;
@@ -60,127 +101,128 @@ body {
     -webkit-transition: transform 400ms ease-in-out;
     transition: transform 400ms ease-in-out;
 }
-
 .tile-red {
     background-color: #DF151A
 }
-
 .tile-blue {
     background-color: #00CBE7
 }
-
 .tile-green {
     background-color: #00DA3C
 }
-
 .tile-yellow {
     background-color: #F4F328
 }
-
-
 .tile-position-0-0 {
     -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
     transform: translate(0px, 0px);
 }
-
 .tile-position-0-1 {
     -webkit-transform: translate(121.25px, 0px);
+    -moz-transform: translate(121.25px, 0px);
     transform: translate(121.25px, 0px);
 }
-
 .tile-position-0-2 {
     -webkit-transform: translate(242.5px, 0px);
+    -moz-transform: translate(242.5px, 0px);
     transform: translate(242.5px, 0px);
 }
-
 .tile-position-0-3 {
     -webkit-transform: translate(363.75px, 0px);
+    -moz-transform: translate(363.75px, 0px);
     transform: translate(363.75px, 0px);
 }
-
 .tile-position-1-0 {
     -webkit-transform: translate(0px, 121.25px);
+    -moz-transform: translate(0px, 121.25px);
     transform: translate(0px, 121.25px);
 }
-
 .tile-position-1-1 {
     -webkit-transform: translate(121.25px, 121.25px);
+    -moz-transform: translate(121.25px, 121.25px);
     transform: translate(121.25px, 121.25px);
 }
-
 .tile-position-1-2 {
     -webkit-transform: translate(242.5px, 121.25px);
+    -moz-transform: translate(242.5px, 121.25px);
     transform: translate(242.5px, 121.25px);
 }
-
 .tile-position-1-3 {
     -webkit-transform: translate(363.75px, 121.25px);
+    -moz-transform: translate(363.75px, 121.25px);
     transform: translate(363.75px, 121.25px);
 }
-
 .tile-position-2-0 {
     -webkit-transform: translate(0px, 242.5px);
+    -moz-transform: translate(0px, 242.5px);
     transform: translate(0px, 242.5px);
 }
-
 .tile-position-2-1 {
     -webkit-transform: translate(121.25px, 242.5px);
+    -moz-transform: translate(121.25px, 242.5px);
     transform: translate(121.25px, 242.5px);
 }
-
 .tile-position-2-2 {
     -webkit-transform: translate(242.5px, 242.5px);
+    -moz-transform: translate(242.5px, 242.5px);
     transform: translate(242.5px, 242.5px);
 }
-
 .tile-position-2-3 {
     -webkit-transform: translate(363.75px, 242.5px);
+    -moz-transform: translate(363.75px, 242.5px);
     transform: translate(363.75px, 242.5px);
 }
-
 .tile-position-3-0 {
     -webkit-transform: translate(0px, 363.75px);
+    -moz-transform: translate(0px, 363.75px);
     transform: translate(0px, 363.75px);
 }
-
 .tile-position-3-1 {
     -webkit-transform: translate(121.25px, 363.75px);
+    -moz-transform: translate(121.25px, 363.75px);
     transform: translate(121.25px, 363.75px);
 }
-
 .tile-position-3-2 {
     -webkit-transform: translate(242.5px, 363.75px);
+    -moz-transform: translate(242.5px, 363.75px);
     transform: translate(242.5px, 363.75px);
 }
-
 .tile-position-3-3 {
     -webkit-transform: translate(363.75px, 363.75px);
+    -moz-transform: translate(363.75px, 363.75px);
     transform: translate(363.75px, 363.75px);
 }
-
 .tile-new {
     -webkit-animation: fadeIn 200ms ease 100ms;
+    -moz-animation: fadeIn 200ms ease 100ms;
     animation: fadeIn 200ms ease 100ms;
     -webkit-animation-fill-mode: backwards;
+    -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
 }
-
 @keyframes fadeIn {
     0% {
         opacity: 0;
     }
-
     100% {
         opacity: 1;
-    } 
+    }
 }
-
 @-webkit-keyframes fadeIn {
     0% {
         opacity: 0;
     }
-
     100% {
         opacity: 1;
-    } 
+    }
+}
+
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

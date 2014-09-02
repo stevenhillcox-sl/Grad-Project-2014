@@ -18,28 +18,23 @@ define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
 				class: "tile"
 			});
 
-			if (tile.tileType == TileType.RED) {
-				$newTile.addClass('tile-red');
-			} else if (tile.tileType == TileType.BLUE) {
-				$newTile.addClass('tile-blue');
-			} else if (tile.tileType == TileType.GREEN) {
-				$newTile.addClass('tile-green');
-			}
-
+			$newTile.addClass(tile.tileType.classString);
 			$newTile.addClass('tile-new');
 			$newTile.addClass('tile-position-' + tile.row + '-' + tile.column);
-
-			$(".tile-container").append($newTile);
 
 			tileMaps.push({
 				gameTile: tile,
 				$uiTile: $newTile
 			});
+
+			setTimeout(function() {
+				$(".tile-container").append($newTile);
+			}, 400);
 		};
 
 		self.removeTile = function(gameTile) {
 			var tileMap = findTileMap(gameTile);
-			setTimeout(function(){
+			setTimeout(function() {
 				tileMap.$uiTile.remove();
 				removeTileMap(tileMap);
 			}, 400);

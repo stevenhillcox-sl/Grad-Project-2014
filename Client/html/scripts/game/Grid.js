@@ -7,7 +7,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
         for (var i = 0; i < gridSize; i++) {
             grid.push([]);
             for (var j = 0; j < gridSize; j++) {
-                grid[i][j] = null;
+                grid[i][j] = [];
             }
         }
 
@@ -35,36 +35,35 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
 
         var pushRow = function(row) {
             for (var i = row.length - 2; i >= 0; i--) {
-                var currentTile = row[i];
-                if (currentTile.tileType != TileType.EMPTY) {
-                    var nextOpenCell = i;
+                var currentCell = row[i];
+
+                if (currentCell.length > 0) {
+                    var nextOpenCell = currentCell;
                     for (var j = i + 1; j < row.length; j++) {
-                        if (row[j].tileType == TileType.EMPTY) {
-                            nextOpenCell = j;
-                        } else if (row[j].tileType == currentTile.tileType) {
-                            nextOpenCell = j;
+                        var candidateCell = row[j];
+                        if (candidateCell.length == 0) {
+                            nextOpenCell = candidateCell;
+                        } else if (candidateCell[0].tileType == currentCell[0].tileType) {
+                            nextOpenCell = candidateCell;
                             break;
                         } else {
                             break;
                         }
                     }
 
-                    if (i != nextOpenCell) {
-                        currentTileRow = currentTile.row;
-                        currentTileColumn = currentTile.column;
-                        currentTile.move(row[nextOpenCell].row, row[nextOpenCell].column);
-                        if (row[nextOpenCell].tileType == currentTile.tileType) {
-                            destroyTile(row[nextOpenCell]);
+                    if (nextOpenCell != currentCell) {
+                        while (currentCell.length > 0) {
+                            nextOpenCell.push(currentCell.pop());
                         }
-                        row[nextOpenCell] = currentTile;
-                        row[i] = new Tile(TileType.EMPTY);
-                        row[i].move(currentTileRow, currentTileColumn);
                     }
                 }
             }
         };
 
-        var destroyTile = function(tile) {
+        var mergeTile = function(tile) {
+            if (self.onTileMerge) {
+                self.onTileMerge(tile);
+            }
             gui.removeTile(tile);
         }
 
@@ -74,12 +73,32 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             row.reverse();
         };
 
+        var updateTiles = function() {
+            for (var i = 0; i < grid.length; i++) {
+                for (var j = 0; j < grid[i].length; j++) {
+                    for (var k = 0; k < grid[i][j].length; k++) {
+                        grid[i][j][k].move(i, j);
+                    }
+
+                }
+            }
+        }
+
+        var collapse = function() {
+            for (var i = 0; i < grid.length; i++) {
+                for (var j = 0; j < grid[i].length; j++) {
+                    var gridCell = grid[i][j];
+                    while (gridCell.length > 1) {
+                        mergeTile(gridCell.pop());
+                    }
+                }
+            }
+        }
+
         self.clear = function() {
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
-                    var newTile = new Tile(TileType.EMPTY);
-                    newTile.move(i, j);
-                    grid[i][j] = newTile;
+                    grid[i][j] = [];
                 }
             }
             return grid;
@@ -90,7 +109,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
 
             for (var i = 0; i < grid.length; i++) {
                 for (var k = 0; k < grid[i].length; k++) {
-                    if (grid[i][k].tileType == TileType.EMPTY) {
+                    if (grid[i][k].length == 0) {
                         openRows.push(i);
                         break;
                     }
@@ -103,14 +122,14 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
 
             var openColumns = [];
             for (var j = 0; j < grid[randomRow].length; j++) {
-                if (grid[randomRow][j].tileType == TileType.EMPTY) {
+                if (grid[randomRow][j].length == 0) {
                     openColumns.push(j);
                 }
             }
             var randomColumn = openColumns[Math.floor(Math.random() * (openColumns.length))];
 
             var newTile = new Tile(tileType);
-            grid[randomRow][randomColumn] = newTile;
+            grid[randomRow][randomColumn].push(newTile);
             newTile.move(randomRow, randomColumn);
 
             gui.addTile(newTile);
@@ -151,14 +170,18 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
                     break;
             }
 
+            updateTiles();
             gui.updateUI();
+            collapse();
         };
+
+        self.onTileMerge = null;
 
         self.print = function() {
             var outText = '';
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
-                    outText += grid[i][j].tileType;
+                    outText += grid[i][j][0] ? grid[i][j][0].tileType : TileType.EMPTY;
                 }
                 outText += "\n";
             }
