@@ -15,7 +15,7 @@ require.config({
     }
 });
 
-require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/Direction', 'game/GUI', 'viewModels/GameViewModel', 'TouchSwipe'], function($, ko, Tile, TileType, Grid, Direction, GUI, GameViewModel) {
+require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/Direction', 'game/GUI', 'viewmodels/GameViewModel', 'TouchSwipe'], function($, ko, Tile, TileType, Grid, Direction, GUI, GameViewModel) {
 
     var self = this;
 
