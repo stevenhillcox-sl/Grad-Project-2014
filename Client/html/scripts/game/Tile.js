@@ -5,7 +5,6 @@ define([], function() {
 		self.tileType = tileType;
 		self.row = 0;
 		self.column = 0;
-		self.destroy = false;
 
 		self.move = function(row, column) {
 			self.row = row;
