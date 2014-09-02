@@ -9,6 +9,6 @@ define([], function() {
 		self.move = function(row, column) {
 			self.row = row;
 			self.column = column;
-		}
+		};
 	};
 });

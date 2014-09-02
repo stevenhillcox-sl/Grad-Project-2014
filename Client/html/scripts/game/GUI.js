@@ -1,5 +1,5 @@
 define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
-	return function GUI() {
+	return function GUI($tileContainer) {
 		var self = this;
 		var tileMaps = [];
 
@@ -28,7 +28,7 @@ define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
 			});
 
 			setTimeout(function() {
-				$(".tile-container").append($newTile);
+				$tileContainer.append($newTile);
 			}, 400);
 		};
 
@@ -45,7 +45,7 @@ define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
 			tileMaps.forEach(function(tileMap) {
 				var classes = tileMap.$uiTile.attr('class').split(' ');
 				classes.forEach(function(classString) {
-					if (classString.indexOf('tile-position') == 0 || classString == 'tile-new') {
+					if (classString.indexOf('tile-position') === 0 || classString == 'tile-new') {
 						tileMap.$uiTile.removeClass(classString);
 					}
 				});

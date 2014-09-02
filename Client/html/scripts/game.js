@@ -38,25 +38,25 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
 
     var getCurrentPlayer = function() {
         return players[currentPlayerTurn];
-    }
+    };
 
     var getPlayerByTileType = function(tileType) {
         return players.filter(function(player) {
             return player.tileType == tileType;
         })[0];
-    }
+    };
 
     var advancePlayerTurn = function() {
         currentPlayerTurn = (currentPlayerTurn + 1) % players.length;
         self.viewModel.playerTurnName(getCurrentPlayer().playerName);
-    }
+    };
 
     var increaseScore = function(player) {
         player.score++;
         player.viewModelScore(player.viewModelScore() + 1);
-    }
+    };
 
-    var gui = new GUI();
+    var gui = new GUI($(".tile-container"));
     var grid = new Grid(4, gui);
 
     var currentPlayerTurn = 0;
@@ -64,14 +64,14 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
 
     players.forEach(function(player) {
         grid.addTile(player.tileType);
-    })
+    });
 
     grid.onTileMerge = function(tile) {
         var tilePlayer = getPlayerByTileType(tile.tileType);
         if (tilePlayer == getCurrentPlayer()) {
             increaseScore(tilePlayer);
         }
-    }
+    };
 
     var makeMove = function(direction) {
         if (!gameWait) {
@@ -84,7 +84,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
                 advancePlayerTurn();
             }, 410);
         }
-    }
+    };
 
     $(window).swipe({
         swipeLeft: function() {
@@ -99,7 +99,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
         swipeUp: function() {
             makeMove(Direction.UP);
         }
-    })
+    });
 
     $(window).keydown(function(event) {
         var KEYLEFT = 37;
@@ -126,7 +126,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
                 direction = Direction.UP;
                 break;
         }
-        if (direction != null) {
+        if (direction !== null) {
             makeMove(direction);
         }
     });

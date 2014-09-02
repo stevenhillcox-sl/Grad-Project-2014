@@ -98,9 +98,9 @@ body {
     width: 106.25px;
     height: 106.25px;
     border-radius: 5px;
-    -webkit-transition: -webkit-transform 400ms ease-in-out;
-    -moz-transition: -moz-transform 400ms ease-in-out;
-    transition: transform 400ms ease-in-out;
+    -webkit-transition: -webkit-transform 200ms ease-in-out;
+    -moz-transition: -moz-transform 200ms ease-in-out;
+    transition: transform 200ms ease-in-out;
 }
 .tile-red {
     background-color: #DF151A
