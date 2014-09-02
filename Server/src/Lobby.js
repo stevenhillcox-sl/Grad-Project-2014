@@ -82,13 +82,12 @@ function Lobby(webSocketServer) {
         var challengerClient = self.getClientBySocket(socket);
         var challengedClient = self.getClientByUserName(userName);
         
-        if(challengedClient.game || challengerClient.game){
-            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'Player can not be challenged at this time'), challengerClient);
-        } else if ( challengerClient == challengedClient ) {
-            webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'You cannot challenge yourself'), challengerClient);
-        } else {
-            self.createGame([challengerClient, challengedClient]);
-        }
+        // if(challengedClient.game || challengerClient.game){
+        //     webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'Player can not be challenged at this time'), challengerClient);
+        // } else if ( challengerClient == challengedClient ) {
+        //     webSocketServer.sendMessage(webSocketServer.createSocketMessage('info', 'You cannot challenge yourself'), challengerClient);
+        // } 
+        self.createGame([challengerClient, challengedClient]);
     };
     
     webSocketServer.onMessage = function(socket, message){
@@ -160,6 +159,7 @@ function Lobby(webSocketServer) {
         });
         self.games.splice(self.games.indexOf(game), 1);
         self.displayUserList();
+        webSocketServer.broadcastMessage(webSocketServer.createSocketMessage('leaderBoardPrompt', ''), self.clients);
     };
 }
 

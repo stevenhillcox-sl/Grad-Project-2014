@@ -12,7 +12,7 @@ function Game(server, webSocketServer, clients)
         { questionText : 'What is the capital of London?', questionOptions :  [{'id' : 0, 'text' : 'England'}, {'id' : 1, 'text' : 'No'}, {'id' : 2, 'text' : 'L'}], correctAnswerId : 2 },
         { questionText : 'What is love?', questionOptions :  [{'id' : 0, 'text' : 'Baby don\'t hurt me'}, {'id' : 1, 'text' : 'Baby don\'t hurt me'}, {'id' : 2, 'text' : 'No more'}], correctAnswerId : 1 },
         { questionText : 'Hablas Espanol?', questionOptions :  [{'id' : 0, 'text' : 'Si'}, {'id' : 1, 'text' : 'Huh?'}, {'id' : 2, 'text' : 'Oui'}], correctAnswerId : 0 },
-        { questionText : 'What is the second derivative of ln(e^x)?', questionOptions :  [{'id' : 0, 'text' : '1'}, {'id' : 1, 'text' : 'x'}, {'id' : 2, 'text' : '0'}], correctAnswerId : 2 },
+        { questionText : 'What is the second derivative of ln(e<sup>x</sup>)?', questionOptions :  [{'id' : 0, 'text' : '1'}, {'id' : 1, 'text' : 'x'}, {'id' : 2, 'text' : '0'}], correctAnswerId : 2 },
     ];
     
     // Sends a message to all game clients
@@ -66,10 +66,10 @@ function Game(server, webSocketServer, clients)
         var correctAnswerId = currentQuestion.correctAnswerId;
         
         if (answer == currentQuestion.correctAnswerId) {
-            client.socket.send(webSocketServer.createSocketMessage('info', 'Correct'));
+            client.socket.send(webSocketServer.createSocketMessage('answerResponse', [true, '']));
             self.getScoreByClient(client).value ++;
         } else {
-            client.socket.send(webSocketServer.createSocketMessage('info', 'Incorrect! The correct answer is: ' + currentQuestion.questionOptions[correctAnswerId].text));
+            client.socket.send(webSocketServer.createSocketMessage('answerResponse', [false, currentQuestion.questionOptions[correctAnswerId].text]));
         }
         
         self.playersAnswered ++;
@@ -101,7 +101,6 @@ function Game(server, webSocketServer, clients)
         
         // Send first question
         self.broadcastToClients(webSocketServer.createSocketMessage('gameStart', ''));
-        self.broadcastToClients(webSocketServer.createSocketMessage('info', 'The Game is starting'));
         self.broadcastToClients(webSocketServer.createSocketMessage('playerInfo', self.getUserNames()));
         this.sendQuestion();
     };
@@ -113,7 +112,7 @@ function Game(server, webSocketServer, clients)
         var highestScore = self.scores[0];
         
         self.scores.forEach(function(score){
-           score.client.socket.send(webSocketServer.createSocketMessage('info', 'Your score: ' + score.value));
+           score.client.socket.send(webSocketServer.createSocketMessage('gameScore', score.value));
            if (score.value > score.client.user.highScore) {
                score.client.user.highScore = score.value;
            }
@@ -126,11 +125,11 @@ function Game(server, webSocketServer, clients)
         });
         
         if(possibleTie) {
-            self.broadcastToClients(webSocketServer.createSocketMessage('info', 'Draw'));
+            self.broadcastToClients(webSocketServer.createSocketMessage('gameResult', 'Draw'));
         } else {
             highestScore.client.user.wins++;
-            highestScore.client.socket.send(webSocketServer.createSocketMessage('info', 'You win'));
-            self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage('info', 'You lose'), highestScore.client);
+            highestScore.client.socket.send(webSocketServer.createSocketMessage('gameResult', true));
+            self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage('gameResult', false), highestScore.client);
         }
         self.close();
     };

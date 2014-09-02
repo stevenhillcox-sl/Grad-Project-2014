@@ -12,18 +12,38 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
         this.connected = ko.observable(false);
         this.activeQuestion = ko.observable(false);
         this.userList = ko.observable();
+        this.leaderBoard = ko.observable();
+        this.opponent = ko.observable();
+        this.answerResponse = ko.observable();
+        this.correctAnswer = ko.observable();
+        this.score = ko.observable(null);
+        this.result = ko.observable();
         
         var self = this;
-    
+        
         //
         /// --> Server code
         //
+        
+        
+        var getLeaderboard = function() {
+            $.ajax( {
+                url: window.location + 'stats',
+                type: 'GET',
+                success: function(data) {
+                self.leaderBoard(data);
+                }
+            });   
+        };
+        
+        getLeaderboard();
         
         // Display information messages to the user
         var onMessage = function(message){
             switch(message.messageType) {
                 case 'playerInfo':
                     self.players(message.messageData);
+                    self.opponent((self.userName() == self.players()[0]) ? self.players()[1] : self.players()[0]);
                     break;
                 case 'questionOptions':
                     self.questionOptions.removeAll();
@@ -31,11 +51,15 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
                     self.activeQuestion(true);
                     break;
                 case 'gameStart':
+                    self.score(null);
+                    self.result(null);
                     self.gameActive(true);
                     break;
                 case 'gameClose':
                     self.gameActive(false);
                     self.players.removeAll();
+                    self.questions(null);
+                    self.answerResponse(null);
                     break;
                 case 'userListPrompt': 
                     $.ajax( {
@@ -46,11 +70,21 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
                         }
                     });
                     break;
+                case 'leaderBoardPrompt':
+                    getLeaderboard();
+                    break;
                 case 'question':
                     self.questions(message.messageData);
                     break;
-                case 'info':
-                    self.serverMessages.unshift(message.messageData);
+                case 'answerResponse':
+                    self.answerResponse(message.messageData[0]);
+                    self.correctAnswer(message.messageData[1]);
+                    break;
+                case 'gameScore':
+                    self.score(message.messageData);
+                    break;
+                case 'gameResult':
+                    self.result(message.messageData);
                     break;
             }
         };
@@ -69,6 +103,7 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
         };
         
         var webSocketClient = new WebSocketClient(onConnected, onMessage, onClose);
+        
         
         this.connectWebSocket = function() {
             webSocketClient.connect();

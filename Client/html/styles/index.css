@@ -1,28 +1,50 @@
+.answerResponse {
+    margin-top: 20px;
+}
+
+table {
+    position: absolute;
+    margin-top: 30px;
+}
+
 h1 {
     text-align: center;
     font-family: 'Muli', sans-serif;
 }
+
+input {
+    width: 90px;
+}
+
 #content {
+    font-family: 'Muli', sans-serif;
     width: 90%;
     margin: auto;
 }
+
+
 #messageArea {
     max-height: 200px;
     overflow-y: auto;
 }
 
-#userList {
-    height: 200px;
+
+#leaderBoard {
     width: 200px;
-    border: 1px solid black;
+    float: left;
+}
+
+#userList {
+    height: auto;
+    width: 200px;
     float: right;
     text-align: center;
 }
 
 #quiz {
-    height: 200px;
-    width: 50%;
-    float: right;
+    /*height: 200px;*/
+    /*width: 50%;*/
+    /*float: right;*/
     font-family: 'Muli', sans-serif;
 }
 
@@ -40,11 +62,7 @@ h1 {
     text-align:center;
 }
 
-#userBar {
-    float: left;
-}
-
-#playerRow:hover {
-    background-color: #9CBA7F;
-    cursor: pointer;
-}
+/*#playerRow:hover {*/
+/*    background-color: #9CBA7F;*/
+/*    cursor: pointer;*/
+/*}*/

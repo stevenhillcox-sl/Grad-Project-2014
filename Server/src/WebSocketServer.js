@@ -27,7 +27,7 @@ function WebSocketServer(httpServer){
             self.onNewClient(newClient);
             
             // Send a success message to the client
-            socket.send(self.createSocketMessage('info', 'Connected'));
+            // socket.send(self.createSocketMessage('info', 'Connected'));
             
             // Set up handler for incoming messages
             socket.on('message', function(message) {

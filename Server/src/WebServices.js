@@ -3,14 +3,14 @@ function WebServices(httpServer, lobby, repository) {
     httpServer.app.get('/users', function(req, res) {
         res.send(lobby.clients.map( function(client) {
             return {userName: client.user.userName,
-                    inGame: client.game === null ? 'Challenge' : 'In-Game'
+                    inGame: client.game === null ? false : true
             };
         }));
     });
     
     httpServer.app.get('/stats', function(req, res) {
        repository.getLeaderboard( function(databaseUsers) {
-            res.send('Leaderboard: ' + JSON.stringify(databaseUsers)); 
+            res.send(databaseUsers); 
        });
     });
     
