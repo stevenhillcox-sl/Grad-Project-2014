@@ -18,13 +18,25 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
         this.correctAnswer = ko.observable();
         this.score = ko.observable(null);
         this.result = ko.observable();
+        this.statsDisplay = ko.observable();
         
         var self = this;
         
         //
         /// --> Server code
         //
+        this.toggleStats = function(user) {
+            if (self.statsDisplay() == user.userName) {
+                self.statsDisplay(false);
+            } else
+            {
+                self.statsDisplay(user.userName);
+            }
+        };
         
+        this.hideStats = function() {
+            self.statsDisplay(false);
+        };
         
         var getLeaderboard = function() {
             $.ajax( {
@@ -118,6 +130,7 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
         this.challengePlayer = function(userName) {
             webSocketClient.sendMessage(webSocketClient.createMessage('challenge', userName));
         };
+        
     };
     
     return IndexViewModel;

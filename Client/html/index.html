@@ -9,7 +9,7 @@
     </head>
     <body>
     <div class="container-fluid">
-    <div class="col-md-3">
+    <div class="col-md-2">
      <table class="table table-striped table-hover">
             <thead>
                 <tr>
@@ -20,17 +20,22 @@
                 </tr>
             </thead>
             <tbody data-bind="foreach: leaderBoard">
-                <tr>
-                    <td  data-bind="text: userName"></td><td data-bind="text: winPercentage.toFixed(2)"></td>
+                <tr data-bind="click: $parent.toggleStats">
+                    <td  data-bind="text: userName"></td>
+                    <td data-bind="text: winPercentage.toFixed(2)"></td>
+                </tr>
+                <tr data-bind="visible: $parent.statsDisplay() == userName">
+                    <td colspan="2">
+                        <div>Games Played: <span data-bind="text: gamesPlayed"></span></div>
+                        <div>Wins: <span data-bind="text: wins"></span></div>
+                    </td>
                 </tr>
             </tbody>
         </table> 
         
-        <!--<div class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">This is a div</div>-->
-        
 
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
         <h1>Welcome to the Game</h1>
         
         <div data-bind="visible: gameActive" class="alert alert-info">
@@ -53,7 +58,7 @@
         <div class="alert alert-success answerResponse" role="alert" data-bind="visible: answerResponse">Correct! Waiting for opponent...</div>
         <div class="alert alert-danger answerResponse" role="alert" data-bind="visible: answerResponse() === false">Incorrect! The correct answer is: <span data-bind="text: correctAnswer"></span>. Waiting for opponent...</div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
     <table class="table table-hover">
             <thead>
                 <tr>

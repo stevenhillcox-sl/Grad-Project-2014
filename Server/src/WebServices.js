@@ -20,10 +20,6 @@ function WebServices(httpServer, lobby, repository) {
                                                                                  'Games Won' : databaseUser.wins}));
         });
     });
-    
-    httpServer.app.get('/clear', function(req, res) {
-        repository.clearUsers();
-    });
 }
 
 module.exports.WebServices = WebServices;
