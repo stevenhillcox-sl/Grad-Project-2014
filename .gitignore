@@ -4,3 +4,4 @@ Server/data/
 Client/js/*
 Client/css/*
 .grunt/*
+._SpecRunner.html
