@@ -1,4 +1,6 @@
 .c9/*
-Client/html/js/config.js
-Server/node_modules/
+node_modules/
 Server/data/
+Client/js/*
+Client/css/*
+.grunt/*
