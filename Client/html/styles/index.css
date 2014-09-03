@@ -16,35 +16,7 @@ input {
     width: 90px;
 }
 
-#content {
-    font-family: 'Muli', sans-serif;
-    width: 90%;
-    margin: auto;
-}
-
-
-#messageArea {
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-
-#leaderBoard {
-    width: 200px;
-    float: left;
-}
-
-#userList {
-    height: auto;
-    width: 200px;
-    float: right;
-    text-align: center;
-}
-
 #quiz {
-    /*height: 200px;*/
-    /*width: 50%;*/
-    /*float: right;*/
     font-family: 'Muli', sans-serif;
 }
 
@@ -61,8 +33,3 @@ input {
     border-bottom: 1px solid black;
     text-align:center;
 }
-
-/*#playerRow:hover {*/
-/*    background-color: #9CBA7F;*/
-/*    cursor: pointer;*/
-/*}*/

@@ -58,12 +58,6 @@ function Repository(){
                 });
             };
             
-            
-            // GOT TO GO
-            self.clearUsers = function() {
-                db.collection('Users').drop();
-            };
-            
        });
     };
     
