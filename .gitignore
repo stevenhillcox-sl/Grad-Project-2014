@@ -1,7 +1,7 @@
 .c9/*
 node_modules/
 Server/data/
-Client/js/*
-Client/css/*
+Client/build/*
+Client/src/css/*
 .grunt/*
 _SpecRunner.html

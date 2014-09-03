@@ -5,11 +5,11 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         jshint: {
-            all: [
+            client: [
                 'Gruntfile.js',
                 'Client/src/js/**/*.js',
                 '!Client/src/js/lib/**/*.js',
-
+                '!Client/src/js/require.js'
             ],
             options: {
                 globals: {
@@ -29,32 +29,50 @@ module.exports = function(grunt) {
             }
         },
         less: {
-            files: {
-                expand: true,
-                cwd: 'Client/src/less',
-                src: '**/*.less',
-                dest: 'Client/css',
-                ext: '.css'
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: 'Client/src/less',
+                    src: '**/*.less',
+                    dest: 'Client/build/css',
+                    ext: '.css'
+                }]
+            },
+            debug: {
+                files: [{
+                    expand: true,
+                    cwd: 'Client/src/less',
+                    src: '**/*.less',
+                    dest: 'Client/src/css',
+                    ext: '.css'
+                }]
             }
         },
         requirejs: {
-            compile: {
+            build: {
                 options: {
                     optimize: "uglify",
                     baseUrl: "Client/src/js",
                     name: 'game',
                     mainConfigFile: "Client/src/js/game.js",
-                    out: "Client/js/game-min.js"
+                    out: "Client/build/js/game.js"
                 }
-            },
-            debug: {
-                options: {
-                    optimize: 'none',
-                    baseUrl: "Client/src/js",
-                    name: 'game',
-                    mainConfigFile: "Client/src/js/game.js",
-                    out: "Client/js/game-min.js"
-                }
+            }
+        },
+        copy: {
+            build: {
+                files: [{
+                    expand: true,
+                    src: ['Client/src/*'],
+                    dest: 'Client/build/',
+                    filter: 'isFile',
+                    flatten: true,
+                },{
+                    expand: true,
+                    src: ['Client/src/js/require.js'],
+                    dest: 'Client/build/js/',
+                    flatten: true,
+                }]
             }
         }
     });
@@ -63,12 +81,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.registerTask('default', ['jshint', 'jasmine']);
-    grunt.registerTask('build-client', ['less', 'requirejs:compile'])
-    grunt.registerTask('build', ['default', 'build-client'])
 
-    grunt.registerTask('build-client-debug', ['less', 'requirejs:debug'])
+    grunt.registerTask('build-client', ['less:build', 'requirejs:build', 'copy:build']);
+    grunt.registerTask('build', ['default', 'build-client']);
+
+    grunt.registerTask('debug-client-less', ['less:debug']);
 
 };

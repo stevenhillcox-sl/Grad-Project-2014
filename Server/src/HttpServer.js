@@ -12,7 +12,7 @@ function HttpServer(){
     });
         
     // Expose folder as a static webserver
-    this.app.use(this.express.static(__dirname + "/../../Client"));
+    this.app.use(this.express.static(__dirname + "/../../Client/build"));
 }
 
 module.exports.HttpServer = HttpServer;
