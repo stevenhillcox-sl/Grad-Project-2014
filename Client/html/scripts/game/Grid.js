@@ -41,7 +41,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
                     var nextOpenCell = currentCell;
                     for (var j = i + 1; j < row.length; j++) {
                         var candidateCell = row[j];
-                        if (candidateCell.length == 0) {
+                        if (candidateCell.length === 0) {
                             nextOpenCell = candidateCell;
                         } else if (candidateCell[0].tileType == currentCell[0].tileType) {
                             nextOpenCell = candidateCell;
@@ -65,7 +65,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
                 self.onTileMerge(tile);
             }
             gui.removeTile(tile);
-        }
+        };
 
         var pullRow = function(row) {
             row.reverse();
@@ -82,7 +82,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
 
                 }
             }
-        }
+        };
 
         var collapse = function() {
             for (var i = 0; i < grid.length; i++) {
@@ -93,7 +93,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
                     }
                 }
             }
-        }
+        };
 
         self.clear = function() {
             for (var i = 0; i < grid.length; i++) {
@@ -109,7 +109,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
 
             for (var i = 0; i < grid.length; i++) {
                 for (var k = 0; k < grid[i].length; k++) {
-                    if (grid[i][k].length == 0) {
+                    if (grid[i][k].length === 0) {
                         openRows.push(i);
                         break;
                     }
@@ -122,7 +122,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
 
             var openColumns = [];
             for (var j = 0; j < grid[randomRow].length; j++) {
-                if (grid[randomRow][j].length == 0) {
+                if (grid[randomRow][j].length === 0) {
                     openColumns.push(j);
                 }
             }
@@ -146,26 +146,26 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
                     break;
 
                 case Direction.DOWN:
-                    for (var i = 0; i < grid.length; i++) {
-                        var pushedColumn = getColumn(i);
+                    for (var j = 0; j < grid.length; j++) {
+                        var pushedColumn = getColumn(j);
                         pushRow(pushedColumn);
-                        setColumn(i, pushedColumn);
+                        setColumn(j, pushedColumn);
                     }
                     break;
 
                 case Direction.LEFT:
-                    for (var i = 0; i < grid.length; i++) {
-                        var pulledRow = getRow(i);
+                    for (var k = 0; k < grid.length; k++) {
+                        var pulledRow = getRow(k);
                         pullRow(pulledRow);
-                        setRow(i, pulledRow);
+                        setRow(k, pulledRow);
                     }
                     break;
 
                 case Direction.UP:
-                    for (var i = 0; i < grid.length; i++) {
-                        var pulledColumn = getColumn(i);
+                    for (var l = 0; l < grid.length; l++) {
+                        var pulledColumn = getColumn(l);
                         pullRow(pulledColumn);
-                        setColumn(i, pulledColumn);
+                        setColumn(l, pulledColumn);
                     }
                     break;
             }

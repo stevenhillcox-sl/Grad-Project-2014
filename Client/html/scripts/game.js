@@ -22,6 +22,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
     this.viewModel = new GameViewModel();
     ko.applyBindings(self.viewModel);
 
+    var gameTick = 200;
     var gameWait = false;
 
     var players = [{
@@ -38,25 +39,33 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
 
     var getCurrentPlayer = function() {
         return players[currentPlayerTurn];
-    }
+    };
 
     var getPlayerByTileType = function(tileType) {
         return players.filter(function(player) {
             return player.tileType == tileType;
         })[0];
-    }
+    };
 
     var advancePlayerTurn = function() {
         currentPlayerTurn = (currentPlayerTurn + 1) % players.length;
         self.viewModel.playerTurnName(getCurrentPlayer().playerName);
-    }
+    };
 
-    var increaseScore = function(player) {
-        player.score++;
-        player.viewModelScore(player.viewModelScore() + 1);
-    }
+    var setScore = function(player, score) {
+        player.score = score;
+        player.viewModelScore(score);
+    };
 
-    var gui = new GUI();
+    var resetGame = function() {
+        gui.clear();
+        grid.clear();
+        players.forEach(function(player){
+            setScore(player, 0);
+        });
+    };
+
+    var gui = new GUI($(".tile-container"), gameTick);
     var grid = new Grid(4, gui);
 
     var currentPlayerTurn = 0;
@@ -64,14 +73,14 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
 
     players.forEach(function(player) {
         grid.addTile(player.tileType);
-    })
+    });
 
     grid.onTileMerge = function(tile) {
         var tilePlayer = getPlayerByTileType(tile.tileType);
         if (tilePlayer == getCurrentPlayer()) {
-            increaseScore(tilePlayer);
+            setScore(tilePlayer, tilePlayer.score + 1);
         }
-    }
+    };
 
     var makeMove = function(direction) {
         if (!gameWait) {
@@ -82,9 +91,9 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
             setTimeout(function() {
                 gameWait = false;
                 advancePlayerTurn();
-            }, 410);
+            }, gameTick + 10);
         }
-    }
+    };
 
     $(window).swipe({
         swipeLeft: function() {
@@ -99,7 +108,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
         swipeUp: function() {
             makeMove(Direction.UP);
         }
-    })
+    });
 
     $(window).keydown(function(event) {
         var KEYLEFT = 37;
@@ -126,7 +135,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
                 direction = Direction.UP;
                 break;
         }
-        if (direction != null) {
+        if (direction !== null) {
             makeMove(direction);
         }
     });
