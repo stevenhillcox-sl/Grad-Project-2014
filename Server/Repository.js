@@ -14,7 +14,7 @@ function Repository(){
             
             if(err) 
             { 
-                setTimeout(self.start, 10000);
+                setTimeout(self.connect, 10000);
                 console.log('Failed to connect to db');
                 console.log('Trying again in 10 seconds');
                 return;
