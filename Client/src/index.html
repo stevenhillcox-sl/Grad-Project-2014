@@ -2,96 +2,105 @@
 <html>
     <head>
         <title>Graduate Project 2014</title>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css"></link>
-        <link href='http://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/game.css"></link>       
         
     </head>
     <body>
-    <div class="container-fluid">
-    <div class="col-xs-2">
-     <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th id="leaderboardHeader" colspan="2">Leader Board</th>
-                </tr>
-                <tr>
-                    <th>User</th><th>Win %</th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: leaderBoard">
-                <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }">
-                    <td  data-bind="text: userName"></td>
-                    <td data-bind="text: winPercentage.toFixed(2)"></td>
-                </tr>
-                <tr data-bind="visible: $parent.statsDisplay() == userName">
-                    <td colspan="2">
-                        <div>Games Played: <span data-bind="text: gamesPlayed"></span></div>
-                        <div>Wins: <span data-bind="text: wins"></span></div>
-                    </td>
-                </tr>
-            </tbody>
-        </table> 
-        
+        <div class="container-fluid">
+            <div class="col-xs-2">
+               <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th id="leaderboardHeader" colspan="2">Leader Board</th>
+                        </tr>
+                        <tr>
+                            <th>User</th><th>Win %</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: leaderBoard">
+                        <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }">
+                            <td  data-bind="text: userName"></td>
+                            <td data-bind="text: winPercentage.toFixed(2)"></td>
+                        </tr>
+                        <tr data-bind="visible: $parent.statsDisplay() == userName">
+                            <td colspan="2">
+                                <div>Games Played: <span data-bind="text: gamesPlayed"></span></div>
+                                <div>Wins: <span data-bind="text: wins"></span></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div>
 
-    </div>
-    <div class="col-xs-8">
-        <h1>Welcome to the Game</h1>
-        
-        <div data-bind="visible: gameActive" class="alert alert-info">
-            You are playing <span data-bind='text: opponent'></span>
-        </div>
-        
-        <div data-bind="visible: score() != null" class="alert alert-info">Your score is: <span data-bind="text: score"></span></div>
-        <div data-bind="visible: result() === true" class="alert alert-info">Congratulations! You won!</div>
-        <div data-bind="visible: result() === false" class="alert alert-info">Sorry, you lost!</div>
-        <div data-bind="visible: result() === 'Draw'" class="alert alert-info">It's a draw!</div>
-        
-        <div id="quiz">
-            <span id="questionArea" data-bind="html: questions"></span>
-            <div id="answerArea" data-bind="visible: gameActive">
-                <div data-bind="foreach: questionOptions">
-                    <button data-bind="text: text, click: function() {$parent.sendAnswer($data.id)}, enable: $parent.activeQuestion">Send Answer</button>
+            <div class="col-xs-8" data-bind="stopBinding: true">
+
+                <div class="container" data-bind="gameView: true">
+                    <div class="game-container">
+                        <div class="tile-container"></div>
+                        <div class="grid-container">
+                            <div class="grid-row">
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                            </div>
+                            <div class="grid-row">
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                            </div>
+                            <div class="grid-row">
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                            </div>
+                            <div class="grid-row">
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                                <div class="grid-cell"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-info-container">
+                        <div class="player-turn" data-bind="text: playerTurnString()"></div>
+                        <div class="red-score" data-bind="text: redScore">0</div>
+                        <div class="blue-score" data-bind="text: blueScore">0</div>
+                    </div>
                 </div>
             </div>
+
+            <div class="col-xs-2">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th id="userListHeader" colspan="2">Users Currently Online</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket, visible: !connected()">Join Lobby</button>
+                                <span data-bind= "visible: connected"> Connected as : </span>
+                            </th>
+                            <th>
+                                <input type="text" data-bind="value: userName, enable: !connected()"/>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: userList">
+                        <tr data-bind="visible: userName !== $parent.userName()">
+                            <td data-bind="text: userName"></td>
+                            <td data-bind="visible: inGame">In-Game</td>
+                            <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
+                        </tr>
+                    </tbody>
+                </table> 
+                
+            </div>
         </div>
-        <div class="alert alert-success answerResponse" role="alert" data-bind="visible: answerResponse">Correct! Waiting for opponent...</div>
-        <div class="alert alert-danger answerResponse" role="alert" data-bind="visible: answerResponse() === false">Incorrect! The correct answer is: <span data-bind="text: correctAnswer"></span>. Waiting for opponent...</div>
-    </div>
-    <div class="col-xs-2">
-    <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th id="userListHeader" colspan="2">Users Currently Online</th>
-                </tr>
-                <tr>
-                    <th>
-                        <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket, visible: !connected()">Join Lobby</button>
-                        <span data-bind= "visible: connected"> Connected as : </span>
-                    </th>
-                    <th>
-                        <input type="text" data-bind="value: userName, enable: !connected()"/>
-                    </th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: userList">
-                <tr data-bind="visible: userName !== $parent.userName()">
-                    <td data-bind="text: userName"></td>
-                    <td data-bind="visible: inGame">In-Game</td>
-                    <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
-                </tr>
-            </tbody>
-        </table> 
-       
-    </div>
-    </div>
-            
         <script data-main="js/index.js" src="js/require.js"></script>
-        <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script> -->
-        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
-        <!-- <script src="./js/lib/bootstrap-hover-dropdown-master/bootstrap-hover-dropdown.min.js"></script> -->
-        <!--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>-->
-        <!--<script type="text/javascript" src="scripts/viewmodels/IndexViewModel.js"></script>-->
-        <!--<script type="text/javascript" src="scripts/WebSocketClient.js"></script>-->
     </body>
 </html>
