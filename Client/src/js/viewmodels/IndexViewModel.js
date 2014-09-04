@@ -39,8 +39,9 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
         };
         
         var getLeaderboard = function() {
+        
             $.ajax( {
-                url: window.location + 'stats',
+                url:  'http://' + window.location.hostname + '/stats',
                 type: 'GET',
                 success: function(data) {
                 self.leaderBoard(data);
@@ -75,7 +76,7 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
                     break;
                 case 'userListPrompt': 
                     $.ajax( {
-                        url: window.location + 'users',
+                        url: 'http://' + window.location.hostname + '/users',
                         type: 'GET',
                         success: function(data) {
                             self.userList(data);

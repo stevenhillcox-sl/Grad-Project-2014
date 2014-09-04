@@ -2,18 +2,8 @@ function Game(server, webSocketServer, clients)
 {
     var self = this;
     
-    this.currentQuestionNumber = 0;
-    this.playersAnswered = 0;
     this.scores = [];
     this.clients = clients;
-    
-    this.questions = [
-        { questionText : 'Is France a flavour?', questionOptions :  [{'id' : 0, 'text' : 'Yes'}, {'id' : 1, 'text' : 'No'}, {'id' : 2, 'text' : 'Maybe'}], correctAnswerId : 2 },
-        { questionText : 'What is the capital of London?', questionOptions :  [{'id' : 0, 'text' : 'England'}, {'id' : 1, 'text' : 'No'}, {'id' : 2, 'text' : 'L'}], correctAnswerId : 2 },
-        { questionText : 'What is love?', questionOptions :  [{'id' : 0, 'text' : 'Baby don\'t hurt me'}, {'id' : 1, 'text' : 'Baby don\'t hurt me'}, {'id' : 2, 'text' : 'No more'}], correctAnswerId : 1 },
-        { questionText : 'Hablas Espanol?', questionOptions :  [{'id' : 0, 'text' : 'Si'}, {'id' : 1, 'text' : 'Huh?'}, {'id' : 2, 'text' : 'Oui'}], correctAnswerId : 0 },
-        { questionText : 'What is the second derivative of ln(e<sup>x</sup>)?', questionOptions :  [{'id' : 0, 'text' : '1'}, {'id' : 1, 'text' : 'x'}, {'id' : 2, 'text' : '0'}], correctAnswerId : 2 },
-    ];
     
     // Sends a message to all game clients
     this.broadcastToClients = function(message){
@@ -34,10 +24,12 @@ function Game(server, webSocketServer, clients)
     };
     
     // Handles incoming messages
-    this.handleMessage = function(message, messageType, client) {
+    this.handleMessage = function(message, client) {
         
-        if(messageType == 'answer'){
-            this.checkAnswer(message.messageData, client);
+        if(message.messageType == 'gameMove') {
+            self.broadcastToAllClientsExcept(message, client);
+        } else if (message.messageType == 'addTile') {
+            self.broadcastToAllClientsExcept(message, client);
         }
     };
     
@@ -59,37 +51,6 @@ function Game(server, webSocketServer, clients)
         })[0];
     };
     
-    // Checks an answer and updates scores as required
-    this.checkAnswer = function(answer, client){
-        
-        var currentQuestion = self.questions[self.currentQuestionNumber];
-        var correctAnswerId = currentQuestion.correctAnswerId;
-        
-        if (answer == currentQuestion.correctAnswerId) {
-            client.socket.send(webSocketServer.createSocketMessage('answerResponse', [true, '']));
-            self.getScoreByClient(client).value ++;
-        } else {
-            client.socket.send(webSocketServer.createSocketMessage('answerResponse', [false, currentQuestion.questionOptions[correctAnswerId].text]));
-        }
-        
-        self.playersAnswered ++;
-        
-        if(self.playersAnswered == self.clients.length &&
-            ++ self.currentQuestionNumber < self.questions.length) {
-                
-                self.playersAnswered = 0;
-                self.sendQuestion();
-        } else if(self.currentQuestionNumber >= self.questions.length) {
-            
-            self.endGame();
-        }
-    };
-    
-    // Sends the current question to all game participants
-    this.sendQuestion = function() {
-        self.broadcastToClients(webSocketServer.createSocketMessage('question', this.questions[self.currentQuestionNumber].questionText));
-        self.broadcastToClients(webSocketServer.createSocketMessage('questionOptions', this.questions[self.currentQuestionNumber].questionOptions));
-    };
     
     // Starts the game
     this.start = function(){
@@ -98,11 +59,6 @@ function Game(server, webSocketServer, clients)
         self.clients.forEach(function(client){
             self.scores.push({'value' : 0, 'client' : client});
         });
-        
-        // Send first question
-        self.broadcastToClients(webSocketServer.createSocketMessage('gameStart', ''));
-        self.broadcastToClients(webSocketServer.createSocketMessage('playerInfo', self.getUserNames()));
-        this.sendQuestion();
     };
     
     // Ends the game and display the scores
