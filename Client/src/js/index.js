@@ -20,23 +20,18 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
     var self = this;
 
     ko.bindingHandlers.stopBinding = {
-        init: function(element, valueAccessor){
+        init: function(element, valueAccessor) {
             return {
                 controlsDescendantBindings: true
             };
         }
     };
 
-    ko.bindingHandlers.gameView = {
-        init: function(element, valueAccessor){
-            ko.applyBindings(self.gameViewModel, element);
-        }
-    }
+    self.gameViewModel = new GameViewModel();
+    ko.applyBindings(self.gameViewModel, $(".game-view-container").get(0));
 
     self.indexViewModel = new IndexViewModel()
     ko.applyBindings(self.indexViewModel);
-
-    self.gameViewModel = new GameViewModel(); 
 
     var gameTick = 200;
     var gameWait = false;

@@ -36,7 +36,7 @@
 
             <div class="col-xs-8" data-bind="stopBinding: true">
 
-                <div class="container" data-bind="gameView: true">
+                <div class="game-view-container">
                     <div class="game-container">
                         <div class="tile-container"></div>
                         <div class="grid-container">
@@ -68,8 +68,8 @@
                     </div>
                     <div class="game-info-container">
                         <div class="player-turn" data-bind="text: playerTurnString()"></div>
-                        <div class="red-score" data-bind="text: redScore">0</div>
-                        <div class="blue-score" data-bind="text: blueScore">0</div>
+                        <div class="red-score" data-bind="text: redScore"></div>
+                        <div class="blue-score" data-bind="text: blueScore"></div>
                     </div>
                 </div>
             </div>
@@ -98,7 +98,6 @@
                         </tr>
                     </tbody>
                 </table> 
-                
             </div>
         </div>
         <script data-main="js/index.js" src="js/require.js"></script>
