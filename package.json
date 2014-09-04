@@ -27,6 +27,7 @@
     "grunt-jasmine-node": "^0.2.1",
     "grunt-mkdir": "^0.1.2",
     "grunt-shell": "^1.0.1",
+    "grunt-shell-spawn": "^0.3.0",
     "grunt-template-jasmine-requirejs": "^0.2.0",
     "jasmine-node": "^1.14.5"
   }

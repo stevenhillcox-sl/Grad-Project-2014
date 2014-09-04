@@ -89,6 +89,24 @@ module.exports = function(grunt) {
                     create: ['Server/data/db']
                 }
             }
+        },
+        execute: {
+            server: {
+                src: ['Server/main.js']
+            }
+        },
+        shell: {
+            deploy: {
+                command: 'sh deploy.sh',
+                options: {
+                    async: true,
+                }
+            },
+            options: {
+                stdout: true,
+                stderr: true,
+                failOnError: true
+            }
         }
     });
 
@@ -100,12 +118,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-mkdir');
+    grunt.loadNpmTasks('grunt-shell-spawn');
 
     grunt.registerTask('default', ['jshint']);
 
     grunt.registerTask('build-client', ['jshint:client', 'jasmine:client', 'less:build', 'requirejs:build', 'copy:build']);
     grunt.registerTask('build-server', ['jshint:server', 'jasmine_node:server', 'clean:server', 'mkdir:server']);
     grunt.registerTask('build', ['build-client', 'build-server']);
+
+    grunt.registerTask('deploy', ['build', 'shell:deploy']);
 
     grunt.registerTask('debug-client-less', ['less:debug']);
 
