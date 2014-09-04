@@ -3,4 +3,4 @@ pkill node
 pkill mongod
 # Start node and mongo
 mongod -dbpath Server/data/db/ --smallfiles& 
-node src/main &
+node Server/main &

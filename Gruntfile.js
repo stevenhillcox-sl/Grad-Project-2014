@@ -108,7 +108,7 @@ module.exports = function(grunt) {
             deploy: {
                 command: 'sh deploy.sh',
                 options: {
-                    async: true,
+                    async: false,
                 }
             },
             options: {
