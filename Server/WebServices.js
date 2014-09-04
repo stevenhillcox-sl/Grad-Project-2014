@@ -14,6 +14,7 @@ function WebServices(httpServer, lobby, repository) {
        });
     });
     
+    
     httpServer.app.get('/stats/:userName', function(req, res) {
         repository.getUser(req.params.userName, function(databaseUser) {
             res.send('Stats for ' + req.params.userName + ': ' + JSON.stringify({'Games Played': databaseUser.gamesPlayed, 
