@@ -54,7 +54,16 @@ module.exports = function(grunt) {
             }
         },
         requirejs: {
-            build: {
+            buildIndex: {
+                options: {
+                    optimize: "uglify",
+                    baseUrl: "Client/src/js",
+                    name: 'index',
+                    mainConfigFile: "Client/src/js/index.js",
+                    out: "Client/build/js/index.js"
+                }
+            },
+            buildGame: {
                 options: {
                     optimize: "uglify",
                     baseUrl: "Client/src/js",
@@ -122,7 +131,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['jshint']);
 
-    grunt.registerTask('build-client', ['jshint:client', 'jasmine:client', 'less:build', 'requirejs:build', 'copy:build']);
+    grunt.registerTask('build-client', ['jshint:client', 'jasmine:client', 'less:build', 'requirejs:buildGame', 'requirejs:buildIndex', 'copy:build']);
     grunt.registerTask('build-server', ['jshint:server', 'jasmine_node:server', 'clean:server', 'mkdir:server']);
     grunt.registerTask('build', ['build-client', 'build-server']);
 
