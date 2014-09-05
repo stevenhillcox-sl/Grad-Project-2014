@@ -11,8 +11,7 @@ define([], function() {
         };
 
         this.connect = function() {
-            // var webSocket = new WebSocket("ws://" + window.location.hostname);
-            var webSocket = new WebSocket("ws://grad-project-2014-dev-c9-shillcox.c9.io/");
+            var webSocket = new WebSocket("ws://" + window.location.hostname);
 
             webSocket.onopen = function() {
                 // Send a message to the server
