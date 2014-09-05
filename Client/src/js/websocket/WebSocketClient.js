@@ -16,7 +16,9 @@ define([], function() {
             webSocket.onopen = function() {
                 // Send a message to the server
                 self.sendMessage = function(message) {
-                    console.log("Sending", message);
+                    
+                    console.log('send', message)
+                    
                     webSocket.send(message);
                 };
 

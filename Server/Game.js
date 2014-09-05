@@ -24,12 +24,12 @@ function Game(server, webSocketServer, clients)
     };
     
     // Handles incoming messages
-    this.handleMessage = function(message, client) {
+    this.handleMessage = function(messageType, messageData, client) {
         
-        if(message.messageType == 'gameMove') {
-            self.broadcastToAllClientsExcept(message, client);
-        } else if (message.messageType == 'addTile') {
-            self.broadcastToAllClientsExcept(message, client);
+        if(messageType == 'gameMove') {
+            self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
+        } else if (messageType == 'addTile') {
+            self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
         }
     };
     
@@ -55,38 +55,18 @@ function Game(server, webSocketServer, clients)
     // Starts the game
     this.start = function(){
         
+        self.broadcastToClients(webSocketServer.createSocketMessage('gameStart', ''));
+        self.broadcastToClients(webSocketServer.createSocketMessage('playerInfo', self.getUserNames()));
+        
         // Set up scores
         self.clients.forEach(function(client){
             self.scores.push({'value' : 0, 'client' : client});
         });
     };
     
-    // Ends the game and display the scores
+    // Ends the game
     this.endGame = function(){
         
-        var possibleTie = true;
-        var highestScore = self.scores[0];
-        
-        self.scores.forEach(function(score){
-           score.client.socket.send(webSocketServer.createSocketMessage('gameScore', score.value));
-           if (score.value > score.client.user.highScore) {
-               score.client.user.highScore = score.value;
-           }
-           if(score.value != highestScore.value){
-               possibleTie = false;
-               if(score.value > highestScore.value){
-                   highestScore = score;
-               }
-           }
-        });
-        
-        if(possibleTie) {
-            self.broadcastToClients(webSocketServer.createSocketMessage('gameResult', 'Draw'));
-        } else {
-            highestScore.client.user.wins++;
-            highestScore.client.socket.send(webSocketServer.createSocketMessage('gameResult', true));
-            self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage('gameResult', false), highestScore.client);
-        }
         self.close();
     };
     

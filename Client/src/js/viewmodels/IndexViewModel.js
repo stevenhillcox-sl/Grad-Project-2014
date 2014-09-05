@@ -10,7 +10,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.connected = ko.observable(false);
         self.userList = ko.observable();
         self.leaderBoard = ko.observable();
-        self.opponent = ko.observable();
+        //self.opponent = ko.observable();
         self.statsDisplay = ko.observable();
 
         self.redScore = ko.observable(0);
@@ -47,11 +47,12 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             switch (message.messageType) {
                 case 'playerInfo':
                     self.players(message.messageData);
-                    self.opponent((self.userName() == self.players()[0]) ? self.players()[1] : self.players()[0]);
                     break;
                 case 'gameStart':
                     self.gameActive(true);
-                    self.game = new Game(self);
+                    setTimeout(function(){
+                        self.game = new Game(self, self.players());
+                    }, 1000);
                     break;
                 case 'gameClose':
                     self.gameActive(false);
@@ -68,7 +69,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     });
                     break;
                 case 'leaderBoardPrompt':
-                    getLeaderboard();
+                    self.getLeaderboard();
                     break;
                 case 'gameMove':
                     if (self.game) {
@@ -91,6 +92,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         var onClose = function() {
             self.connected(false);
+            self.gameActive(false);
             self.players.removeAll();
         };
 
@@ -102,11 +104,11 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         self.sendMove = function(direction){
             webSocketClient.sendMessage(webSocketClient.createMessage('gameMove', direction));
-        }
+        };
 
         self.sendTile = function(position){
-            websocketClient.sendMessage(webSocketClient.createMessage('addTile', position));
-        }
+            webSocketClient.sendMessage(webSocketClient.createMessage('addTile', position));
+        };
 
         self.challengePlayer = function(userName) {
             webSocketClient.sendMessage(webSocketClient.createMessage('challenge', userName));

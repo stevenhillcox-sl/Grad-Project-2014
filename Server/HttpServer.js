@@ -14,7 +14,7 @@ function HttpServer(){
     
         
     // Expose folder as a static webserver
-    this.app.use(this.express.static(__dirname + "/../Client/build"));
+    this.app.use(this.express.static(__dirname + "/../Client/"));
 }
 
 module.exports.HttpServer = HttpServer;
