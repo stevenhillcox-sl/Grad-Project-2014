@@ -95,7 +95,7 @@ function Lobby(webSocketServer) {
         
         if(client.game !== null){
             
-            client.game.handleMessage(message, message.messageType, client);
+            client.game.handleMessage(message, client);
             
         }
     };

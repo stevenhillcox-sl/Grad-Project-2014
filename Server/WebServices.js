@@ -14,12 +14,17 @@ function WebServices(httpServer, lobby, repository) {
        });
     });
     
+    
     httpServer.app.get('/stats/:userName', function(req, res) {
         repository.getUser(req.params.userName, function(databaseUser) {
             res.send('Stats for ' + req.params.userName + ': ' + JSON.stringify({'Games Played': databaseUser.gamesPlayed, 
                                                                                  'Games Won' : databaseUser.wins}));
         });
     });
+    
+    httpServer.app.get('/health', function( req, res) {
+        res.send('Number of active connections: ' + lobby.clients.length + '\n Server has been running for: ' + httpServer.uptime() + 'seconds.');
+    })
 }
 
 module.exports.WebServices = WebServices;

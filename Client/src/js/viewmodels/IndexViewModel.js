@@ -29,10 +29,22 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 self.statsDisplay(user.userName);
             }
         };
+<<<<<<< HEAD
 
         self.getLeaderboard = function() {
             $.ajax({
                 url: window.location + 'stats',
+=======
+        
+        this.hideStats = function() {
+            self.statsDisplay(false);
+        };
+        
+        var getLeaderboard = function() {
+        
+            $.ajax( {
+                url:  'http://' + window.location.hostname + '/stats',
+>>>>>>> origin/dev
                 type: 'GET',
                 success: function(data) {
                     self.leaderBoard(data);
@@ -57,9 +69,10 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.gameActive(false);
                     self.players.removeAll();
                     break;
-                case 'userListPrompt':
-                    $.ajax({
-                        url: window.location + 'users',
+
+                case 'userListPrompt': 
+                    $.ajax( {
+                        url: 'http://' + window.location.hostname + '/users',
                         type: 'GET',
                         success: function(data) {
                             self.userList(data);
