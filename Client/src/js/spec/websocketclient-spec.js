@@ -13,4 +13,4 @@ define(['../websocket/WebSocketClient'], function(WebSocketClient){
 			expect(testMessage).toBe('{"messageType":"type","messageData":"Hello World!"}');
 		});
 	});
-})
+});

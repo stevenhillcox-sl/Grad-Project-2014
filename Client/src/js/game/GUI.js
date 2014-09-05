@@ -2,7 +2,7 @@ define(['jQuery', './Tile', './TileType'], function($, Tile, TileType) {
 	return function GUI($tileContainer, gameTick) {
 		var self = this;
 		var tileMaps = [];
-		var gameTick = gameTick || 200;
+		gameTick = gameTick || 200;
 
 		var findTileMap = function(gameTile) {
 			return tileMaps.filter(function(tileMap) {

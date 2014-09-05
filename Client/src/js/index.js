@@ -30,7 +30,7 @@ require(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/
     self.gameViewModel = new GameViewModel();
     ko.applyBindings(self.gameViewModel, $(".game-view-container").get(0));
 
-    self.indexViewModel = new IndexViewModel()
+    self.indexViewModel = new IndexViewModel();
     ko.applyBindings(self.indexViewModel);
 
     var gameTick = 200;

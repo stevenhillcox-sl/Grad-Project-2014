@@ -19,21 +19,28 @@ define([], function(){
                 {
                     webSocket.send(message);
                 };
+                if (onConnected) {
+                    onConnected();
+                    
+                }
                 
-                onConnected && onConnected();
             };
             
             // Handle incoming messages
             webSocket.onmessage = function(socketMessage)
             {
                 var message = JSON.parse(socketMessage.data);
-                
-                onMessage && onMessage(message);
+                if (onMessage)
+                {
+                    onMessage(message);
+                }
             };
             
             webSocket.onclose = function()
             {
-                onClose && onClose();
+                if (onClose) {
+                    onClose();
+                }
             };
         };
     };

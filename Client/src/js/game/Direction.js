@@ -1,5 +1,5 @@
 define([], function() {
-	return Direction = {
+	return { 
 		UP: 'UP',
 		DOWN: 'DOWN',
 		LEFT: 'LEFT',

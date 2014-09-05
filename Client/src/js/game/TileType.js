@@ -1,5 +1,5 @@
 define([], function() {
-	return TileType = {
+	return {
 		EMPTY: {
 			string: '*',
 			classString: ''
