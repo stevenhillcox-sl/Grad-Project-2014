@@ -1,14 +1,13 @@
-define([], function() {
+define(['./Position'], function(Position) {
 	return function Tile(tileType) {
 		var self = this;
 
 		self.tileType = tileType;
-		self.row = 0;
-		self.column = 0;
+		self.position = new Position(0, 0);
 
-		self.move = function(row, column) {
-			self.row = row;
-			self.column = column;
+		// Sets a tile's position
+		self.setPosition = function(position) {
+			self.position = position;
 		};
 	};
 });

@@ -129,5 +129,5 @@ module.exports = function(grunt) {
     grunt.registerTask('deploy', ['build', 'shell:deploy']);
 
     grunt.registerTask('debug-client-less', ['less:debug']);
-
+    grunt.registerTask('debug-deploy', ['debug-client-less','shell:deploy']);
 };
