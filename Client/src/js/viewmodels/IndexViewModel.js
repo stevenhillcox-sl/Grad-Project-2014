@@ -140,7 +140,5 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.sendLobbyChatMessage = function() {
             webSocketClient.sendMessage(webSocketClient.createMessage('lobbyChat', {'chatMessage': self.lobbyChatMessage(), 'userName': self.userName()}));
         };
-
-
     };
 });
