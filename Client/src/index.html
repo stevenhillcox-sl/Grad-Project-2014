@@ -69,6 +69,17 @@
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
+                <div>
+                    <div class="chatBar" data-bind="visible: gameActive">
+                        <input class="chatInput" type='text' data-bind="value: chatMessage "></input>
+                        <button type='button' class="btn btn-primary" data-bind="click: sendChatMessage">Send Message</button>
+                    </div>
+                    <div class="chatWindow" data-bind="foreach: chatWindow">
+                        <div>
+                            <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-xs-2">

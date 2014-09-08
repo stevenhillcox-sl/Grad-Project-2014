@@ -36,6 +36,8 @@ function Game(server, webSocketServer, clients)
             case 'addTile':
                 self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
                 break;
+            case 'chat':
+                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
         }
     };
     
