@@ -1,8 +1,10 @@
 define([], function() {
     return function WebSocketClient(onConnected, onMessage, onClose) {
+
         var self = this;
         this.sendMessage = null;
 
+        // Creates a correctly formatted JSON message
         this.createMessage = function(messageType, messageData) {
             return JSON.stringify({
                 'messageType': messageType,
@@ -10,34 +12,36 @@ define([], function() {
             });
         };
 
+        // Connect to the web socket
         this.connect = function() {
-            var webSocket = new WebSocket("ws://" + window.location.hostname);
+            var webSocket = new WebSocket("ws://" + (window.location.hostname || "grad-project-2014-dev-c9-shillcox.c9.io"));
 
             webSocket.onopen = function() {
                 // Send a message to the server
                 self.sendMessage = function(message) {
                     
-                    console.log('send', message)
-                    
                     webSocket.send(message);
                 };
 
-                onConnected && onConnected();
+                if(onConnected){
+                    onConnected();
+                }
             };
 
             // Handle incoming messages
             webSocket.onmessage = function(socketMessage) {
                 var message = JSON.parse(socketMessage.data);
 
-                console.log("got", message);
-
                 if (onMessage) {
                     onMessage(message);
                 }
             };
 
+            // Handle disconnects
             webSocket.onclose = function() {
-                onClose && onClose();
+                if(onClose){
+                    onClose();
+                }
             };
         };
     };

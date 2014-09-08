@@ -16,10 +16,10 @@ require.config({
     }
 });
 
-require(['jQuery', 'knockout', 'viewmodels/IndexViewModel', ], function($, ko, IndexViewModel) {
+require(['jQuery', 'knockout', 'viewmodels/IndexViewModel'], function($, ko, IndexViewModel) {
 
     var self = this;
 
-    self.indexViewModel = new IndexViewModel()
+    self.indexViewModel = new IndexViewModel();
     ko.applyBindings(self.indexViewModel);
 });

@@ -10,7 +10,6 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.connected = ko.observable(false);
         self.userList = ko.observable();
         self.leaderBoard = ko.observable();
-        //self.opponent = ko.observable();
         self.statsDisplay = ko.observable();
 
         self.redScore = ko.observable(0);
@@ -44,6 +43,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         // Display information messages to the user
         var onMessage = function(message) {
+            
+            console.log('get', message.messageType, message.messageData);
+            
             switch (message.messageType) {
                 case 'playerInfo':
                     self.players(message.messageData);
@@ -62,7 +64,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
                 case 'userListPrompt': 
                     $.ajax( {
-                        url: 'http://' + window.location.hostname + '/users',
+                        url: 'http://' + ( window.location.hostname || "grad-project-2014-dev-c9-shillcox.c9.io" ) + '/users',
                         type: 'GET',
                         success: function(data) {
                             self.userList(data);
@@ -117,6 +119,6 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         self.endGame = function(){
              webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
-        }
+        };
     };
 });
