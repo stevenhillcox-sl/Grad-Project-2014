@@ -16,11 +16,9 @@ function Repository(){
             { 
                 setTimeout(self.connect, 5000);
                 console.log(err.message);
-                console.log('Trying again in 10 seconds');
+                console.log('Trying again in 5 seconds');
                 return;
             }
-            
-            console.log('Connected to db');
             
             self.addUser = function(user, callBack){
                 db.collection('Users').insert(user, function(err, records){
@@ -55,8 +53,9 @@ function Repository(){
                     }
                 });
             };
-            
        });
+       
+       console.log("Connected to database");
     };
 }
 

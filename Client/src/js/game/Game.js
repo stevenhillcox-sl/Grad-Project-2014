@@ -41,13 +41,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			player.viewModelScore(score);
 		};
 		
-		var count = 0;
-		
 		var startTurn = function(){
-			
-			if(count++ == 3){
-				viewModel.endGame();
-			}
 			
 			var newTilePosition = grid.getRandomEmptyCell();
 			if(newTilePosition){
