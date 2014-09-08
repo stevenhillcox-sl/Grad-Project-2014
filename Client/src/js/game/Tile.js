@@ -3,7 +3,7 @@ define(['./Position'], function(Position) {
 		var self = this;
 
 		self.tileType = tileType;
-		self.position = new Position
+		self.position = new Position(0, 0);
 
 		// Sets a tile's position
 		self.setPosition = function(position) {

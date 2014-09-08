@@ -43,6 +43,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         // Display information messages to the user
         var onMessage = function(message) {
+            
+            console.log('get', message.messageType, message.messageData);
+            
             switch (message.messageType) {
                 case 'playerInfo':
                     self.players(message.messageData);
@@ -116,6 +119,6 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         self.endGame = function(){
              webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
-        }
+        };
     };
 });

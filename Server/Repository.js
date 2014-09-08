@@ -30,8 +30,8 @@ function Repository(){
             
             self.getLeaderboard = function(callback) {
                 db.collection('Users').find(function(err, records) {
-                    records.sort({'winPercentage' : -1}).toArray(function(err, array) {
-                       callback(array); 
+                    records.sort({'winPercentage' : -1}).toArray(function(err, sortedRecords) {
+                       callback(sortedRecords); 
                     });
                 });
             };
@@ -54,8 +54,6 @@ function Repository(){
                 });
             };
        });
-       
-       console.log("Connected to database");
     };
 }
 

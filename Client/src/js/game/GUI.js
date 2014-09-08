@@ -24,7 +24,7 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 
 			$newTile.addClass(tile.tileType.classString);
 			$newTile.addClass('tile-new');
-			$newTile.addClass('tile-position-' + tile.row + '-' + tile.column);
+			$newTile.addClass('tile-position-' + tile.position.row + '-' + tile.position.column);
 
 			tileMaps.push({
 				gameTile: tile,

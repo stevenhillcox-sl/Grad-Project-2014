@@ -22,7 +22,7 @@ function Lobby(webSocketServer) {
     // Prompt users to update thier leaderboard
     var promptLeaderBoard = function() {
         webSocketServer.broadcastMessage(webSocketServer.createSocketMessage('leaderBoardPrompt', ''), self.clients);
-    }
+    };
 
     webSocketServer.onNewClient = function(client) {
         self.clients.push(client);

@@ -23,7 +23,9 @@ define([], function() {
                     webSocket.send(message);
                 };
 
-                onConnected && onConnected();
+                if(onConnected){
+                    onConnected();
+                }
             };
 
             // Handle incoming messages
