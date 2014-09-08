@@ -1,5 +1,5 @@
 define(['./Tile', './TileType', './Direction', './Position'], function(Tile, TileType, Direction, Position) {
-    return function Grid(gridSize, gui) {
+    return function Grid(gridSize) {
 
         var self = this;
         var grid = [];
@@ -75,13 +75,6 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
             row.reverse();
         };
 
-        // Removes a tile 
-        var removeTile = function(tile) {
-            if (self.onTileMerge) {
-                self.onTileMerge(tile);
-            }
-            gui.removeTile(tile);
-        };
 
         // Updates the positions stored in the tiles to match the grid
         var updateTiles = function() {
@@ -100,8 +93,14 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
                     var gridCell = grid[i][j];
+                    var mergedTiles = [];
                     while (gridCell.length > 1) {
-                        removeTile(gridCell.pop());
+                        mergedTiles.push(gridCell.pop());
+                    }
+                    if(mergedTiles.length > 0){
+                        if (self.onTileMerge) {
+                            self.onTileMerge(mergedTiles);
+                        }
                     }
                 }
             }

@@ -15,6 +15,24 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 		var removeTileMap = function(tileMap) {
 			tileMaps.splice(tileMaps.indexOf(tileMap), 1);
 		};
+		
+		// Add a score indicator
+		self.addScorePopUp = function(tile, score) {
+			var $newScorePopUp = $("<div>", {
+				class: "score-pop-up"
+			});
+			
+			$newScorePopUp.addClass('tile-position-' + tile.position.row + '-' + tile.position.column);
+			$newScorePopUp.text("+"+score);
+			
+			setTimeout(function() {
+				$tileContainer.append($newScorePopUp);
+			}, gameTick);
+			
+			setTimeout(function() {
+				$newScorePopUp.remove();
+			}, 6  * gameTick);
+		};
 
 		// Creates a new gui tile and maps it to a given game tile
 		self.addTile = function(tile) {
