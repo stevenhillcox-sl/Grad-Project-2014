@@ -57,11 +57,9 @@ function Lobby(webSocketServer) {
             
         if(!client.user){
             repository.getUser(userName, function(databaseUser){
-                console.log('result is : ' + JSON.stringify(databaseUser));
                 
                 if (databaseUser) {
                     client.user = databaseUser;
-                    console.log('I am in the database: ' + JSON.stringify(client.user));
                 } else {
                     client.user = { 'userName' : userName,
                                     'gamesPlayed': 0,
@@ -95,7 +93,7 @@ function Lobby(webSocketServer) {
         
         if(client.game !== null){
             
-            client.game.handleMessage(message, client);
+            client.game.handleMessage(message.messageType, message.messageData, client);
             
         }
     };

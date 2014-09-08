@@ -1,79 +1,65 @@
-define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, WebSocketClient){
-    
-    var IndexViewModel = function() {
-        // Create observables
-        this.userName = ko.observable('User' + Math.floor(Math.random()*1000));
-        this.serverMessages = ko.observableArray();
-        this.players = ko.observableArray();
-        this.questions = ko.observable();
-        this.questionOptions = ko.observableArray();
-        this.selectedAnswer = ko.observable();
-        this.gameActive = ko.observable(false);
-        this.connected = ko.observable(false);
-        this.activeQuestion = ko.observable(false);
-        this.userList = ko.observable();
-        this.leaderBoard = ko.observable();
-        this.opponent = ko.observable();
-        this.answerResponse = ko.observable();
-        this.correctAnswer = ko.observable();
-        this.score = ko.observable(null);
-        this.result = ko.observable();
-        this.statsDisplay = ko.observable();
-        
+define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], function($, ko, WebSocketClient, Game) {
+    return function IndexViewModel() {
         var self = this;
-        
-        //
-        /// --> Server code
-        //
-        this.toggleStats = function(user) {
+
+        // Create observables
+        self.userName = ko.observable('User' + Math.floor(Math.random() * 1000));
+        self.serverMessages = ko.observableArray();
+        self.players = ko.observableArray();
+        self.gameActive = ko.observable(false);
+        self.connected = ko.observable(false);
+        self.userList = ko.observable();
+        self.leaderBoard = ko.observable();
+        //self.opponent = ko.observable();
+        self.statsDisplay = ko.observable();
+
+        self.redScore = ko.observable(0);
+        self.blueScore = ko.observable(0);
+        self.playerTurnName = ko.observable('');
+        self.playerTurnString = ko.computed(function() {
+            return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
+        });
+
+        self.game = null;
+
+        self.toggleStats = function(user) {
             if (self.statsDisplay() == user.userName) {
                 self.statsDisplay(false);
-            } else
-            {
+            } else {
                 self.statsDisplay(user.userName);
             }
         };
-        
-        this.hideStats = function() {
-            self.statsDisplay(false);
-        };
-        
-        var getLeaderboard = function() {
-        
-            $.ajax( {
-                url:  'http://' + window.location.hostname + '/stats',
+
+        self.getLeaderboard = function() {
+            $.ajax({
+                url: window.location + 'stats',
                 type: 'GET',
                 success: function(data) {
-                self.leaderBoard(data);
+                    self.leaderBoard(data);
                 }
-            });   
+            });
         };
-        
-        getLeaderboard();
-        
+
+        self.getLeaderboard();
+
         // Display information messages to the user
-        var onMessage = function(message){
-            switch(message.messageType) {
+        var onMessage = function(message) {
+            switch (message.messageType) {
                 case 'playerInfo':
                     self.players(message.messageData);
-                    self.opponent((self.userName() == self.players()[0]) ? self.players()[1] : self.players()[0]);
-                    break;
-                case 'questionOptions':
-                    self.questionOptions.removeAll();
-                    self.questionOptions(message.messageData);
-                    self.activeQuestion(true);
                     break;
                 case 'gameStart':
-                    self.score(null);
-                    self.result(null);
                     self.gameActive(true);
+                    setTimeout(function(){
+                        self.game = new Game(self, self.players());
+                    }, 1000);
                     break;
                 case 'gameClose':
                     self.gameActive(false);
                     self.players.removeAll();
-                    self.questions(null);
-                    self.answerResponse(null);
+                    self.game.clear();
                     break;
+
                 case 'userListPrompt': 
                     $.ajax( {
                         url: 'http://' + window.location.hostname + '/users',
@@ -84,55 +70,53 @@ define(['jQuery', 'knockout', '../websocket/WebSocketClient'], function($, ko, W
                     });
                     break;
                 case 'leaderBoardPrompt':
-                    getLeaderboard();
+                    self.getLeaderboard();
                     break;
-                case 'question':
-                    self.questions(message.messageData);
+                case 'gameMove':
+                    if (self.game) {
+                        self.game.move(message.messageData);
+                    }
                     break;
-                case 'answerResponse':
-                    self.answerResponse(message.messageData[0]);
-                    self.correctAnswer(message.messageData[1]);
-                    break;
-                case 'gameScore':
-                    self.score(message.messageData);
-                    break;
-                case 'gameResult':
-                    self.result(message.messageData);
+                case 'addTile':
+                    if (self.game) {
+                        self.game.addTile(message.messageData);
+                    }
                     break;
             }
         };
-        
-        var onConnected = function(){
-            // Start the game
+
+        var onConnected = function() {
             self.connected(true);
             var joinMessage = webSocketClient.createMessage('join', self.userName());
             webSocketClient.sendMessage(joinMessage);
         };
-        
-        var onClose = function(){
+
+        var onClose = function() {
             self.connected(false);
+            self.gameActive(false);
             self.players.removeAll();
-            self.questionOptions.removeAll();
         };
-        
+
         var webSocketClient = new WebSocketClient(onConnected, onMessage, onClose);
-        
-        
-        this.connectWebSocket = function() {
+
+        self.connectWebSocket = function() {
             webSocketClient.connect();
         };
-        
-        this.sendAnswer = function(id) {
-            webSocketClient.sendMessage(webSocketClient.createMessage('answer', id));
-            self.questionOptions.removeAll();
-            self.activeQuestion(false);
+
+        self.sendMove = function(direction){
+            webSocketClient.sendMessage(webSocketClient.createMessage('gameMove', direction));
         };
-        
-        this.challengePlayer = function(userName) {
+
+        self.sendTile = function(position){
+            webSocketClient.sendMessage(webSocketClient.createMessage('addTile', position));
+        };
+
+        self.challengePlayer = function(userName) {
             webSocketClient.sendMessage(webSocketClient.createMessage('challenge', userName));
         };
-        
+
+        self.endGame = function(){
+             webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
+        }
     };
-    
-    return IndexViewModel;
 });

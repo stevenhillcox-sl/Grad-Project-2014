@@ -23,13 +23,11 @@ function Repository(){
             console.log('Connected to db');
             
             self.addUser = function(user, callBack){
-                console.log(user);
                 db.collection('Users').insert(user, function(err, records){
                     if (callBack) {
                         callBack(records);
                     }
                 });
-                console.log(user);
             };
             
             self.getLeaderboard = function(callback) {

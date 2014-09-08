@@ -104,7 +104,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             return grid;
         };
 
-        self.addTile = function(tileType) {
+        self.getRandomEmptyCell = function() {
             var openRows = [];
 
             for (var i = 0; i < grid.length; i++) {
@@ -128,9 +128,17 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             }
             var randomColumn = openColumns[Math.floor(Math.random() * (openColumns.length))];
 
+            return {
+                row: randomRow,
+                column: randomColumn
+            }
+        }
+
+        self.addTile = function(position, tileType) {
+
             var newTile = new Tile(tileType);
-            grid[randomRow][randomColumn].push(newTile);
-            newTile.move(randomRow, randomColumn);
+            grid[position.row][position.column].push(newTile);
+            newTile.move(position.row, position.column);
 
             gui.addTile(newTile);
         };
