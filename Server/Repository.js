@@ -14,8 +14,8 @@ function Repository(){
             
             if(err) 
             { 
-                setTimeout(self.connect, 10000);
-                console.log('Failed to connect to db');
+                setTimeout(self.connect, 5000);
+                console.log(err.message);
                 console.log('Trying again in 10 seconds');
                 return;
             }
@@ -60,8 +60,6 @@ function Repository(){
             
        });
     };
-    
-    this.connect();
 }
 
 module.exports.Repository = Repository;
