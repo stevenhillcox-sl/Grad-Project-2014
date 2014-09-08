@@ -57,6 +57,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 case 'gameClose':
                     self.gameActive(false);
                     self.players.removeAll();
+                    self.game.clear();
                     break;
 
                 case 'userListPrompt': 
@@ -114,5 +115,8 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             webSocketClient.sendMessage(webSocketClient.createMessage('challenge', userName));
         };
 
+        self.endGame = function(){
+             webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
+        }
     };
 });

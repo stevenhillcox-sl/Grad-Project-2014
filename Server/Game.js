@@ -26,10 +26,16 @@ function Game(server, webSocketServer, clients)
     // Handles incoming messages
     this.handleMessage = function(messageType, messageData, client) {
         
-        if(messageType == 'gameMove') {
-            self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
-        } else if (messageType == 'addTile') {
-            self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
+        switch(messageType) {
+            case 'endGame':
+                self.close();
+                break;
+            case 'gameMove':
+                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
+                break;
+            case 'addTile':
+                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
+                break;
         }
     };
     
@@ -93,7 +99,6 @@ function Game(server, webSocketServer, clients)
         
         // Send closing down message to all clients
         self.broadcastToClients(webSocketServer.createSocketMessage('gameClose', ''));
-        
         server.closeGame(self);
     };
 }

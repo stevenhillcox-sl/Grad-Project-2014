@@ -40,19 +40,22 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			player.score = score;
 			player.viewModelScore(score);
 		};
-
-		var resetGame = function() {
-			gui.clear();
-			grid.clear();
-			self.players.forEach(function(player) {
-				setScore(player, 0);
-			});
-		};
 		
-		var createTile = function(){
+		var count = 0;
+		
+		var startTurn = function(){
+			
+			if(count++ == 3){
+				viewModel.endGame();
+			}
+			
 			var newTilePosition = grid.getRandomEmptyCell();
-			viewModel.sendTile(newTilePosition);
-		}
+			if(newTilePosition){
+				viewModel.sendTile(newTilePosition);
+			} else {
+				viewModel.endGame();
+			}
+		};
 		
 		var gameTick = 200;
 		var gamePlayer = getPlayerByPlayerName(viewModel.userName());
@@ -64,7 +67,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		viewModel.playerTurnName(getCurrentPlayer().playerName);
 		
 		if(getCurrentPlayer() == gamePlayer){
-			createTile();
+			startTurn();
 		}
 
 		grid.onTileMerge = function(tile) {
@@ -72,6 +75,14 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			if (tilePlayer == getCurrentPlayer()) {
 				setScore(tilePlayer, tilePlayer.score + 1);
 			}
+		};
+		
+		self.clear = function() {
+			gui.clear();
+			grid.clear();
+			self.players.forEach(function(player) {
+				setScore(player, 0);
+			});
 		};
 
 		self.addTile = function(position) {
@@ -82,7 +93,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			grid.move(direction, getCurrentPlayer().tileType);
 			advancePlayerTurn();
 			if(getCurrentPlayer() == gamePlayer){
-				createTile();
+				startTurn();
 			}
 		};
 
