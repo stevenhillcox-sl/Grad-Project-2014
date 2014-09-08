@@ -25,10 +25,7 @@ function WebSocketServer(httpServer){
                 'game' : null
             };
             self.onNewClient(newClient);
-            
-            // Send a success message to the client
-            // socket.send(self.createSocketMessage('info', 'Connected'));
-            
+                        
             // Set up handler for incoming messages
             socket.on('message', function(message) {
                 self.handleMessage(message, socket);

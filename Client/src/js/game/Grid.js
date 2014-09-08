@@ -1,8 +1,10 @@
-define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Direction) {
-    return function Grid(gridSize, gui) {
+define(['./Tile', './TileType', './Direction', './Position'], function(Tile, TileType, Direction, Position) {
+    return function Grid(gridSize) {
 
         var self = this;
         var grid = [];
+
+        self.onTileMerge = null;
 
         for (var i = 0; i < gridSize; i++) {
             grid.push([]);
@@ -11,10 +13,12 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             }
         }
 
+        // Returns a copy of a row
         var getRow = function(rowNumber) {
             return grid[rowNumber].slice(0);
         };
 
+        // Returns a copy of a column
         var getColumn = function(columnNumber) {
             var column = [];
             for (var i = 0; i < grid.length; i++) {
@@ -23,16 +27,20 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             return column;
         };
 
+        // Sets a row in the grid to match a given row
         var setRow = function(rowNumber, row) {
             grid[rowNumber] = row;
         };
 
+        // Sets a column in the grid to match a given column
         var setColumn = function(columnNumber, column) {
             for (var i = 0; i < grid.length; i++) {
                 grid[i][columnNumber] = column[i];
             }
         };
 
+        // Pushes tiles in a row, moving tiles into the furthest empty one or
+        // adding it to a cell if that cell contains same typed tiles
         var pushRow = function(row) {
             for (var i = row.length - 2; i >= 0; i--) {
                 var currentCell = row[i];
@@ -60,41 +68,45 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             }
         };
 
-        var mergeTile = function(tile) {
-            if (self.onTileMerge) {
-                self.onTileMerge(tile);
-            }
-            gui.removeTile(tile);
-        };
-
+        // Pulls a row by pushing in the opposite direction
         var pullRow = function(row) {
             row.reverse();
             pushRow(row);
             row.reverse();
         };
 
+
+        // Updates the positions stored in the tiles to match the grid
         var updateTiles = function() {
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
                     for (var k = 0; k < grid[i][j].length; k++) {
-                        grid[i][j][k].move(i, j);
+                        grid[i][j][k].setPosition(new Position(i, j));
                     }
 
                 }
             }
         };
 
+        // Collapses the grid, merging together tiles of the same type in the same cell
         var collapse = function() {
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
                     var gridCell = grid[i][j];
+                    var mergedTiles = [];
                     while (gridCell.length > 1) {
-                        mergeTile(gridCell.pop());
+                        mergedTiles.push(gridCell.pop());
+                    }
+                    if(mergedTiles.length > 0){
+                        if (self.onTileMerge) {
+                            self.onTileMerge(mergedTiles);
+                        }
                     }
                 }
             }
         };
 
+        // Clears out the grid
         self.clear = function() {
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
@@ -104,6 +116,8 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             return grid;
         };
 
+        // Searches the grid for an open slot and returns a random position
+        // Returns null if the grid is full
         self.getRandomEmptyCell = function() {
             var openRows = [];
 
@@ -116,7 +130,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
                 }
             }
             if (openRows.length === 0) {
-                return false;
+                return null;
             }
             var randomRow = openRows[Math.floor(Math.random() * (openRows.length))];
 
@@ -128,21 +142,20 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             }
             var randomColumn = openColumns[Math.floor(Math.random() * (openColumns.length))];
 
-            return {
-                row: randomRow,
-                column: randomColumn
-            }
-        }
+            return new Position(randomRow, randomColumn);
+        };
 
+        // Adds a tile to the grid and returns it
         self.addTile = function(position, tileType) {
 
             var newTile = new Tile(tileType);
             grid[position.row][position.column].push(newTile);
-            newTile.move(position.row, position.column);
+            newTile.position = position;
 
-            gui.addTile(newTile);
+            return newTile;
         };
 
+        // Shunts the grid in a given direction
         self.move = function(direction) {
             switch (direction) {
                 case Direction.RIGHT:
@@ -179,22 +192,7 @@ define(['./Tile', './TileType', './Direction'], function(Tile, TileType, Directi
             }
 
             updateTiles();
-            gui.updateUI();
             collapse();
         };
-
-        self.onTileMerge = null;
-
-        self.print = function() {
-            var outText = '';
-            for (var i = 0; i < grid.length; i++) {
-                for (var j = 0; j < grid[i].length; j++) {
-                    outText += grid[i][j][0] ? grid[i][j][0].tileType : TileType.EMPTY;
-                }
-                outText += "\n";
-            }
-            console.log(outText);
-        };
-
     };
 });
