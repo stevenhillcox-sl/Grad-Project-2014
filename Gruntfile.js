@@ -80,38 +80,9 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        clean: {
-            server: ["Server/data"]
-        },
-        mkdir: {
-            server: {
-                options: {
-                    create: ['Server/data/db']
-                }
-            }
-        },
         execute: {
             server: {
                 src: ['Server/main.js']
-            }
-        },
-        shell: {
-            deployUnix: {
-                command: 'sh deploy.sh',
-                options: {
-                    async: false,
-                }
-            },
-            deployWindows: {
-                command: 'deploy.bat',
-                options: {
-                    async: false,
-                }
-            },
-            options: {
-                stdout: true,
-                stderr: true,
-                failOnError: true
             }
         }
     });
@@ -121,20 +92,17 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-jasmine-node');
-    grunt.loadNpmTasks('grunt-mkdir');
-    grunt.loadNpmTasks('grunt-shell-spawn');
+    grunt.loadNpmTasks('grunt-execute');
 
     grunt.registerTask('default', ['jshint']);
 
     grunt.registerTask('build-client', ['jshint:client', 'jasmine:client', 'less:build', 'requirejs:build', 'copy:build']);
-    grunt.registerTask('build-server', ['jshint:server', 'jasmine_node:server', 'clean:server', 'mkdir:server']);
+    grunt.registerTask('build-server', ['jshint:server', 'jasmine_node:server']);
     grunt.registerTask('build', ['build-client', 'build-server']);
 
-    grunt.registerTask('deploy', ['build', 'shell:deployUnix']);
-    grunt.registerTask('deploy-windows', ['build', 'shell:deployWindows']);
+    grunt.registerTask('deploy', ['build', 'execute:server']);
 
     grunt.registerTask('debug-client-less', ['less:debug']);
-    grunt.registerTask('debug-deploy', ['debug-client-less','shell:deploy']);
+    grunt.registerTask('debug-deploy', ['debug-client-less', 'execute:server']);
 };
