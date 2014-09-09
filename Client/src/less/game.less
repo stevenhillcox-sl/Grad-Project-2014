@@ -13,7 +13,6 @@ body {
     -ms-user-select: none;
     user-select: none;
     cursor: default;
-
 }
 
 .game-info-container {
@@ -101,6 +100,7 @@ body {
     -webkit-transition: -webkit-transform 200ms ease-in-out;
     -moz-transition: -moz-transform 200ms ease-in-out;
     transition: transform 200ms ease-in-out;
+    z-index: 3;
 }
 .tile-red {
     background-color: #DF151A
@@ -195,9 +195,9 @@ body {
     transform: translate(363.75px, 363.75px);
 }
 .tile-new {
-    -webkit-animation: fadeIn 200ms ease 100ms;
-    -moz-animation: fadeIn 200ms ease 100ms;
-    animation: fadeIn 200ms ease 100ms;
+    -webkit-animation: newTileFadeIn 200ms ease 100ms;
+    -moz-animation: newTileFadeIn 200ms ease 100ms;
+    animation: newTileFadeIn 200ms ease 100ms;
     -webkit-animation-fill-mode: backwards;
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
@@ -209,7 +209,7 @@ body {
     width: 106.25px;
     height: 106.25px;
     border-radius: 5px;
-    z-index: 3;
+    z-index: 4;
     
     font-size: 2.5em;
     font-weight: 900;
@@ -227,32 +227,56 @@ body {
     animation-fill-mode: forwards;
 }
 
-@-webkit-keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@-moz-keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+.end-game-overlay {
+    background-color: #FFF;
+    width: 400px;
+    height: 100px;
+    z-index: 5;
+    position: relative;
+    opacity: 0.8;
+    border-radius: 5px;
+    margin-right: auto;
+    margin-left: auto;
+
+    font-size: 2.5em;
+    font-weight: 900;
+    vertical-align: center;
+    text-align: center;
+    line-height: 100px;
+    text-shadow: black 1px 1px;
+
+    -webkit-animation: overlayFloatUp 1000ms;
+    -moz-animation: overlayFloatUp 1000ms;
+    animation: overlayFloatUp 1000ms;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
 }
 
-
+@-webkit-keyframes newTileFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-moz-keyframes newTileFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes newTileFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 @-webkit-keyframes scoreFadeOut {
     0% {
         opacity: 1;
@@ -281,5 +305,30 @@ body {
     100% {
         opacity: 0;
         font-size: 5em;
+    }
+}
+
+@-webkit-keyframes overlayFloatUp {
+    0% {
+        transform: translateY(300px);
+    }
+    100% {
+        transform: translateY(185px);
+    }
+}
+@-moz-keyframes overlayFloatUp {
+    0% {
+        transform: translateY(300px);
+    }
+    100% {
+        transform: translateY(185px);
+    }
+}
+@keyframes overlayFloatUp {
+    0% {
+        transform: translateY(300px);
+    }
+    100% {
+        transform: translateY(185px);
     }
 }

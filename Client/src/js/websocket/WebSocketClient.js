@@ -19,7 +19,6 @@ define([], function() {
             webSocket.onopen = function() {
                 // Send a message to the server
                 self.sendMessage = function(message) {
-                    
                     webSocket.send(message);
                 };
 
@@ -31,7 +30,6 @@ define([], function() {
             // Handle incoming messages
             webSocket.onmessage = function(socketMessage) {
                 var message = JSON.parse(socketMessage.data);
-
                 if (onMessage) {
                     onMessage(message);
                 }

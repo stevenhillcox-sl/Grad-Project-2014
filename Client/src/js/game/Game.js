@@ -2,18 +2,13 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 	return function Game(viewModel, userNames, $gameContainer) {
 
 		var self = this;
-
-		self.players = [{
-			playerName: userNames[0],
-			tileType: TileType.RED,
-			score: 0,
-			viewModelScore: viewModel.redScore
-		}, {
-			playerName: userNames[1],
-			tileType: TileType.BLUE,
-			score: 0,
-			viewModelScore: viewModel.blueScore
-		}];
+		var scoreLimit = 10;
+		var gameWait = false;
+		var gameTick = 200;
+		var gamePlayer = null;
+		var currentPlayerTurn = 0;
+		var gui = new GUI(gameTick);
+		var grid = new Grid(4);
 
 		// Gets the player whoes turn it is
 		var getCurrentPlayer = function() {
@@ -45,51 +40,86 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			player.score = score;
 			player.viewModelScore(score);
 		};
-		
+
 		// Adds a new tile for the player and checks for end game conditions 
-		var startTurn = function(){
-			
+		var startTurn = function() {
 			var newTilePosition = grid.getRandomEmptyCell();
-			if(newTilePosition){
-				viewModel.sendTile(newTilePosition);
-			} else {
+			var scoreLimitReached = false;
+			self.players.forEach(function(player) {
+				if (player.score <= 0) {
+					scoreLimitReached = true;
+				}
+			});
+
+			if (!newTilePosition || scoreLimitReached) {
 				viewModel.endGame();
+			} else {
+				viewModel.sendTile(newTilePosition);
 			}
 		};
-		
-		var gameTick = 200;
-		var gamePlayer = getPlayerByPlayerName(viewModel.userName());
 
-		var gui = new GUI($(".tile-container"), gameTick);
-		var grid = new Grid(4);
-
-		var currentPlayerTurn = 0;
-		viewModel.playerTurnName(getCurrentPlayer().playerName);
-		
-		if(getCurrentPlayer() == gamePlayer){
-			startTurn();
-		}
+		self.players = [{
+			playerName: userNames[0],
+			tileType: TileType.RED,
+			score: scoreLimit,
+			viewModelScore: viewModel.redScore
+		}, {
+			playerName: userNames[1],
+			tileType: TileType.BLUE,
+			score: scoreLimit,
+			viewModelScore: viewModel.blueScore
+		}];
 
 		// Define action to be taken when the grid merges tiles
 		grid.onTileMerge = function(tiles) {
 			var tilePlayer = getPlayerByTileType(tiles[0].tileType);
 			if (tilePlayer == getCurrentPlayer()) {
-				setScore(tilePlayer, tilePlayer.score + tiles.length);
-				gui.addScorePopUp(tiles[0], tiles.length);
+				var scoreChange = tiles.length;
+				setScore(tilePlayer, tilePlayer.score - scoreChange);
+				gui.addScorePopUp(tiles[0], scoreChange);
 			}
 
-			tiles.forEach(function(tile){
+			tiles.forEach(function(tile) {
 				gui.removeTile(tile);
 			});
 		};
-		
-		// Clears the game resetings the grid, GUI and scores
+
+		// Checks if the user has currently won or lost in an end game situation
+		self.checkWinStatus = function() {
+			var sortedPlayers = self.players.slice(0);
+			sortedPlayers.sort(function(a, b) {
+				return a.score - b.score;
+			});
+			if (gamePlayer == sortedPlayers[0]) {
+				gui.displayEndGameOverlay(true);
+			} else {
+				gui.displayEndGameOverlay(false);
+			}
+		};
+
+		// Resets the state of the game
 		self.clear = function() {
 			gui.clear();
 			grid.clear();
+
 			self.players.forEach(function(player) {
-				setScore(player, 0);
+				setScore(player, scoreLimit);
 			});
+
+			currentPlayerTurn = 0;
+		};
+
+		// Initialises the game
+		self.initalise = function() {
+
+			self.clear();
+			viewModel.playerTurnName(getCurrentPlayer().playerName);
+
+			gamePlayer = getPlayerByPlayerName(viewModel.userName());
+
+			if (getCurrentPlayer() == gamePlayer) {
+				startTurn();
+			}
 		};
 
 		// Adds a tile to the game
@@ -103,15 +133,19 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			grid.move(direction, getCurrentPlayer().tileType);
 			gui.updateUI();
 			advancePlayerTurn();
-			if(getCurrentPlayer() == gamePlayer){
+			if (getCurrentPlayer() == gamePlayer) {
 				startTurn();
 			}
 		};
 
 		// Send a move to the server
 		self.makeMove = function(direction) {
-			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() ) {
+			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() && !gameWait) {
+				gameWait = true;
 				viewModel.sendMove(direction);
+				setTimeout(function() {
+					gameWait = false;
+				}, gameTick);
 			}
 		};
 
@@ -130,7 +164,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}
 		});
 
-		$(window).keyup(function(event) {
+		$($gameContainer).keyup(function(event) {
 			var KEYLEFT = 37;
 			var KEYUP = 38;
 			var KEYRIGHT = 39;

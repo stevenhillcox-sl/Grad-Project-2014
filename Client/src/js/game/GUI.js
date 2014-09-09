@@ -1,7 +1,11 @@
 define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileType) {
-	return function GUI($tileContainer, gameTick) {
+	return function GUI(gameTick) {
 		var self = this;
+
 		var tileMaps = [];
+		var $tileContainer = $(".tile-container");
+		var $gameContainer = $('.game-container');
+
 		gameTick = gameTick || 200;
 
 		// Returns a tile mapping based on it's game tile
@@ -15,23 +19,39 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 		var removeTileMap = function(tileMap) {
 			tileMaps.splice(tileMaps.indexOf(tileMap), 1);
 		};
-		
+
 		// Add a score indicator
 		self.addScorePopUp = function(tile, score) {
 			var $newScorePopUp = $("<div>", {
 				class: "score-pop-up"
 			});
-			
+
 			$newScorePopUp.addClass('tile-position-' + tile.position.row + '-' + tile.position.column);
-			$newScorePopUp.text("+"+score);
-			
+			$newScorePopUp.text("-" + score);
+
 			setTimeout(function() {
 				$tileContainer.append($newScorePopUp);
 			}, gameTick);
-			
+
 			setTimeout(function() {
 				$newScorePopUp.remove();
-			}, 6  * gameTick);
+			}, 6 * gameTick);
+		};
+
+		// Displays an overlay informing the user of a win/loss
+		self.displayEndGameOverlay = function(win) {
+
+			var $endGameOverlay = $("<div>", {
+				class: "end-game-overlay"
+			});
+
+			if (win) {
+				$endGameOverlay.text("You win!");
+			} else {
+				$endGameOverlay.text("You lose");
+			}
+
+			$gameContainer.append($endGameOverlay);
 		};
 
 		// Creates a new gui tile and maps it to a given game tile
@@ -64,11 +84,16 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 		};
 
 		// Remove all UI tiles and clear the mappings
-		self.clear = function(){
-			tileMaps.forEach(function(tileMap){
+		self.clear = function() {
+			tileMaps.forEach(function(tileMap) {
 				tileMap.$uiTile.remove();
 			});
 			tileMaps = [];
+
+			$endGameOverlay = $('.end-game-overlay');
+			if ($endGameOverlay) {
+				$endGameOverlay.remove();
+			}
 		};
 
 		// Updates the UI tiles based on thier game tile locations
