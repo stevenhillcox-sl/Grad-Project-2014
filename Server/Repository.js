@@ -20,7 +20,7 @@ function Repository(){
                 return;
             }
             
-            console.log('Connecting');
+            console.log('MongoDB connected');
             
             self.addUser = function(user, callBack){
                 db.collection('Users').insert(user, function(err, records){
