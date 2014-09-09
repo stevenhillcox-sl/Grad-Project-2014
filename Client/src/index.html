@@ -69,7 +69,7 @@
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
-                <div>
+                <div class="gameChat" data-bind="visible: gameActive">
                     <div class="gameChatBar" data-bind="visible: gameActive">
                         <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
                         <button type='button' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
@@ -108,8 +108,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="lobbyChat">
-                    <div class="lobbyChatBar" data-bind="visible: connected">
+                <div class="lobbyChat" data-bind="visible: connected">
+                    <div class="lobbyChatBar">
                         <input class="chatInput" type='text' data-bind="value: lobbyChatMessage, hasFocus: lobbyChatSelected "></input>
                         <button type='button' class="btn btn-primary" data-bind="click: sendLobbyChatMessage">Send Message</button>
                     </div>
