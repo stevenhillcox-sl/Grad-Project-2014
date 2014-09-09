@@ -55,12 +55,8 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             });
         }
 
-        // self.getLeaderboard();
-
         // Display information messages to the user
         var onMessage = function(message) {
-
-            console.log('get', message.messageType, message.messageData);
 
             switch (message.messageType) {
                 case 'playerInfo':

@@ -1,7 +1,6 @@
 /* global describe, it, expect, beforeEach */
 define(['../websocket/WebSocketClient'], function(WebSocketClient){
 	describe("WebSocketClient", function() {
-		//var c = require('../websocket/WebSocketClient.js').WebSocketClient;
 		var client;
 
 		beforeEach(function() {
