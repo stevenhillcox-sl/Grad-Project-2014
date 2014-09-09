@@ -1,5 +1,5 @@
 define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/Direction', 'game/GUI', 'TouchSwipe'], function($, ko, Tile, TileType, Grid, Direction, GUI) {
-	return function Game(viewModel, userNames) {
+	return function Game(viewModel, userNames, $gameContainer) {
 
 		var self = this;
 
@@ -110,12 +110,12 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Send a move to the server
 		self.makeMove = function(direction) {
-			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive()) {
+			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() ) {
 				viewModel.sendMove(direction);
 			}
 		};
 
-		$(window).swipe({
+		$($gameContainer).swipe({
 			swipeLeft: function() {
 				self.makeMove(Direction.LEFT);
 			},

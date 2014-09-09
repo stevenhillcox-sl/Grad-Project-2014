@@ -71,7 +71,7 @@
                 </div>
                 <div>
                     <div class="gameChatBar" data-bind="visible: gameActive">
-                        <input class="gameChatInput" type='text' data-bind="value:gameChatMessage "></input>
+                        <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
                         <button type='button' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
                     </div>
                     <div class="gameChatWindow" data-bind="foreach: gameChatWindow">
@@ -110,7 +110,7 @@
                 </div>
                 <div class="lobbyChat">
                     <div class="lobbyChatBar" data-bind="visible: connected">
-                        <input class="chatInput" type='text' data-bind="value: lobbyChatMessage "></input>
+                        <input class="chatInput" type='text' data-bind="value: lobbyChatMessage, hasFocus: lobbyChatSelected "></input>
                         <button type='button' class="btn btn-primary" data-bind="click: sendLobbyChatMessage">Send Message</button>
                     </div>
                     <div class="lobbyChatWindow" data-bind="foreach: lobbyChatWindow">

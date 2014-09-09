@@ -22,6 +22,13 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.gameChatWindow = ko.observableArray();
         self.lobbyChatMessage = ko.observable();
         self.lobbyChatWindow = ko.observableArray();
+        self.gameChatSelected = ko.observable(false);
+        self.lobbyChatSelected = ko.observable(false);
+        self.chatSelected = ko.computed( function() {
+            console.log(self.lobbyChatSelected());
+            console.log(self.gameChatSelected());
+            return self.gameChatSelected() || self.lobbyChatSelected();
+        });
 
         self.game = null;
 
@@ -65,7 +72,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 case 'gameStart':
                     self.gameActive(true);
                     setTimeout(function() {
-                        self.game = new Game(self, self.players());
+                        self.game = new Game(self, self.players(), $('.game-container'));
                     }, 1000);
                     break;
                 case 'gameClose':
