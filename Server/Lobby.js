@@ -77,10 +77,11 @@ function Lobby(webSocketServer) {
     webSocketServer.onMessage = function(socket, message) {
         var client = self.getClientBySocket(socket);
 
-        if (client.game !== null) {
+        if (client.game !== null && message.messageType == 'chat') {
 
             client.game.handleMessage(message.messageType, message.messageData, client);
-
+        } else {
+            webSocketServer.broadcastMessage(webSocketServer.createSocketMessage(message.messageType,message.messageData), self.clients);
         }
     };
 

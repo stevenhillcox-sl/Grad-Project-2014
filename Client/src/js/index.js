@@ -16,6 +16,7 @@ require.config({
     }
 });
 
+
 require(['jQuery', 'knockout', 'viewmodels/IndexViewModel'], function($, ko, IndexViewModel) {
 
     var self = this;

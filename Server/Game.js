@@ -31,11 +31,13 @@ function Game(server, webSocketServer, clients)
                 self.close();
                 break;
             case 'gameMove':
-                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
+                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData));
                 break;
             case 'addTile':
-                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData), client);
+                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData));
                 break;
+            case 'chat':
+                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData));
         }
     };
     

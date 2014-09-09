@@ -18,6 +18,11 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.playerTurnString = ko.computed(function() {
             return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
         });
+        self.chatMessage = ko.observable();
+        self.chatWindow = ko.observableArray();
+        self.lobbyChatMessage = ko.observable();
+        self.lobbyChatWindow = ko.observableArray();
+
 
         self.game = null;
 
@@ -39,7 +44,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             });
         };
 
-        self.getLeaderboard();
+        // self.getLeaderboard();
 
         // Display information messages to the user
         var onMessage = function(message) {
@@ -60,6 +65,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.gameActive(false);
                     self.players.removeAll();
                     self.game.clear();
+
                     break;
 
                 case 'userListPrompt': 
@@ -83,6 +89,12 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     if (self.game) {
                         self.game.addTile(message.messageData);
                     }
+                    break;
+                case 'chat':
+                    self.chatWindow.unshift(message.messageData);
+                    break;
+                case 'lobbyChat':
+                    self.lobbyChatWindow.unshift(message.messageData);
                     break;
             }
         };
@@ -119,6 +131,14 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         self.endGame = function(){
              webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
+        };
+        
+        self.sendChatMessage = function() {
+            webSocketClient.sendMessage(webSocketClient.createMessage('chat', {'chatMessage': self.chatMessage(), 'userName': self.userName()}));
+        };
+        
+        self.sendLobbyChatMessage = function() {
+            webSocketClient.sendMessage(webSocketClient.createMessage('lobbyChat', {'chatMessage': self.lobbyChatMessage(), 'userName': self.userName()}));
         };
     };
 });

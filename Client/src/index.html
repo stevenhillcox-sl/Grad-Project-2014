@@ -69,32 +69,56 @@
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
+                <div>
+                    <div class="chatBar" data-bind="visible: gameActive">
+                        <input class="chatInput" type='text' data-bind="value: chatMessage "></input>
+                        <button type='button' class="btn btn-primary" data-bind="click: sendChatMessage">Send Message</button>
+                    </div>
+                    <div class="chatWindow" data-bind="foreach: chatWindow">
+                        <div>
+                            <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-xs-2">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th id="userListHeader" colspan="2">Users Currently Online</th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket, visible: !connected()">Join Lobby</button>
-                                <span data-bind= "visible: connected"> Connected as : </span>
-                            </th>
-                            <th>
-                                <input type="text" data-bind="value: userName, enable: !connected()"/>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="foreach: userList">
-                        <tr data-bind="visible: userName !== $parent.userName()">
-                            <td data-bind="text: userName"></td>
-                            <td data-bind="visible: inGame">In-Game</td>
-                            <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
-                        </tr>
-                    </tbody>
-                </table> 
+                <div class="userListTable">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th id="userListHeader" colspan="2">Users Currently Online</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket, visible: !connected()">Join Lobby</button>
+                                    <span data-bind= "visible: connected"> Connected as : </span>
+                                </th>
+                                <th>
+                                    <input type="text" data-bind="value: userName, enable: !connected()"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: userList">
+                            <tr data-bind="visible: userName !== $parent.userName()">
+                                <td data-bind="text: userName"></td>
+                                <td data-bind="visible: inGame">In-Game</td>
+                                <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="lobbyChat">
+                    <div class="lobbyChatBar" data-bind="visible: connected">
+                        <input class="chatInput" type='text' data-bind="value: lobbyChatMessage "></input>
+                        <button type='button' class="btn btn-primary" data-bind="click: sendLobbyChatMessage">Send Message</button>
+                    </div>
+                    <div class="lobbyChatWindow" data-bind="foreach: lobbyChatWindow">
+                        <div>
+                            <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <script data-main="js/index.js" src="js/require.js"></script>
