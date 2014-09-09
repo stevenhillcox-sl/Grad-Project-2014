@@ -1,13 +1,13 @@
 /* global */
-function Lobby(webSocketServer) {
+function Lobby(webSocketServer, repository) {
 
     var self = this;
 
     // Requires 
     var g = require('./Game.js');
-    var r = require('./Repository.js');
-    var repository = new r.Repository();
-    repository.connect();
+    // var r = require('./Repository.js');
+    // var repository = new r.Repository();
+    // repository.connect();
 
     self.clients = [];
     self.players = [];
@@ -78,7 +78,7 @@ function Lobby(webSocketServer) {
         var client = self.getClientBySocket(socket);
         
         switch (message.messageType) {
-            case 'chat':
+            case 'gameChat':
                 if (client.game !== null) {
                     client.game.broadcastToClients(webSocketServer.createSocketMessage(message.messageType, message.messageData));
                 }

@@ -75,6 +75,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 case 'gameClose':
                     self.gameActive(false);
                     self.players.removeAll();
+                    self.gameChatWindow.removeAll();
                     //self.game.clear();
                     break;
                 case 'endGame':

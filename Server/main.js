@@ -13,8 +13,11 @@ var httpServer = new hs.HttpServer();
 var webSocketServer = new wss.WebSocketServer(httpServer.http);
 webSocketServer.startServer();
 
-var lobby = new l.Lobby(webSocketServer);
-
 var repository = new r.Repository();
+repository.connect();
+
+var lobby = new l.Lobby(webSocketServer, repository);
+
+
 
 var webServices = new webS.WebServices( httpServer, lobby, repository);
