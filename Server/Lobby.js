@@ -8,7 +8,7 @@ function Lobby(webSocketServer) {
     var r = require('./Repository.js');
     var repository = new r.Repository();
     repository.connect();
-    
+
     self.clients = [];
     self.players = [];
     self.clientQueue = [];
@@ -76,12 +76,21 @@ function Lobby(webSocketServer) {
 
     webSocketServer.onMessage = function(socket, message) {
         var client = self.getClientBySocket(socket);
-
-        if (client.game !== null && message.messageType == 'chat') {
-
-            client.game.handleMessage(message.messageType, message.messageData, client);
-        } else {
-            webSocketServer.broadcastMessage(webSocketServer.createSocketMessage(message.messageType,message.messageData), self.clients);
+        
+        switch (message.messageType) {
+            case 'chat':
+                if (client.game !== null) {
+                    client.game.broadcastToClients(webSocketServer.createSocketMessage(message.messageType, message.messageData));
+                }
+                break;
+            case 'lobbyChat':
+                webSocketServer.broadcastMessage(webSocketServer.createSocketMessage(message.messageType, message.messageData), self.clients);
+                break;
+            default:
+                if (client.game !== null) {
+                    client.game.handleMessage(message.messageType, message.messageData, client);
+                }
+                break;
         }
     };
 

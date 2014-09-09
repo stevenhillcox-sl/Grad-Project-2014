@@ -53,25 +53,27 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.userList(data);
                 }
             });
-        }
+        };
 
         // Display information messages to the user
         var onMessage = function(message) {
 
             switch (message.messageType) {
-                case 'playerInfo':
-                    self.players(message.messageData);
-                    break;
                 case 'gameStart':
                     self.gameActive(true);
-                    setTimeout(function() {
+                    self.players(message.messageData);
+                    if (!self.game) {
                         self.game = new Game(self, self.players());
-                    }, 1000);
+                    }
+                    self.game.initalise();
                     break;
                 case 'gameClose':
                     self.gameActive(false);
                     self.players.removeAll();
-                    self.game.clear();
+                    //self.game.clear();
+                    break;
+                case 'endGame':
+                    self.game.checkWinStatus();
                     break;
                 case 'userListPrompt':
                     self.getUserList();
