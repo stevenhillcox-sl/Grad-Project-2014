@@ -18,10 +18,15 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.playerTurnString = ko.computed(function() {
             return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
         });
-        self.chatMessage = ko.observable();
-        self.chatWindow = ko.observableArray();
+        self.gameChatMessage = ko.observable();
+        self.gameChatWindow = ko.observableArray();
         self.lobbyChatMessage = ko.observable();
         self.lobbyChatWindow = ko.observableArray();
+        self.gameChatSelected = ko.observable(false);
+        self.lobbyChatSelected = ko.observable(false);
+        self.chatSelected = ko.computed( function() {
+            return self.gameChatSelected() || self.lobbyChatSelected();
+        });
 
         self.game = null;
 
@@ -63,7 +68,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.gameActive(true);
                     self.players(message.messageData);
                     if (!self.game) {
-                        self.game = new Game(self, self.players());
+                        self.game = new Game(self, self.players(), $('.game-container'));
                     }
                     self.game.initalise();
                     break;
@@ -91,8 +96,8 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                         self.game.addTile(message.messageData);
                     }
                     break;
-                case 'chat':
-                    self.chatWindow.unshift(message.messageData);
+                case 'gameChat':
+                    self.gameChatWindow.unshift(message.messageData);
                     break;
                 case 'lobbyChat':
                     self.lobbyChatWindow.unshift(message.messageData);
@@ -134,9 +139,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
         };
 
-        self.sendChatMessage = function() {
-            webSocketClient.sendMessage(webSocketClient.createMessage('chat', {
-                'chatMessage': self.chatMessage(),
+        self.sendGameChatMessage = function() {
+            webSocketClient.sendMessage(webSocketClient.createMessage('gameChat', {
+                'chatMessage': self.gameChatMessage(),
                 'userName': self.userName()
             }));
         };

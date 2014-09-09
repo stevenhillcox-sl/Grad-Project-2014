@@ -1,5 +1,5 @@
 define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/Direction', 'game/GUI', 'TouchSwipe'], function($, ko, Tile, TileType, Grid, Direction, GUI) {
-	return function Game(viewModel, userNames) {
+	return function Game(viewModel, userNames, $gameContainer) {
 
 		var self = this;
 		var scoreLimit = 10;
@@ -140,7 +140,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Send a move to the server
 		self.makeMove = function(direction) {
-			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !gameWait) {
+			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() && !gameWait) {
 				gameWait = true;
 				viewModel.sendMove(direction);
 				setTimeout(function() {
@@ -149,7 +149,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}
 		};
 
-		$(window).swipe({
+		$($gameContainer).swipe({
 			swipeLeft: function() {
 				self.makeMove(Direction.LEFT);
 			},
@@ -164,7 +164,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}
 		});
 
-		$(window).keyup(function(event) {
+		$($gameContainer).keyup(function(event) {
 			var KEYLEFT = 37;
 			var KEYUP = 38;
 			var KEYRIGHT = 39;
