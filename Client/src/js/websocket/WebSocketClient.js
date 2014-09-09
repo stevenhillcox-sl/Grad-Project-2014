@@ -2,7 +2,7 @@ define([], function() {
     return function WebSocketClient(onConnected, onMessage, onClose) {
 
         var self = this;
-        this.sendMessage = null;
+        self.sendMessage = null;
 
         // Creates a correctly formatted JSON message
         this.createMessage = function(messageType, messageData) {

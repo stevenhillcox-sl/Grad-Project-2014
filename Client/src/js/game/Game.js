@@ -61,7 +61,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		var gamePlayer = getPlayerByPlayerName(viewModel.userName());
 
 		var gui = new GUI($(".tile-container"), gameTick);
-		var grid = new Grid(4, gui);
+		var grid = new Grid(4);
 
 		var currentPlayerTurn = 0;
 		viewModel.playerTurnName(getCurrentPlayer().playerName);
@@ -71,11 +71,16 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		}
 
 		// Define action to be taken when the grid merges tiles
-		grid.onTileMerge = function(tile) {
-			var tilePlayer = getPlayerByTileType(tile.tileType);
+		grid.onTileMerge = function(tiles) {
+			var tilePlayer = getPlayerByTileType(tiles[0].tileType);
 			if (tilePlayer == getCurrentPlayer()) {
-				setScore(tilePlayer, tilePlayer.score + 1);
+				setScore(tilePlayer, tilePlayer.score + tiles.length);
+				gui.addScorePopUp(tiles[0], tiles.length);
 			}
+
+			tiles.forEach(function(tile){
+				gui.removeTile(tile);
+			});
 		};
 		
 		// Clears the game resetings the grid, GUI and scores

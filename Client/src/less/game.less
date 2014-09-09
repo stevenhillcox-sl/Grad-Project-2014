@@ -1,5 +1,6 @@
 * {
     -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 body {
@@ -201,14 +202,31 @@ body {
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
 }
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+
+.score-pop-up {
+    position: inherit;
+    display: inline-block;
+    width: 106.25px;
+    height: 106.25px;
+    border-radius: 5px;
+    z-index: 3;
+    
+    font-size: 2.5em;
+    font-weight: 900;
+    vertical-align: center;
+    text-align: center;
+    color: #FFF;
+    line-height: 106.25px;
+    text-shadow: black 1px 1px;
+    
+    -webkit-animation: scoreFadeOut 1000ms;
+    -moz-animation: scoreFadeOut 1000ms;
+    animation: scoreFadeOut 1000ms;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
 }
+
 @-webkit-keyframes fadeIn {
     0% {
         opacity: 0;
@@ -217,12 +235,51 @@ body {
         opacity: 1;
     }
 }
-
 @-moz-keyframes fadeIn {
     0% {
         opacity: 0;
     }
     100% {
         opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+@-webkit-keyframes scoreFadeOut {
+    0% {
+        opacity: 1;
+        font-size: 2.5em;
+    }
+    100% {
+        opacity: 0;
+        font-size: 5em;
+    }
+}
+@-moz-keyframes scoreFadeOut {
+    0% {
+        opacity: 1;
+        font-size: 2.5em;
+    }
+    100% {
+        opacity: 0;
+        font-size: 5em;
+    }
+}
+@keyframes scoreFadeOut {
+    0% {
+        opacity: 1;
+        font-size: 2.5em;
+    }
+    100% {
+        opacity: 0;
+        font-size: 5em;
     }
 }
