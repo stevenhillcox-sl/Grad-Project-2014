@@ -23,8 +23,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.lobbyChatMessage = ko.observable();
         self.lobbyChatWindow = ko.observableArray();
 
-
         self.game = null;
+
+        var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
 
         self.toggleStats = function(user) {
             if (self.statsDisplay() == user.userName) {
@@ -36,7 +37,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         self.getLeaderboard = function() {
             $.ajax({
-                url: window.location + 'stats',
+                url: baseURI + '/stats',
                 type: 'GET',
                 success: function(data) {
                     self.leaderBoard(data);
@@ -44,20 +45,30 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             });
         };
 
+        self.getUserList = function() {
+            $.ajax({
+                url: baseURI + '/users',
+                type: 'GET',
+                success: function(data) {
+                    self.userList(data);
+                }
+            });
+        }
+
         // self.getLeaderboard();
 
         // Display information messages to the user
         var onMessage = function(message) {
-            
+
             console.log('get', message.messageType, message.messageData);
-            
+
             switch (message.messageType) {
                 case 'playerInfo':
                     self.players(message.messageData);
                     break;
                 case 'gameStart':
                     self.gameActive(true);
-                    setTimeout(function(){
+                    setTimeout(function() {
                         self.game = new Game(self, self.players());
                     }, 1000);
                     break;
@@ -65,17 +76,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.gameActive(false);
                     self.players.removeAll();
                     self.game.clear();
-
                     break;
-
-                case 'userListPrompt': 
-                    $.ajax( {
-                        url: 'http://' + ( window.location.hostname || "grad-project-2014-dev-c9-shillcox.c9.io" ) + '/users',
-                        type: 'GET',
-                        success: function(data) {
-                            self.userList(data);
-                        }
-                    });
+                case 'userListPrompt':
+                    self.getUserList();
                     break;
                 case 'leaderBoardPrompt':
                     self.getLeaderboard();
@@ -117,11 +120,11 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             webSocketClient.connect();
         };
 
-        self.sendMove = function(direction){
+        self.sendMove = function(direction) {
             webSocketClient.sendMessage(webSocketClient.createMessage('gameMove', direction));
         };
 
-        self.sendTile = function(position){
+        self.sendTile = function(position) {
             webSocketClient.sendMessage(webSocketClient.createMessage('addTile', position));
         };
 
@@ -129,16 +132,22 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             webSocketClient.sendMessage(webSocketClient.createMessage('challenge', userName));
         };
 
-        self.endGame = function(){
-             webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
+        self.endGame = function() {
+            webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
         };
-        
+
         self.sendChatMessage = function() {
-            webSocketClient.sendMessage(webSocketClient.createMessage('chat', {'chatMessage': self.chatMessage(), 'userName': self.userName()}));
+            webSocketClient.sendMessage(webSocketClient.createMessage('chat', {
+                'chatMessage': self.chatMessage(),
+                'userName': self.userName()
+            }));
         };
-        
+
         self.sendLobbyChatMessage = function() {
-            webSocketClient.sendMessage(webSocketClient.createMessage('lobbyChat', {'chatMessage': self.lobbyChatMessage(), 'userName': self.userName()}));
+            webSocketClient.sendMessage(webSocketClient.createMessage('lobbyChat', {
+                'chatMessage': self.lobbyChatMessage(),
+                'userName': self.userName()
+            }));
         };
     };
 });

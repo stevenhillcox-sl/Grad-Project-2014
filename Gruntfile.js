@@ -96,8 +96,14 @@ module.exports = function(grunt) {
             }
         },
         shell: {
-            deploy: {
+            deployUnix: {
                 command: 'sh deploy.sh',
+                options: {
+                    async: false,
+                }
+            },
+            deployWindows: {
+                command: 'deploy.bat',
                 options: {
                     async: false,
                 }
@@ -126,7 +132,8 @@ module.exports = function(grunt) {
     grunt.registerTask('build-server', ['jshint:server', 'jasmine_node:server', 'clean:server', 'mkdir:server']);
     grunt.registerTask('build', ['build-client', 'build-server']);
 
-    grunt.registerTask('deploy', ['build', 'shell:deploy']);
+    grunt.registerTask('deploy', ['build', 'shell:deployUnix']);
+    grunt.registerTask('deploy-windows', ['build', 'shell:deployWindows']);
 
     grunt.registerTask('debug-client-less', ['less:debug']);
     grunt.registerTask('debug-deploy', ['debug-client-less','shell:deploy']);
