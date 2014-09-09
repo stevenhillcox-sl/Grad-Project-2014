@@ -70,11 +70,11 @@
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
                 <div>
-                    <div class="chatBar" data-bind="visible: gameActive">
-                        <input class="chatInput" type='text' data-bind="value: chatMessage "></input>
-                        <button type='button' class="btn btn-primary" data-bind="click: sendChatMessage">Send Message</button>
+                    <div class="gameChatBar" data-bind="visible: gameActive">
+                        <input class="gameChatInput" type='text' data-bind="value:gameChatMessage "></input>
+                        <button type='button' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
                     </div>
-                    <div class="chatWindow" data-bind="foreach: chatWindow">
+                    <div class="gameChatWindow" data-bind="foreach: gameChatWindow">
                         <div>
                             <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
                         </div>
