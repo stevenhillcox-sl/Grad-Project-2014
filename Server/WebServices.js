@@ -10,7 +10,6 @@ function WebServices(httpServer, lobby, repository) {
     
     httpServer.app.get('/stats', function(req, res) {
        repository.getLeaderboard( function(databaseUsers) {
-           console.log('leaderboard request');
             res.send(databaseUsers); 
        });
     });

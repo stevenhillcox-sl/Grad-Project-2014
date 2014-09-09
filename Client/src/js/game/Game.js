@@ -164,7 +164,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}
 		});
 
-		$($gameContainer).keyup(function(event) {
+		$(window).keyup(function(event) {
 			var KEYLEFT = 37;
 			var KEYUP = 38;
 			var KEYRIGHT = 39;
