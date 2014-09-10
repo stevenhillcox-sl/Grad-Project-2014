@@ -31,6 +31,8 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.game = null;
 
         var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
+        
+       
 
         self.toggleStats = function(user) {
             if (self.statsDisplay() == user.userName) {
@@ -48,7 +50,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.leaderBoard(data);
                 }
             });
-        };
+        }; 
+        
+        self.getLeaderboard();
 
         self.getUserList = function() {
             $.ajax({
@@ -75,6 +79,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 case 'gameClose':
                     self.gameActive(false);
                     self.players.removeAll();
+                    self.gameChatWindow.removeAll();
                     //self.game.clear();
                     break;
                 case 'endGame':

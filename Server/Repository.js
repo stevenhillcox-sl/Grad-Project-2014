@@ -13,12 +13,14 @@ function Repository(){
         MongoClient.connect('mongodb://127.0.0.1:27017/GameDB', function(err, db) {
             
             if(err) 
-            { 
+            {
                 setTimeout(self.connect, 5000);
                 console.log(err.message);
                 console.log('Trying again in 5 seconds');
                 return;
             }
+            
+            console.log('MongoDB connected');
             
             self.addUser = function(user, callBack){
                 db.collection('Users').insert(user, function(err, records){
