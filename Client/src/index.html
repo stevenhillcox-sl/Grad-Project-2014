@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="game-info-container" data-bind="visible:gameActive">
-                    <div class="player-turn" data-bind="text: playerTurnString()"></div>
+                    <div class="player-turn" data-bind="text: playerTurnString(), css: playerNameClass"></div>
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>

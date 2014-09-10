@@ -33,6 +33,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		var advancePlayerTurn = function() {
 			currentPlayerTurn = (currentPlayerTurn + 1) % self.players.length;
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
+			viewModel.playerNameClass(getCurrentPlayer().playerNameClass);
 		};
 
 		// Sets a player's score
@@ -78,12 +79,15 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			playerName: userNames[0],
 			tileType: TileType.RED,
 			score: scoreLimit,
-			viewModelScore: viewModel.redScore
+			viewModelScore: viewModel.redScore,
+			playerNameClass: 'player-name-red'
+
 		}, {
 			playerName: userNames[1],
 			tileType: TileType.BLUE,
 			score: scoreLimit,
-			viewModelScore: viewModel.blueScore
+			viewModelScore: viewModel.blueScore,
+			playerNameClass: 'player-name-blue'
 		}];
 
 		// Define action to be taken when the grid merges tiles
@@ -130,6 +134,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 			self.clear();
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
+			viewModel.playerNameClass(getCurrentPlayer().playerNameClass);
 
 			gamePlayer = getPlayerByPlayerName(viewModel.userName());
 
