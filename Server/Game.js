@@ -25,14 +25,10 @@ function Game(server, webSocketServer, clients) {
     // Handles incoming messages
     self.handleMessage = function(messageType, messageData, client) {
 
-        switch (messageType) {
-            case 'endGame':
-                self.close();
-            case 'gameMove':
-            case 'addTile':
-                self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage(messageType, messageData), client);
-                break;
+        if (messageType === 'endGame') {
+            self.close();
         }
+        self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage(messageType, messageData), client);
     };
 
     // Gets a list of usernames for the game clients
