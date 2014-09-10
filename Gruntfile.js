@@ -81,8 +81,17 @@ module.exports = function(grunt) {
             }
         },
         execute: {
-            server: {
-                src: ['Server/main.js']
+            serverBuild: {
+                src: ['Server/main.js'],
+                options: {
+                    args: ['Client/build']
+                }
+            },
+            serverDebug: {
+                src: ['Server/main.js'],
+                options: {
+                    args: ['Client/src']
+                }
             }
         }
     });
@@ -101,8 +110,8 @@ module.exports = function(grunt) {
     grunt.registerTask('build-server', ['jshint:server', 'jasmine_node:server']);
     grunt.registerTask('build', ['build-client', 'build-server']);
 
-    grunt.registerTask('deploy', ['build', 'execute:server']);
+    grunt.registerTask('deploy', ['build', 'execute:serverBuild']);
 
     grunt.registerTask('debug-client-less', ['less:debug']);
-    grunt.registerTask('debug-deploy', ['debug-client-less', 'execute:server']);
+    grunt.registerTask('debug-deploy', ['debug-client-less', 'execute:serverDebug']);
 };

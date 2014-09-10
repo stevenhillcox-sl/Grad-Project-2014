@@ -1,4 +1,4 @@
-function HttpServer(){
+function HttpServer(staticHttpPath){
     this.express = require('express');
     this.app = this.express();
     this.http = require('http').Server(this.app);
@@ -14,7 +14,7 @@ function HttpServer(){
     
         
     // Expose folder as a static webserver
-    this.app.use(this.express.static(__dirname + "/../Client/build"));
+    this.app.use(this.express.static(__dirname + "/../" + staticHttpPath));
 }
 
 module.exports.HttpServer = HttpServer;
