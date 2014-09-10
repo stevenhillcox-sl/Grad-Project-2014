@@ -51,21 +51,23 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				if (player.score <= 0) {
 					scoreLimitReached = true;
 				}
-				var newTilePosition = grid.getRandomEmptyCell(newTilePositions);
-
-				if (newTilePosition) {
-					var newTile = new Tile(player.tileType, newTilePosition);
-					newTile.setPosition(newTilePosition);
-					newTiles.push(newTile);
-					newTilePositions.push(newTilePosition);
-				}
 			});
 
-			if (newTiles.length === 0 || scoreLimitReached) {
+			if (scoreLimitReached) {
 				viewModel.endGame();
 			} else {
-				newTiles.forEach(function(newTile){
-					viewModel.sendTile(newTile);
+
+				self.players.forEach(function(player) {
+					var newTilePosition = grid.getRandomEmptyCell();
+
+					if (newTilePosition) {
+						var newTile = new Tile(player.tileType, newTilePosition);
+
+						self.addTile(newTile);
+						viewModel.sendTile(newTile);
+					} else {
+						viewModel.endGame();
+					}
 				});
 			}
 		};
@@ -136,7 +138,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Adds a tile to the game
 		self.addTile = function(tile) {
-			var tileTypeKey = Object.keys(TileType).filter(function(key){
+			var tileTypeKey = Object.keys(TileType).filter(function(key) {
 				return tile.tileType.string === TileType[key].string;
 			})[0];
 			var newTile = new Tile(TileType[tileTypeKey], tile.position);
@@ -158,6 +160,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		self.makeMove = function(direction) {
 			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() && !gameWait) {
 				gameWait = true;
+				self.move(direction);
 				viewModel.sendMove(direction);
 				setTimeout(function() {
 					gameWait = false;

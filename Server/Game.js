@@ -30,7 +30,7 @@ function Game(server, webSocketServer, clients) {
                 self.close();
             case 'gameMove':
             case 'addTile':
-                self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData));
+                self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage(messageType, messageData), client);
                 break;
         }
     };

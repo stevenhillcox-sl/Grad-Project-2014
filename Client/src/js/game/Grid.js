@@ -118,11 +118,8 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
 
         // Searches the grid for an open slot and returns a random position
         // Returns null if the grid is full
-        self.getRandomEmptyCell = function(exceptedPositions) {
+        self.getRandomEmptyCell = function() {
             var openRows = [];
-            if (!exceptedPositions) {
-                exceptedPositions = [];
-            }
 
             for (var i = 0; i < grid.length; i++) {
                 for (var k = 0; k < grid[i].length; k++) {
@@ -143,11 +140,6 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                     openColumns.push(j);
                 }
             }
-            exceptedPositions.forEach(function(position) {
-                if (position.row == randomRow && openColumns.indexOf(position.column) != -1) {
-                    openColumns.splice(openColumns.indexOf(position.column), 1);
-                }
-            });
 
             var randomColumn = openColumns[Math.floor(Math.random() * (openColumns.length))];
 
