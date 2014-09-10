@@ -1,8 +1,8 @@
 define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/Direction', 'game/GUI', 'TouchSwipe'], function($, ko, Tile, TileType, Grid, Direction, GUI) {
-	return function Game(viewModel, userNames, $gameContainer) {
+	return function Game(viewModel, $gameContainer) {
 
 		var self = this;
-		var scoreLimit = 10;
+		var scoreLimit = 1;
 		var gameWait = false;
 		var gameTick = 200;
 		var gamePlayer = null;
@@ -75,20 +75,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}
 		};
 
-		self.players = [{
-			playerName: userNames[0],
-			tileType: TileType.RED,
-			score: scoreLimit,
-			viewModelScore: viewModel.redScore,
-			playerNameClass: 'player-name-red'
-
-		}, {
-			playerName: userNames[1],
-			tileType: TileType.BLUE,
-			score: scoreLimit,
-			viewModelScore: viewModel.blueScore,
-			playerNameClass: 'player-name-blue'
-		}];
+	
 
 		// Define action to be taken when the grid merges tiles
 		grid.onTileMerge = function(tiles) {
@@ -111,6 +98,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				return a.score - b.score;
 			});
 			if (gamePlayer == sortedPlayers[0]) {
+				viewModel.updateUserStats(gamePlayer.playerName, 1);
 				gui.displayEndGameOverlay(true);
 			} else {
 				gui.displayEndGameOverlay(false);
@@ -130,9 +118,26 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		};
 
 		// Initialises the game
-		self.initalise = function() {
+		self.initalise = function(userNames) {
+
+			self.players = [{
+				playerName: userNames[0],
+				tileType: TileType.RED,
+				score: scoreLimit,
+				viewModelScore: viewModel.redScore,
+				playerNameClass: 'player-name-red'
+	
+			}, {
+				playerName: userNames[1],
+				tileType: TileType.BLUE,
+				score: scoreLimit,
+				viewModelScore: viewModel.blueScore,
+				playerNameClass: 'player-name-blue'
+			}];
 
 			self.clear();
+			
+			
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
 			viewModel.playerNameClass(getCurrentPlayer().playerNameClass);
 

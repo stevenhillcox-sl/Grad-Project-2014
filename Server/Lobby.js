@@ -15,18 +15,18 @@ function Lobby(webSocketServer, repository) {
     self.games = [];
 
     // Prompt users to update thier list of clients
-    var promptUserList = function() {
+    self.promptUserList = function() {
         webSocketServer.broadcastMessage(webSocketServer.createSocketMessage('userListPrompt', ''), self.clients);
     };
 
     // Prompt users to update thier leaderboard
-    var promptLeaderBoard = function() {
+    self.promptLeaderBoard = function() {
         webSocketServer.broadcastMessage(webSocketServer.createSocketMessage('leaderBoardPrompt', ''), self.clients);
     };
 
     webSocketServer.onNewClient = function(client) {
         self.clients.push(client);
-        promptUserList();
+        self.promptUserList();
     };
 
     webSocketServer.onClientClose = function(socket) {
@@ -35,7 +35,7 @@ function Lobby(webSocketServer, repository) {
 
         // Remove the client from our list
         self.clients.splice(self.clients.indexOf(client), 1);
-        promptUserList();
+        self.promptUserList();
 
         // Close thier game (if they are in one)
         if (client.game) {
@@ -71,7 +71,9 @@ function Lobby(webSocketServer, repository) {
         var challengerClient = self.getClientBySocket(socket);
         var challengedClient = self.getClientByUserName(userName);
 
-        self.createGame([challengerClient, challengedClient]);
+        if(challengerClient !== challengedClient && !challengerClient.game && !challengedClient.game){
+            self.createGame([challengerClient, challengedClient]);
+        }
     };
 
     webSocketServer.onMessage = function(socket, message) {
@@ -120,21 +122,21 @@ function Lobby(webSocketServer, repository) {
         clients.forEach(function(client) {
             client.game = game;
             client.user.gamesPlayed++;
+            repository.persistUser(client.user);
         });
 
         game.start();
-        promptUserList();
+        self.promptUserList();
     };
 
     // Closes off a game
     self.closeGame = function(game) {
         game.clients.forEach(function(client) {
             client.game = null;
-            repository.persistUser(client.user);
         });
         self.games.splice(self.games.indexOf(game), 1);
-        promptUserList();
-        promptLeaderBoard();
+        self.promptUserList();
+        // self.promptLeaderBoard();
     };
 }
 

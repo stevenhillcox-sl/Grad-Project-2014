@@ -51,7 +51,7 @@ function Repository(){
                 user.winPercentage = 100 * user.wins / user.gamesPlayed;
                 db.collection('Users').update({'userName' : user.userName}, user, function(err, records){
                     if (callback) {
-                        callback(records); 
+                        callback(); 
                     }
                 });
             };
