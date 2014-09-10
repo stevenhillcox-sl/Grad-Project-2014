@@ -97,7 +97,7 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                     while (gridCell.length > 1) {
                         mergedTiles.push(gridCell.pop());
                     }
-                    if(mergedTiles.length > 0){
+                    if (mergedTiles.length > 0) {
                         if (self.onTileMerge) {
                             self.onTileMerge(mergedTiles);
                         }
@@ -118,8 +118,11 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
 
         // Searches the grid for an open slot and returns a random position
         // Returns null if the grid is full
-        self.getRandomEmptyCell = function() {
+        self.getRandomEmptyCell = function(exceptedPositions) {
             var openRows = [];
+            if (!exceptedPositions) {
+                exceptedPositions = [];
+            }
 
             for (var i = 0; i < grid.length; i++) {
                 for (var k = 0; k < grid[i].length; k++) {
@@ -140,19 +143,20 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                     openColumns.push(j);
                 }
             }
+            exceptedPositions.forEach(function(position) {
+                if (position.row == randomRow && openColumns.indexOf(position.column) != -1) {
+                    openColumns.splice(openColumns.indexOf(position.column), 1);
+                }
+            });
+
             var randomColumn = openColumns[Math.floor(Math.random() * (openColumns.length))];
 
             return new Position(randomRow, randomColumn);
         };
 
-        // Adds a tile to the grid and returns it
-        self.addTile = function(position, tileType) {
-
-            var newTile = new Tile(tileType);
-            grid[position.row][position.column].push(newTile);
-            newTile.position = position;
-
-            return newTile;
+        // Adds a tile to the grid
+        self.addTile = function(tile) {
+            grid[tile.position.row][tile.position.column].push(tile);
         };
 
         // Shunts the grid in a given direction

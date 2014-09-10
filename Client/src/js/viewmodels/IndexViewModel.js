@@ -127,8 +127,8 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             webSocketClient.sendMessage(webSocketClient.createMessage('gameMove', direction));
         };
 
-        self.sendTile = function(position) {
-            webSocketClient.sendMessage(webSocketClient.createMessage('addTile', position));
+        self.sendTile = function(tile) {
+            webSocketClient.sendMessage(webSocketClient.createMessage('addTile', tile));
         };
 
         self.challengePlayer = function(userName) {

@@ -41,20 +41,32 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			player.viewModelScore(score);
 		};
 
-		// Adds a new tile for the player and checks for end game conditions 
+		// Adds a new tile for each player and checks for end game conditions 
 		var startTurn = function() {
-			var newTilePosition = grid.getRandomEmptyCell();
+			var newTiles = [];
+			var newTilePositions = [];
 			var scoreLimitReached = false;
+
 			self.players.forEach(function(player) {
 				if (player.score <= 0) {
 					scoreLimitReached = true;
 				}
+				var newTilePosition = grid.getRandomEmptyCell(newTilePositions);
+
+				if (newTilePosition) {
+					var newTile = new Tile(player.tileType, newTilePosition);
+					newTile.setPosition(newTilePosition);
+					newTiles.push(newTile);
+					newTilePositions.push(newTilePosition);
+				}
 			});
 
-			if (!newTilePosition || scoreLimitReached) {
+			if (newTiles.length === 0 || scoreLimitReached) {
 				viewModel.endGame();
 			} else {
-				viewModel.sendTile(newTilePosition);
+				newTiles.forEach(function(newTile){
+					viewModel.sendTile(newTile);
+				});
 			}
 		};
 
@@ -123,8 +135,12 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		};
 
 		// Adds a tile to the game
-		self.addTile = function(position) {
-			var newTile = grid.addTile(position, getCurrentPlayer().tileType);
+		self.addTile = function(tile) {
+			var tileTypeKey = Object.keys(TileType).filter(function(key){
+				return tile.tileType.string === TileType[key].string;
+			})[0];
+			var newTile = new Tile(TileType[tileTypeKey], tile.position);
+			grid.addTile(newTile);
 			gui.addTile(newTile);
 		};
 
