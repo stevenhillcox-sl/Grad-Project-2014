@@ -57,18 +57,20 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				viewModel.endGame();
 			} else {
 
-				self.players.forEach(function(player) {
+				for (var i = 0; i < self.players.length; i++) {
+
 					var newTilePosition = grid.getRandomEmptyCell();
 
 					if (newTilePosition) {
-						var newTile = new Tile(player.tileType, newTilePosition);
+						var newTile = new Tile(self.players[i].tileType, newTilePosition);
 
 						self.addTile(newTile);
 						viewModel.sendTile(newTile);
 					} else {
 						viewModel.endGame();
+						break;
 					}
-				});
+				}
 			}
 		};
 
