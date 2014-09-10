@@ -71,7 +71,9 @@ function Lobby(webSocketServer, repository) {
         var challengerClient = self.getClientBySocket(socket);
         var challengedClient = self.getClientByUserName(userName);
 
-        self.createGame([challengerClient, challengedClient]);
+        if(challengerClient !== challengedClient && !challengerClient.game && !challengedClient.game){
+            self.createGame([challengerClient, challengedClient]);
+        }
     };
 
     webSocketServer.onMessage = function(socket, message) {
