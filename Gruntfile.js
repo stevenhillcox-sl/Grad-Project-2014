@@ -74,6 +74,11 @@ module.exports = function(grunt) {
                     flatten: true,
                 }, {
                     expand: true,
+                    src: ['Client/src/img/*'],
+                    dest: 'Client/build/img/',
+                    flatten: true,
+                }, {
+                    expand: true,
                     src: ['Client/src/js/require.js'],
                     dest: 'Client/build/js/',
                     flatten: true,
