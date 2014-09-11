@@ -48,6 +48,16 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 url: baseURI + '/stats',
                 type: 'GET',
                 success: function(data) {
+                    data.sort( function(a, b) {
+                        var bPercent = 100 * b.wins / b.gamesPlayed;
+                        var aPercent = 100 * a.wins / a.gamesPlayed;
+                        
+                        if (aPercent === bPercent) {
+                            return b.wins - a.wins;
+                        }
+                        
+                       return bPercent - aPercent; 
+                    });
                     self.leaderBoard(data);
                 }
             });

@@ -22,7 +22,7 @@
                     <tbody data-bind="foreach: leaderBoard">
                         <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }">
                             <td  data-bind="text: userName"></td>
-                            <td data-bind="text: winPercentage.toFixed(2)"></td>
+                            <td data-bind="text: (100 * wins / gamesPlayed).toFixed(2)"></td>
                         </tr>
                         <tr data-bind="visible: $parent.statsDisplay() == userName">
                             <td colspan="2">
