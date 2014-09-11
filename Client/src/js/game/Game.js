@@ -2,7 +2,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 	return function Game(viewModel, $gameContainer) {
 
 		var self = this;
-		var scoreLimit = 1;
+		var scoreLimit = 10;
 		var gameWait = false;
 		var gameTick = 200;
 		var gamePlayer = null;
@@ -75,7 +75,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}
 		};
 
-	
+
 
 		// Define action to be taken when the grid merges tiles
 		grid.onTileMerge = function(tiles) {
@@ -93,15 +93,27 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Checks if the user has currently won or lost in an end game situation
 		self.checkWinStatus = function() {
-			var sortedPlayers = self.players.slice(0);
-			sortedPlayers.sort(function(a, b) {
-				return a.score - b.score;
-			});
-			if (gamePlayer == sortedPlayers[0]) {
-				viewModel.updateUserStats(gamePlayer.playerName, 1);
-				gui.displayEndGameOverlay(true);
+			// Check for a draw
+			var draw = true;
+			for (var i = 1; i < self.players.length; i++) {
+				if (self.players[i].score !== self.players[0].score) {
+					draw = false;
+					break;
+				}
+			}
+			if (draw) {
+				gui.displayEndGameOverlay("draw");
 			} else {
-				gui.displayEndGameOverlay(false);
+				var sortedPlayers = self.players.slice(0);
+				sortedPlayers.sort(function(a, b) {
+					return a.score - b.score;
+				});
+				if (gamePlayer == sortedPlayers[0]) {
+					viewModel.updateUserStats(gamePlayer.playerName, 1);
+					gui.displayEndGameOverlay("win");
+				} else {
+					gui.displayEndGameOverlay("loss");
+				}
 			}
 		};
 
@@ -126,7 +138,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				score: scoreLimit,
 				viewModelScore: viewModel.redScore,
 				playerNameClass: 'player-name-red'
-	
+
 			}, {
 				playerName: userNames[1],
 				tileType: TileType.BLUE,
@@ -136,8 +148,8 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}];
 
 			self.clear();
-			
-			
+
+
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
 			viewModel.playerNameClass(getCurrentPlayer().playerNameClass);
 
