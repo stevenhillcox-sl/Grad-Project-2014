@@ -73,7 +73,7 @@
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
-                <div class="gameChat" data-bind="visible: gameActive">
+                <div class="chat-game" data-bind="visible: gameActive">
                     <div class="chat-bar-game" data-bind="visible: gameActive">
                         <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
                         <button type='button' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
@@ -91,7 +91,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th id="userListHeader" colspan="2">Users Currently Online</th>
+                                <th id="user-list-header" colspan="2">Users Currently Online</th>
                             </tr>
                             <tr>
                                 <th>

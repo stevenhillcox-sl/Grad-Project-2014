@@ -30,7 +30,6 @@ function WebServices(httpServer, lobby, repository) {
 
     //post routes
     httpServer.app.post('/stats/:userName/:winIncrement', function( req, res) {
-        console.log("incrementing score");
         var user = lobby.getClientByUserName(req.params.userName).user;
         user.wins += Number(req.params.winIncrement);
         repository.persistUser(user, function() {
