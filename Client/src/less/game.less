@@ -1,22 +1,48 @@
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+.game-title {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 900;
 }
-body {
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    color: #8D7966;
-    background-color: #F8F1E9;
-
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: default;
+.game-container {
+    width: 500px;
+    height: 500px;
+    padding: 15px;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    background-color: #A8A39D;
 }
-
+.grid-container {
+    position: absolute;
+    z-index: 1;
+}
+.grid-row {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 15px;
+}
+.grid-row:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.grid-row:last-child {
+    margin-bottom: 0px;
+}
+.grid-cell {
+    width: 106.25px;
+    height: 106.25px;
+    margin-right: 15px;
+    background-color: #D8C8B8;
+    border-radius: 5px;
+    float: left;
+}
+.grid-cell:last-child {
+    margin-right: 0px;
+}
 .game-info-container {
-
     margin-top: 25px;
     width: 500px;
     margin-right: auto;
@@ -56,44 +82,7 @@ body {
 .player-name-blue {
     color: #00CBE7;
 }
-.game-container {
-    width: 500px;
-    height: 500px;
-    padding: 15px;
-    margin-top: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 5px;
-    background-color: #A8A39D;
-}
-.grid-container {
-    position: absolute;
-    z-index: 1;
-}
-.grid-row {
-    display: flex;
-    flex-wrap: nowrap;
-    margin-bottom: 15px;
-}
-.grid-row:after {
-    content: "";
-    display: block;
-    clear: both;
-}
-.grid-row:last-child {
-    margin-bottom: 0px;
-}
-.grid-cell {
-    width: 106.25px;
-    height: 106.25px;
-    margin-right: 15px;
-    background-color: #D8C8B8;
-    border-radius: 5px;
-    float: left;
-}
-.grid-cell:last-child {
-    margin-right: 0px;
-}
+
 .tile-container {
     position: absolute;
     z-index: 2;
