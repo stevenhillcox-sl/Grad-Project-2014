@@ -44,8 +44,14 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 type: 'GET',
                 success: function(data) {
                     data.sort( function(a, b) {
-                        var bPercent = 100 * b.wins / b.gamesPlayed;
-                        var aPercent = 100 * a.wins / a.gamesPlayed;
+                        var bPercent;
+                        var aPercent;
+                        
+                        bPercent = 100 * b.wins / b.gamesPlayed;
+                        aPercent = 100 * a.wins / a.gamesPlayed;
+                        
+                        aPercent = aPercent || 0;
+                        bPercent = bPercent || 0;
                         
                         if (aPercent === bPercent) {
                             return b.wins - a.wins;

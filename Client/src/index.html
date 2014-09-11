@@ -24,7 +24,7 @@
                         <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10">
                             <td data-bind="text: $index() + 1"></td>
                             <td data-bind="text: userName"></td>
-                            <td data-bind="text: (100 * wins / gamesPlayed).toFixed(2)"></td>
+                            <td data-bind="text: gamesPlayed === 0 ? 0.0.toFixed(2) : (100 * wins / gamesPlayed).toFixed(2)"></td>
                         </tr>
                         <tr data-bind="visible: $parent.statsDisplay() == userName">
                             <td colspan="2">
