@@ -3,6 +3,9 @@ describe("Lobby", function() {
   var l = require('../Lobby.js').Lobby;
   var lobby;
   var webSocketServer = {};
+  var repository = {
+    persistUser: function(user){}
+  };
 
   webSocketServer.createSocketMessage = function(messageType, messageData) {
     return JSON.stringify({
@@ -14,7 +17,7 @@ describe("Lobby", function() {
   webSocketServer.broadcastMessage = function() {};
 
   beforeEach(function() {
-    lobby = new l(webSocketServer);
+    lobby = new l(webSocketServer, repository);
   });
 
   it("can add new clients", function() {
@@ -125,6 +128,7 @@ describe("Lobby", function() {
   //   });
 
   it("allows clients to challenge other clients", function() {
+    
     var challengerSocket = {
       send: function() {},
       item: 'foo'
@@ -133,6 +137,8 @@ describe("Lobby", function() {
       send: function() {},
       item: 'bar'
     };
+    
+    
     lobby.clients = [{
       'user': {
         'userName': 'User1'
