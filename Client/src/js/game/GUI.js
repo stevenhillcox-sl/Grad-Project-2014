@@ -1,4 +1,4 @@
-+define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileType) {
+define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileType) {
 	return function GUI(gameTick) {
 		var self = this;
 
@@ -45,16 +45,16 @@
 				class: "end-game-overlay"
 			});
 
-			switch (status){
-				case "win" :
+			switch (status) {
+				case "win":
 					$endGameOverlay.text("You win!");
-				break;
-				case "loss" :
+					break;
+				case "loss":
 					$endGameOverlay.text("You lose");
-				break;
-				case "draw" :
+					break;
+				case "draw":
 					$endGameOverlay.text("Draw");
-				break;
+					break;
 			}
 
 			$gameContainer.append($endGameOverlay);
