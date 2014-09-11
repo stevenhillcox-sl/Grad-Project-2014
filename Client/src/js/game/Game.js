@@ -2,7 +2,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 	return function Game(viewModel, $gameContainer) {
 
 		var self = this;
-		var scoreLimit = 1;
+		var scoreLimit = 10;
 		var gameWait = false;
 		var gameTick = 200;
 		var gamePlayer = null;
