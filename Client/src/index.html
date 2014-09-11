@@ -8,20 +8,22 @@
         
     </head>
     <body>
-        <div class="container-fluid">
-            <div class="col-xs-2">
+        <div class="row-fluid">
+            <div class="col-md-3 col-lg-2 hidden-xs hidden-sm">
                <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th id="leaderboardHeader" colspan="2">Leader Board</th>
                         </tr>
                         <tr>
-                            <th>User</th><th>Win %</th>
+                            <th>Rank</th><th>User</th><th>Win %</th>
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: leaderBoard">
-                        <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }">
-                            <td  data-bind="text: userName"></td>
+
+                        <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10">
+                            <td data-bind="text: $index() + 1"></td>
+                            <td data-bind="text: userName"></td>
                             <td data-bind="text: (100 * wins / gamesPlayed).toFixed(2)"></td>
                         </tr>
                         <tr data-bind="visible: $parent.statsDisplay() == userName">
@@ -34,7 +36,8 @@
                 </table> 
             </div>
 
-            <div class="col-xs-8">
+            <div class="col-md-6 col-lg-8">
+                <div class="game-title">Tiler</div>
                 <div class="game-container">
                     <div class="tile-container"></div>
                     <div class="grid-container">
@@ -70,11 +73,11 @@
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
                 <div class="gameChat" data-bind="visible: gameActive">
-                    <div class="gameChatBar" data-bind="visible: gameActive">
+                    <div class="chat-bar-game" data-bind="visible: gameActive">
                         <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
                         <button type='button' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
                     </div>
-                    <div class="gameChatWindow" data-bind="foreach: gameChatWindow">
+                    <div class="chat-window-game" data-bind="foreach: gameChatWindow">
                         <div>
                             <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
                         </div>
@@ -82,8 +85,8 @@
                 </div>
             </div>
 
-            <div class="col-xs-2">
-                <div class="userListTable">
+            <div class="col-md-3 col-lg-2">
+                <div class="user-info">
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -92,10 +95,9 @@
                             <tr>
                                 <th>
                                     <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket, visible: !connected()">Join Lobby</button>
-                                    <span data-bind= "visible: connected"> Connected as : </span>
                                 </th>
                                 <th>
-                                    <input type="text" data-bind="value: userName, enable: !connected()"/>
+                                    <input class="username-input" type="text" data-bind="value: userName, enable: !connected()"/>
                                 </th>
                             </tr>
                         </thead>
@@ -108,18 +110,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="lobbyChat" data-bind="visible: connected">
-                    <div class="lobbyChatBar">
-                        <input class="chatInput" type='text' data-bind="value: lobbyChatMessage, hasFocus: lobbyChatSelected "></input>
-                        <button type='button' class="btn btn-primary" data-bind="click: sendLobbyChatMessage">Send Message</button>
-                    </div>
-                    <div class="lobbyChatWindow" data-bind="foreach: lobbyChatWindow">
-                        <div>
-                            <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
-                        </div>
-                    </div>
-                </div>
             </div>
+        </div>
+       <div class="navbar-fixed-bottom footer">
+          <div class="container">
+               <p><a href="https://github.com/stevenhillcox/Grad-Project-2014">GitHub</a> - <a href="https://travis-ci.org/stevenhillcox/Grad-Project-2014">Travis</a> - <a href="www.scottlogic.co.uk">ScottLogic</a></p>
+          </div>
         </div>
         <script data-main="js/index.js" src="js/require.js"></script>
     </body>

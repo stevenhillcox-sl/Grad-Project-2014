@@ -21,20 +21,15 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         });
         self.gameChatMessage = ko.observable();
         self.gameChatWindow = ko.observableArray();
-        self.lobbyChatMessage = ko.observable();
-        self.lobbyChatWindow = ko.observableArray();
         self.gameChatSelected = ko.observable(false);
-        self.lobbyChatSelected = ko.observable(false);
         self.chatSelected = ko.computed( function() {
-            return self.gameChatSelected() || self.lobbyChatSelected();
+            return self.gameChatSelected();
         });
 
         self.game = null;
 
         var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
         
-       
-
         self.toggleStats = function(user) {
             if (self.statsDisplay() == user.userName) {
                 self.statsDisplay(false);
@@ -126,9 +121,6 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 case 'gameChat':
                     self.gameChatWindow.unshift(message.messageData);
                     break;
-                case 'lobbyChat':
-                    self.lobbyChatWindow.unshift(message.messageData);
-                    break;
             }
         };
 
@@ -170,13 +162,6 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.sendGameChatMessage = function() {
             webSocketClient.sendMessage(webSocketClient.createMessage('gameChat', {
                 'chatMessage': self.gameChatMessage(),
-                'userName': self.userName()
-            }));
-        };
-
-        self.sendLobbyChatMessage = function() {
-            webSocketClient.sendMessage(webSocketClient.createMessage('lobbyChat', {
-                'chatMessage': self.lobbyChatMessage(),
                 'userName': self.userName()
             }));
         };

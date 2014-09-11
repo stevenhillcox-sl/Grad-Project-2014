@@ -1,34 +1,18 @@
-.answerResponse {
-    margin-top: 20px;
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
+body {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    color: #8D7966;
+    background-color: #F8F1E9;
 
-.gameChatWindow {
-    position: relative;
-    top: 60px;
-    width: auto;
-    height: auto;
-    max-height: 200px;
-    overflow: auto;
-}
-
-.gameChatBar {
-    position: relative;  
-    top: 60px;
-}
-
-table {
-    margin-top: 30px;
-}
-
- .userListTable {
-     max-height: 450px;
-     overflow: auto;
- }
-
-
-.lobbyChat {
-    position: absolute;
-    top: 500px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 h1 {
@@ -40,20 +24,40 @@ input {
     width: 90px;
 }
 
-.chatBar input {
-    width: 150px;
+table {
+    margin-top: 30px;
 }
 
-#quiz {
-    font-family: 'Muli', sans-serif;
+.chat-window-game {
+    position: relative;
+    top: 60px;
+    width: auto;
+    height: auto;
+    max-height: 200px;
+    overflow: auto;
 }
 
-#questionArea {
-    font-size: 2em;
+.chat-bar-game {
+    position: relative;  
+    top: 60px;
 }
 
-#answerArea {
-    padding-top: 2em;
+.user-info {
+    padding-right: 25px;
+    max-height: 450px;
+    overflow: auto;
+    overflow-x: hidden;
+ }
+
+.username-input {
+    width: 100%;
+}
+
+.footer {
+    background-color: #D5DED9;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
 }
 
 #userListHeader {
@@ -61,4 +65,3 @@ input {
     border-bottom: 1px solid black;
     text-align:center;
 }
-
