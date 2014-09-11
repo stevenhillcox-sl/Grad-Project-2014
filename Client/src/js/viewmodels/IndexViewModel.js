@@ -49,7 +49,18 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         }; 
         
         self.getLeaderboard();
-
+        
+        self.updateUserStats = function(userName, winIncrement) {
+            $.ajax({
+                url: baseURI + '/stats/' + userName + '/' + winIncrement,
+                type: 'POST',
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+            
+        };
+        
         self.getUserList = function() {
             $.ajax({
                 url: baseURI + '/users',
@@ -68,9 +79,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.gameActive(true);
                     self.players(message.messageData);
                     if (!self.game) {
-                        self.game = new Game(self, self.players(), $('.game-container'));
+                        self.game = new Game(self, $('.game-container'));
                     }
-                    self.game.initalise();
+                    self.game.initalise(self.players());
                     break;
                 case 'gameClose':
                     self.gameActive(false);
