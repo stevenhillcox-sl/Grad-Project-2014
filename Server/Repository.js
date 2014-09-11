@@ -32,7 +32,7 @@ function Repository(){
             
             self.getLeaderboard = function(callback) {
                 db.collection('Users').find(function(err, records) {
-                    records.sort({'winPercentage' : -1}).toArray(function(err, sortedRecords) {
+                    records.toArray(function(err, sortedRecords) {
                        callback(sortedRecords); 
                     });
                 });
@@ -47,8 +47,6 @@ function Repository(){
             };
             
             self.persistUser = function(user, callback){
-                //BIT ODD HAVING THIS HERE
-                user.winPercentage = 100 * user.wins / user.gamesPlayed;
                 db.collection('Users').update({'userName' : user.userName}, user, function(err, records){
                     if (callback) {
                         callback(); 

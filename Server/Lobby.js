@@ -57,8 +57,7 @@ function Lobby(webSocketServer, repository) {
                         'userName': userName,
                         'gamesPlayed': 0,
                         'wins': 0,
-                        'highScore': 0,
-                        'winPercentage': 0
+                        'highScore': 0
                     };
                     repository.addUser(client.user);
                 }
