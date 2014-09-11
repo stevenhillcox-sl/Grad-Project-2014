@@ -170,6 +170,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 'chatMessage': self.gameChatMessage(),
                 'userName': self.userName()
             }));
+            self.gameChatMessage('');
         };
     };
 });

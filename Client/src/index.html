@@ -78,8 +78,10 @@
                 </div>
                 <div class="chat-game" data-bind="visible: gameActive">
                     <div class="chat-bar-game" data-bind="visible: gameActive">
-                        <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
-                        <button type='button' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
+                        <form>
+                            <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
+                            <button type='submit' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
+                        </form>
                     </div>
                     <div class="chat-window-game" data-bind="foreach: gameChatWindow">
                         <div>
