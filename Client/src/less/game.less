@@ -181,16 +181,19 @@ body {
     animation-fill-mode: forwards;
 }
 
+
 .end-game-overlay {
+
     background-color: #FFF;
-    width: @gridSize * 4 / 5;
-    height:  @gridSize / 5;
     z-index: 5;
     position: relative;
     opacity: 0.8;
     border-radius: 5px;
     margin-right: auto;
     margin-left: auto;
+
+    width: @gridSize * 4 / 5;
+    height:  @gridSize / 5;
 
     font-size: 2.5em;
     font-weight: 900;
@@ -205,6 +208,20 @@ body {
     -webkit-animation-fill-mode: forwards;
     -moz-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
+}
+
+.game-rules {
+    width: @gridSize;
+    height: 200px;
+    margin-top: 50px;
+
+    font-size: 1.2em;
+    vertical-align: center;
+    text-align: center;
+
+    border-radius: 5px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 @-webkit-keyframes newTileFadeIn {
