@@ -25,7 +25,7 @@
                         <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10">
                             <td><span data-bind="text: $index() + 1"></span> <span data-bind="if: ($index() < 3)"><img data-bind="attr: { src: 'img/trophy-'+($index()+1)+'.png' }"></img></span></td>
                             <td data-bind="text: userName"></td>
-                            <td data-bind="text: gamesPlayed === 0 ? 0.0.toFixed(2) : (100 * wins / gamesPlayed).toFixed(2)"></td>
+                            <td data-bind="text: gamesPlayed === 0 ? 0 : parseInt(100 * wins / gamesPlayed)"></td>
                         </tr>
                         <tr data-bind="visible: $parent.statsDisplay() == userName">
                             <td colspan="2">
