@@ -22,9 +22,9 @@
                     </thead>
                     <tbody data-bind="foreach: leaderBoard">
 
-                        <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10">
+                        <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10 || (userName === $parent.userName() && $parent.connected())">
                             <td><span data-bind="text: $index() + 1"></span> <span data-bind="if: ($index() < 3)"><img data-bind="attr: { src: 'img/trophy-'+($index()+1)+'.png' }"></img></span></td>
-                            <td data-bind="text: userName"></td>
+                            <td data-bind="text: userName, style: { 'font-weight': (userName === $parent.userName() && $parent.connected()) ? 'bold' : 'normal' }"></td>
                             <td data-bind="text: gamesPlayed === 0 ? 0 : parseInt(100 * wins / gamesPlayed)"></td>
                         </tr>
                         <tr data-bind="visible: $parent.statsDisplay() == userName">
@@ -76,6 +76,7 @@
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
+                <div class="game-rules"><h1>How to play</h1><p>Combine tiles of your colour to lose points. The first lose all of their points will win! If there are no more places for tiles to spawn, the game will end and whoever has the lowest score will win.</p></div>
             </div>
 
             <div class="col-md-3 col-lg-2">
