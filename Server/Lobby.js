@@ -79,11 +79,6 @@ function Lobby(webSocketServer, repository) {
         var client = self.getClientBySocket(socket);
         
         switch (message.messageType) {
-            case 'gameChat':
-                if (client.game !== null) {
-                    client.game.broadcastToClients(webSocketServer.createSocketMessage(message.messageType, message.messageData));
-                }
-                break;
             case 'lobbyChat':
                 webSocketServer.broadcastMessage(webSocketServer.createSocketMessage(message.messageType, message.messageData), self.clients);
                 break;

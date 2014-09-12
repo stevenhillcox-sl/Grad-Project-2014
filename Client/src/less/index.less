@@ -36,25 +36,39 @@ table {
     height: 2em;
 }
 
-.chat-game {
-    margin-bottom:50px;
+.chat-lobby {
+    position: relative;
+    top: 25px;
+    left: 25px;
 }
 
-.chat-window-game {
-    position: relative;
-    top: 60px;
-    width: auto;
-    height: auto;
+.chat-window-lobby-wrapper { 
+    display: table-cell;
+    vertical-align: bottom;
+    width: 250px;
+    height: 200px;
+    background-color: #f9f9f9;
+}
+
+.chat-window-lobby {
     max-height: 200px;
     overflow: auto;
 }
 
-.chat-bar-game {
-    position: relative;  
-    top: 60px;
+.chat-messages-lobby {
+    margin-top: 0.2em;
 }
 
-.user-info {
+.lobbyChatInput {
+    width: 120px;
+}
+
+.user-info-container{
+    height: 450px;
+  
+ }
+ 
+ .user-info {
     max-height: 450px;
     overflow: auto;
     overflow-x: hidden;

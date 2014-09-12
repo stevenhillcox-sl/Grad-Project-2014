@@ -76,51 +76,55 @@
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
-                <div class="chat-game" data-bind="visible: gameActive">
-                    <div class="chat-bar-game" data-bind="visible: gameActive">
-                        <form>
-                            <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
-                            <button type='submit' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
-                        </form>
-                    </div>
-                    <div class="chat-window-game" data-bind="foreach: gameChatWindow">
-                        <div>
-                            <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="col-md-3 col-lg-2">
-                <div class="user-info">
-                    <table class="table table-hover">
-                        <thead>
-                            
-                            <tr data-bind="ifnot: connected">
-                                <th>
-                                    <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket">Join Lobby</button>
-                                </th>
-                                <th>
-                                    <input class="username-input" type="text" data-bind="value: userName"/>
-                                </th>
-                            </tr>
-                            <tr data-bind="if: connected">
-                                <th colspan="2">
-                                    <div class="username-display">Connected as <span data-bind="text: userName"></span></div>
-                                </th>
-                            </tr>
-                            <tr data-bind="if: connected">
-                                <th class="user-list-header" colspan="2">Users Currently Online</th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: userList">
-                            <tr data-bind="visible: userName !== $parent.userName()">
-                                <td data-bind="text: userName"></td>
-                                <td data-bind="visible: inGame">In-Game</td>
-                                <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="user-info-container">
+                    <div class="user-info">
+                        <table class="table table-hover">
+                            <thead>
+                                
+                                <tr data-bind="ifnot: connected">
+                                    <th>
+                                        <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket">Join Lobby</button>
+                                    </th>
+                                    <th>
+                                        <input class="username-input" type="text" data-bind="value: userName"/>
+                                    </th>
+                                </tr>
+                                <tr data-bind="if: connected">
+                                    <th colspan="2">
+                                        <div class="username-display">Connected as <span data-bind="text: userName"></span></div>
+                                    </th>
+                                </tr>
+                                <tr data-bind="if: connected">
+                                    <th class="user-list-header" colspan="2">Users Currently Online</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: userList">
+                                <tr data-bind="visible: userName !== $parent.userName()">
+                                    <td data-bind="text: userName"></td>
+                                    <td data-bind="visible: inGame">In-Game</td>
+                                    <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="chat-lobby" data-bind="visible: connected">
+                    <div class="chat-window-lobby-wrapper">
+                        <div class="chat-window-lobby" data-bind="foreach: lobbyChatWindow">
+                            <div class="chat-messages-lobby">
+                                <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-bar-lobby" data-bind="visible: connected">
+                        <form>
+                            <input class="lobbyChatInput" type='text' data-bind="value:lobbyChatMessage, hasFocus: lobbyChatSelected "></input>
+                            <button type='submit' class="btn btn-primary" data-bind="click: sendlobbyChatMessage">Send Message</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-1 show-lg"></div>
