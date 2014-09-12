@@ -116,7 +116,7 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                 }
             }
             return true;
-        }
+        };
 
         // Clears out the grid
         self.clear = function() {
