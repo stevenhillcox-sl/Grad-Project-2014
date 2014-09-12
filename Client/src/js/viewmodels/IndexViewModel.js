@@ -90,7 +90,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.scrollChatWindow = function() {
             $(".chat-window-lobby").animate({ scrollTop: $(document).height() }, "slow");
             return false;
-        }
+        };
 
         // Display information messages to the user
         var onMessage = function(message) {

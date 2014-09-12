@@ -39,24 +39,31 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 		};
 
 		// Displays an overlay informing the user of a win/loss
-		self.displayEndGameOverlay = function(status) {
+		self.displayEndGameOverlay = function(status, gridFull) {
 
 			var $endGameOverlay = $("<div>", {
 				class: "end-game-overlay"
 			});
 
+			var statusString = "";
+
+			if(gridFull){
+				statusString += "The grid is full! ";
+			}
+
 			switch (status) {
 				case "win":
-					$endGameOverlay.text("You win!");
+					statusString += "You win!";
 					break;
 				case "loss":
-					$endGameOverlay.text("You lose");
+					statusString += "You lose";
 					break;
 				case "draw":
-					$endGameOverlay.text("Draw");
+					statusString += "It's a Draw";
 					break;
 			}
 
+			$endGameOverlay.text(statusString);
 			$gameContainer.append($endGameOverlay);
 		};
 

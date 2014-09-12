@@ -106,6 +106,18 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
             }
         };
 
+        // Checks if the grid is full
+        self.isFull = function(){
+            for (var i = 0; i < grid.length; i++) {
+                for (var j = 0; j < grid[i].length; j++) {
+                    if(grid[i][j].length === 0){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
         // Clears out the grid
         self.clear = function() {
             for (var i = 0; i < grid.length; i++) {
