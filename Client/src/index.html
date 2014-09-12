@@ -90,16 +90,22 @@
                 <div class="user-info">
                     <table class="table table-hover">
                         <thead>
-                            <tr>
-                                <th id="user-list-header" colspan="2">Users Currently Online</th>
+                            
+                            <tr data-bind="ifnot: connected">
+                                <th>
+                                    <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket">Join Lobby</button>
+                                </th>
+                                <th>
+                                    <input class="username-input" type="text" data-bind="value: userName"/>
+                                </th>
                             </tr>
-                            <tr>
-                                <th>
-                                    <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket, visible: !connected()">Join Lobby</button>
+                            <tr data-bind="if: connected">
+                                <th colspan="2">
+                                    <div class="username-display">Connected as <span data-bind="text: userName"></span></div>
                                 </th>
-                                <th>
-                                    <input class="username-input" type="text" data-bind="value: userName, enable: !connected()"/>
-                                </th>
+                            </tr>
+                            <tr data-bind="if: connected">
+                                <th class="user-list-header" colspan="2">Users Currently Online</th>
                             </tr>
                         </thead>
                         <tbody data-bind="foreach: userList">
