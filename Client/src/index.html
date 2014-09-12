@@ -38,7 +38,10 @@
             </div>
 
             <div class="col-md-6 col-lg-6">
-                <div class="game-title">Tiler</div>
+                <div class="game-title">
+                    <img class='logo' src="img/tiler_logo.png"/>
+                    <span>Tiler</span>
+                </div>
                 <div class="game-container">
                     <div class="tile-container"></div>
                     <div class="grid-container">
@@ -75,8 +78,10 @@
                 </div>
                 <div class="chat-game" data-bind="visible: gameActive">
                     <div class="chat-bar-game" data-bind="visible: gameActive">
-                        <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
-                        <button type='button' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
+                        <form>
+                            <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
+                            <button type='submit' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
+                        </form>
                     </div>
                     <div class="chat-window-game" data-bind="foreach: gameChatWindow">
                         <div>
