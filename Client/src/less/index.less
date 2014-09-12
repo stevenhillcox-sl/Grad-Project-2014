@@ -13,10 +13,6 @@ body {
     cursor: default;
 }
 
-input {
-    width: 90px;
-}
-
 table {
     margin-top: 30px;
 }
@@ -35,23 +31,20 @@ table {
     height: 1.6em;
 }
 
-.chat-lobby {
-    position: relative;
-    top: 25px;
-    left: 25px;
-}
 
 .chat-window-lobby-wrapper { 
-    display: table-cell;
-    vertical-align: bottom;
-    width: 250px;
     height: 200px;
-    background-color: #f9f9f9;
+    overflow: auto;
+    display: flex;
 }
 
 .chat-window-lobby {
     max-height: 200px;
-    overflow: auto;
+    align-self: flex-end;
+}
+
+.chat-bar-lobby {
+    display: flex;    
 }
 
 .chat-messages-lobby {
@@ -59,7 +52,8 @@ table {
 }
 
 .lobbyChatInput {
-    width: 120px;
+    flex-grow: 1;
+    margin-right: 2px;
 }
 
 .user-info-container{

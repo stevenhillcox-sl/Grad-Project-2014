@@ -113,18 +113,23 @@
                         </table>
                     </div>
                 </div>
-                <div class="chat-lobby" data-bind="visible: connected">
-                    <div class="chat-window-lobby-wrapper">
-                        <div class="chat-window-lobby" data-bind="foreach: lobbyChatWindow">
-                            <div class="chat-messages-lobby">
-                                <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
+                <div class="panel panel-default" data-bind="visible: connected">
+                    <div class="panel-heading"><h3 class="panel-title">Global chat</h3></div>
+                    <div class="panel-body">
+                        <div class="chat-lobby">
+                            <div class="chat-window-lobby-wrapper">
+                                <div class="chat-window-lobby" data-bind="foreach: lobbyChatWindow">
+                                    <div class="chat-messages-lobby">
+                                        <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="chat-bar-lobby" data-bind="visible: connected">
-                        <form>
-                            <input class="lobbyChatInput" type='text' data-bind="value:lobbyChatMessage, hasFocus: lobbyChatSelected "></input>
-                            <button type='submit' class="btn btn-primary" data-bind="click: sendlobbyChatMessage">Send Message</button>
+                    <div class="panel-footer">
+                        <form class="chat-bar-lobby form-inline">
+                            <input class="lobbyChatInput form-control" type='text' data-bind="value:lobbyChatMessage, hasFocus: lobbyChatSelected "></input>
+                            <button type='submit' class="btn btn-primary" data-bind="click: sendlobbyChatMessage">Send</button>
                         </form>
                     </div>
                 </div>

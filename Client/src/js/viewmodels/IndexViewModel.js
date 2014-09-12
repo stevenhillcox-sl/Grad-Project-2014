@@ -88,7 +88,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         };
         
         self.scrollChatWindow = function() {
-            $(".chat-window-lobby").animate({ scrollTop: $(document).height() }, "slow");
+            $(".chat-window-lobby-wrapper").animate({ scrollTop: $(document).height() }, "slow");
             return false;
         };
 
