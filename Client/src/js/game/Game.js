@@ -56,10 +56,8 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			player.viewModelScore(score);
 		};
 
-		// Adds a new tile for each player and checks for end game conditions 
-		var startTurn = function() {
-			var newTiles = [];
-			var newTilePositions = [];
+		// Checks for end game conditions and optionally adds a new tile
+		var startTurn = function(addTile) {
 			var scoreLimitReached = false;
 
 			self.players.forEach(function(player) {
@@ -71,17 +69,18 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			if (scoreLimitReached) {
 				viewModel.endGame();
 			} else {
+				if (addTile) {
+					var newTilePosition = grid.getRandomEmptyCell();
+					var tileType = getCurrentTileType();
 
-				var newTilePosition = grid.getRandomEmptyCell();
-				var tileType = getCurrentTileType();
+					if (newTilePosition) {
+						var newTile = new Tile(tileType, newTilePosition);
 
-				if (newTilePosition) {
-					var newTile = new Tile(tileType, newTilePosition);
-
-					//self.addTile(newTile);
-					viewModel.sendTile(newTile);
-				} else {
-					viewModel.endGame();
+						//self.addTile(newTile);
+						viewModel.sendTile(newTile);
+					} else {
+						viewModel.endGame();
+					}
 				}
 			}
 		};
@@ -160,7 +159,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			gamePlayer = getPlayerByPlayerName(viewModel.userName());
 
 			if (getCurrentPlayer() == gamePlayer) {
-				startTurn();
+				startTurn(true);
 			}
 		};
 
@@ -186,7 +185,6 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 			if (hasMoved) {
 				gui.updateUI();
-
 				advanceTileType();
 
 				if (!hasMerged) {
@@ -194,7 +192,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				}
 
 				if (getCurrentPlayer() == gamePlayer) {
-					startTurn();
+					startTurn(!hasMerged);
 				}
 			}
 
