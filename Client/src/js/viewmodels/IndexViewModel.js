@@ -12,10 +12,10 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.leaderBoard = ko.observable();
         self.statsDisplay = ko.observable();
 
-        self.redScore = ko.observable(0);
-        self.blueScore = ko.observable(0);
+        self.player1Score = ko.observable(0);
+        self.player2Score = ko.observable(0);
+
         self.playerTurnName = ko.observable('');
-        self.playerNameClass = ko.observable('');
         self.playerTurnString = ko.computed(function() {
             return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
         });
@@ -88,7 +88,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         };
         
         self.scrollChatWindow = function() {
-            $(".chat-window-lobby-wrapper").animate({ scrollTop: $(document).height() }, "slow");
+            $(".chat-window-lobby-wrapper").animate({ scrollTop: $(document).height() }, "fast");
             return false;
         };
 

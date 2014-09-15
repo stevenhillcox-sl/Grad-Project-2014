@@ -9,17 +9,14 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		var currentPlayerTurn = 0;
 		var gui = new GUI(gameTick);
 		var grid = new Grid(4);
+		var tileOrder = [TileType.RED, TileType.BLUE, TileType.GREEN, TileType.YELLOW];
+		var currentTileType = 0;
+
+		self.players = null;
 
 		// Gets the player whoes turn it is
 		var getCurrentPlayer = function() {
 			return self.players[currentPlayerTurn];
-		};
-
-		// Gets a player by thier tile type
-		var getPlayerByTileType = function(tileType) {
-			return self.players.filter(function(player) {
-				return player.tileType == tileType;
-			})[0];
 		};
 
 		// Gets a player by thier name
@@ -29,11 +26,16 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			})[0];
 		};
 
+		// Gets the current tile type to be added to the grid
+		var getCurrentTileType = function() {			
+			return tileOrder[currentTileType];
+		};
+
 		// Advances the turn counter
 		var advancePlayerTurn = function() {
 			currentPlayerTurn = (currentPlayerTurn + 1) % self.players.length;
+			currentTileType = (currentTileType + 1) % tileOrder.length;
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
-			viewModel.playerNameClass(getCurrentPlayer().playerNameClass);
 		};
 
 		// Sets a player's score
@@ -58,33 +60,27 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				viewModel.endGame();
 			} else {
 
-				for (var i = 0; i < self.players.length; i++) {
+				var newTilePosition = grid.getRandomEmptyCell();
+				var tileType = getCurrentTileType();
 
-					var newTilePosition = grid.getRandomEmptyCell();
+				if (newTilePosition) {
+					var newTile = new Tile(tileType, newTilePosition);
 
-					if (newTilePosition) {
-						var newTile = new Tile(self.players[i].tileType, newTilePosition);
-
-						self.addTile(newTile);
-						viewModel.sendTile(newTile);
-					} else {
-						viewModel.endGame();
-						break;
-					}
+					self.addTile(newTile);
+					viewModel.sendTile(newTile);
+				} else {
+					viewModel.endGame();
 				}
 			}
 		};
 
-
-
 		// Define action to be taken when the grid merges tiles
 		grid.onTileMerge = function(tiles) {
-			var tilePlayer = getPlayerByTileType(tiles[0].tileType);
-			if (tilePlayer == getCurrentPlayer()) {
-				var scoreChange = tiles.length;
-				setScore(tilePlayer, tilePlayer.score - scoreChange);
-				gui.addScorePopUp(tiles[0], scoreChange);
-			}
+			var tilePlayer = getCurrentPlayer();
+			var scoreChange = tiles.length;
+			setScore(tilePlayer, tilePlayer.score - scoreChange);
+			gui.addScorePopUp(tiles[0], scoreChange);
+			//}
 
 			tiles.forEach(function(tile) {
 				gui.removeTile(tile);
@@ -128,6 +124,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			});
 
 			currentPlayerTurn = 0;
+			currentTileType = 0;
 		};
 
 		// Initialises the game
@@ -137,22 +134,17 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				playerName: userNames[0],
 				tileType: TileType.RED,
 				score: scoreLimit,
-				viewModelScore: viewModel.redScore,
-				playerNameClass: 'player-name-red'
+				viewModelScore: viewModel.player1Score
 
 			}, {
 				playerName: userNames[1],
 				tileType: TileType.BLUE,
 				score: scoreLimit,
-				viewModelScore: viewModel.blueScore,
-				playerNameClass: 'player-name-blue'
+				viewModelScore: viewModel.player2Score
 			}];
 
 			self.clear();
-
-
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
-			viewModel.playerNameClass(getCurrentPlayer().playerNameClass);
 
 			gamePlayer = getPlayerByPlayerName(viewModel.userName());
 
