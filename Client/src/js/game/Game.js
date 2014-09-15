@@ -29,7 +29,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		// Gets the current tile type to be added to the grid
 		var getCurrentTileType = function() {			
 			return tileOrder[currentTileType];
-		}
+		};
 
 		// Advances the turn counter
 		var advancePlayerTurn = function() {
