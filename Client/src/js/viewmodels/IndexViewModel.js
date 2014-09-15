@@ -16,7 +16,6 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.player2Score = ko.observable(0);
 
         self.playerTurnName = ko.observable('');
-        // self.playerNameClass = ko.observable('');
         self.playerTurnString = ko.computed(function() {
             return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
         });

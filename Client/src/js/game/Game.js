@@ -74,12 +74,9 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			}
 		};
 
-
-
 		// Define action to be taken when the grid merges tiles
 		grid.onTileMerge = function(tiles) {
-			var tilePlayer = getCurrentPlayer(); //getPlayerByTileType(tiles[0].tileType);
-			//if (tilePlayer == getCurrentPlayer()) {
+			var tilePlayer = getCurrentPlayer();
 			var scoreChange = tiles.length;
 			setScore(tilePlayer, tilePlayer.score - scoreChange);
 			gui.addScorePopUp(tiles[0], scoreChange);
@@ -127,6 +124,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			});
 
 			currentPlayerTurn = 0;
+			currentTileType = 0;
 		};
 
 		// Initialises the game
@@ -136,22 +134,17 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				playerName: userNames[0],
 				tileType: TileType.RED,
 				score: scoreLimit,
-				viewModelScore: viewModel.player1Score,
-				//playerNameClass: 'player-name-red'
+				viewModelScore: viewModel.player1Score
 
 			}, {
 				playerName: userNames[1],
 				tileType: TileType.BLUE,
 				score: scoreLimit,
-				viewModelScore: viewModel.player2Score,
-				//playerNameClass: 'player-name-blue'
+				viewModelScore: viewModel.player2Score
 			}];
 
 			self.clear();
-
-
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
-			//viewModel.playerNameClass(getCurrentPlayer().playerNameClass);
 
 			gamePlayer = getPlayerByPlayerName(viewModel.userName());
 
