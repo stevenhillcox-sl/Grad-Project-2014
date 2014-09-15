@@ -13,48 +13,55 @@ body {
     cursor: default;
 }
 
-.game-title span {
-    text-align: center;
-    font-family: 'Muli', sans-serif;
-    font-weight: bold;
-    font-size: 2em;
-    position: relative;
-    top: 15px;
-    left: 20px;
-}
-
-input {
-    width: 90px;
-}
-
 table {
     margin-top: 30px;
 }
 
-.logo {
-    width: 1.4em;
-    height: 2em;
-}
-
-.chat-game {
-    margin-bottom:50px;
-}
-
-.chat-window-game {
+.game-title span {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 2em;
     position: relative;
-    top: 60px;
-    width: auto;
-    height: auto;
-    max-height: 200px;
+    top: 12px;
+}
+
+.logo {
+    width: 1.2em;
+    height: 1.6em;
+}
+
+
+.chat-window-lobby-wrapper { 
+    height: 200px;
     overflow: auto;
+    display: flex;
 }
 
-.chat-bar-game {
-    position: relative;  
-    top: 60px;
+.chat-window-lobby {
+    max-height: 200px;
+    align-self: flex-end;
 }
 
-.user-info {
+.chat-bar-lobby {
+    display: flex;    
+}
+
+.chat-messages-lobby {
+    margin-top: 0.2em;
+}
+
+.lobbyChatInput {
+    flex-grow: 1;
+    margin-right: 2px;
+}
+
+.user-info-container{
+    height: 450px;
+  
+ }
+ 
+ .user-info {
     max-height: 450px;
     overflow: auto;
     overflow-x: hidden;

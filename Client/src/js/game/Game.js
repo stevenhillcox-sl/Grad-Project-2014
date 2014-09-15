@@ -93,6 +93,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Checks if the user has currently won or lost in an end game situation
 		self.checkWinStatus = function() {
+			var gridFull = grid.isFull();
 			// Check for a draw
 			var draw = true;
 			for (var i = 1; i < self.players.length; i++) {
@@ -102,7 +103,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				}
 			}
 			if (draw) {
-				gui.displayEndGameOverlay("draw");
+				gui.displayEndGameOverlay("draw", gridFull);
 			} else {
 				var sortedPlayers = self.players.slice(0);
 				sortedPlayers.sort(function(a, b) {
@@ -110,9 +111,9 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				});
 				if (gamePlayer == sortedPlayers[0]) {
 					viewModel.updateUserStats(gamePlayer.playerName, 1);
-					gui.displayEndGameOverlay("win");
+					gui.displayEndGameOverlay("win", gridFull);
 				} else {
-					gui.displayEndGameOverlay("loss");
+					gui.displayEndGameOverlay("loss", gridFull);
 				}
 			}
 		};

@@ -3,6 +3,7 @@
     <head>
         <title>Graduate Project 2014</title>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="css/index.css"></link>
         <link rel="stylesheet" type="text/css" href="css/game.css"></link>       
         
@@ -22,9 +23,9 @@
                     </thead>
                     <tbody data-bind="foreach: leaderBoard">
 
-                        <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10">
+                        <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10 || (userName === $parent.userName() && $parent.connected())">
                             <td><span data-bind="text: $index() + 1"></span> <span data-bind="if: ($index() < 3)"><img data-bind="attr: { src: 'img/trophy-'+($index()+1)+'.png' }"></img></span></td>
-                            <td data-bind="text: userName"></td>
+                            <td data-bind="text: userName, style: { 'font-weight': (userName === $parent.userName() && $parent.connected()) ? 'bold' : 'normal' }"></td>
                             <td data-bind="text: gamesPlayed === 0 ? 0 : parseInt(100 * wins / gamesPlayed)"></td>
                         </tr>
                         <tr data-bind="visible: $parent.statsDisplay() == userName">
@@ -76,51 +77,61 @@
                     <div class="red-score" data-bind="text: redScore"></div>
                     <div class="blue-score" data-bind="text: blueScore"></div>
                 </div>
-                <div class="chat-game" data-bind="visible: gameActive">
-                    <div class="chat-bar-game" data-bind="visible: gameActive">
-                        <form>
-                            <input class="gameChatInput" type='text' data-bind="value:gameChatMessage, hasFocus: gameChatSelected "></input>
-                            <button type='submit' class="btn btn-primary" data-bind="click: sendGameChatMessage">Send Message</button>
-                        </form>
-                    </div>
-                    <div class="chat-window-game" data-bind="foreach: gameChatWindow">
-                        <div>
-                            <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
-                        </div>
-                    </div>
-                </div>
+                <div class="game-rules"><h1>How to play</h1><p>Combine tiles of your colour to lose points. The first to lose all of their points will win!<br/>If there are no more places for tiles to spawn, the game will end and whoever has the lowest score will win.</p></div>
             </div>
 
             <div class="col-md-3 col-lg-2">
-                <div class="user-info">
-                    <table class="table table-hover">
-                        <thead>
-                            
-                            <tr data-bind="ifnot: connected">
-                                <th>
-                                    <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket">Join Lobby</button>
-                                </th>
-                                <th>
-                                    <input class="username-input" type="text" data-bind="value: userName"/>
-                                </th>
-                            </tr>
-                            <tr data-bind="if: connected">
-                                <th colspan="2">
-                                    <div class="username-display">Connected as <span data-bind="text: userName"></span></div>
-                                </th>
-                            </tr>
-                            <tr data-bind="if: connected">
-                                <th class="user-list-header" colspan="2">Users Currently Online</th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: userList">
-                            <tr data-bind="visible: userName !== $parent.userName()">
-                                <td data-bind="text: userName"></td>
-                                <td data-bind="visible: inGame">In-Game</td>
-                                <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="user-info-container">
+                    <div class="user-info">
+                        <table class="table table-hover">
+                            <thead>
+                                
+                                <tr data-bind="ifnot: connected">
+                                    <th>
+                                        <button type="button" class="btn btn-primary" data-bind="click: connectWebSocket">Join Lobby</button>
+                                    </th>
+                                    <th>
+                                        <input class="username-input" type="text" data-bind="value: userName"/>
+                                    </th>
+                                </tr>
+                                <tr data-bind="if: connected">
+                                    <th colspan="2">
+                                        <div class="username-display">Connected as <span data-bind="text: userName"></span></div>
+                                    </th>
+                                </tr>
+                                <tr data-bind="if: connected">
+                                    <th class="user-list-header" colspan="2">Users Currently Online</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: userList">
+                                <tr data-bind="visible: userName !== $parent.userName()">
+                                    <td data-bind="text: userName"></td>
+                                    <td data-bind="visible: inGame">In-Game</td>
+                                    <td data-bind="visible: !inGame"><button class="btn btn-default" data-bind="enable: !$parent.gameActive(), click: function() {$parent.challengePlayer($data.userName)}">Challenge</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-default" data-bind="visible: connected">
+                    <div class="panel-heading"><h3 class="panel-title">Global chat</h3></div>
+                    <div class="panel-body">
+                        <div class="chat-lobby">
+                            <div class="chat-window-lobby-wrapper">
+                                <div class="chat-window-lobby" data-bind="foreach: lobbyChatWindow">
+                                    <div class="chat-messages-lobby">
+                                        <span data-bind="text: userName"></span>: <span data-bind="text: chatMessage"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <form class="chat-bar-lobby form-inline">
+                            <input class="lobbyChatInput form-control" type='text' data-bind="value:lobbyChatMessage, hasFocus: lobbyChatSelected "></input>
+                            <button type='submit' class="btn btn-primary" data-bind="click: sendlobbyChatMessage">Send</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-1 show-lg"></div>

@@ -19,11 +19,11 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.playerTurnString = ko.computed(function() {
             return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
         });
-        self.gameChatMessage = ko.observable();
-        self.gameChatWindow = ko.observableArray();
-        self.gameChatSelected = ko.observable(false);
+        self.lobbyChatMessage = ko.observable();
+        self.lobbyChatWindow = ko.observableArray();
+        self.lobbyChatSelected = ko.observable(false);
         self.chatSelected = ko.computed( function() {
-            return self.gameChatSelected();
+            return self.lobbyChatSelected();
         });
 
         self.game = null;
@@ -86,6 +86,11 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 }
             });
         };
+        
+        self.scrollChatWindow = function() {
+            $(".chat-window-lobby-wrapper").animate({ scrollTop: $(document).height() }, "slow");
+            return false;
+        };
 
         // Display information messages to the user
         var onMessage = function(message) {
@@ -102,7 +107,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 case 'gameClose':
                     self.gameActive(false);
                     self.players.removeAll();
-                    self.gameChatWindow.removeAll();
+                    self.lobbyChatWindow.removeAll();
                     //self.game.clear();
                     break;
                 case 'endGame':
@@ -124,8 +129,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                         self.game.addTile(message.messageData);
                     }
                     break;
-                case 'gameChat':
-                    self.gameChatWindow.unshift(message.messageData);
+                case 'lobbyChat':
+                    self.lobbyChatWindow.push(message.messageData);
+                    self.scrollChatWindow();
                     break;
             }
         };
@@ -165,12 +171,12 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
             webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
         };
 
-        self.sendGameChatMessage = function() {
-            webSocketClient.sendMessage(webSocketClient.createMessage('gameChat', {
-                'chatMessage': self.gameChatMessage(),
+        self.sendlobbyChatMessage = function() {
+            webSocketClient.sendMessage(webSocketClient.createMessage('lobbyChat', {
+                'chatMessage': self.lobbyChatMessage(),
                 'userName': self.userName()
             }));
-            self.gameChatMessage('');
+            self.lobbyChatMessage('');
         };
     };
 });
