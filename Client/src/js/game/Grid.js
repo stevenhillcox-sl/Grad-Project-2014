@@ -107,14 +107,39 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
         };
 
         // Checks if the grid is full
-        self.isFull = function(){
+        self.isFull = function() {
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
-                    if(grid[i][j].length === 0){
+                    if (grid[i][j].length === 0) {
                         return false;
                     }
                 }
             }
+            return true;
+        };
+
+        // Checks if the grid id gridlocked
+        self.isGridLocked = function() {
+            if (!self.isFull()) {
+                return false;
+            }
+
+            for (var i = 0; i < grid.length; i++) {
+                var row = getRow(i);
+                for (var j = 0; j < (row.length - 1); j++) {
+                    if (row[j][0].tileType === row[j + 1][0].tileType) {
+                        return false;
+                    }
+                }
+
+                var column = getColumn(i);
+                for (var k = 0; k < (column.length - 1); k++) {
+                    if (column[k][0].tileType === column[k + 1][0].tileType) {
+                        return false;
+                    }
+                }
+            }
+
             return true;
         };
 
