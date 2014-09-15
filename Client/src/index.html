@@ -73,11 +73,11 @@
                     </div>
                 </div>
                 <div class="game-info-container" data-bind="visible:gameActive">
-                    <div class="player-turn" data-bind="text: playerTurnString(), css: playerNameClass"></div>
-                    <div class="red-score" data-bind="text: redScore"></div>
-                    <div class="blue-score" data-bind="text: blueScore"></div>
+                    <div class="player-turn" data-bind="text: playerTurnString()"></div>
+                    <div class="player-1-score" data-bind="text: player1Score"></div>
+                    <div class="player-2-score" data-bind="text: player2Score"></div>
                 </div>
-                <div class="game-rules"><h1>How to play</h1><p>Combine tiles of your colour to lose points. The first to lose all of their points will win!<br/>If there are no more places for tiles to spawn, the game will end and whoever has the lowest score will win.</p></div>
+                <div class="game-rules"><h1>How to play</h1><p>Combine tiles of the same colour to lose points. The first to lose all of their points will win!<br/>If there are no more places for tiles to spawn, the game will end and whoever has the lowest score will win.</p></div>
             </div>
 
             <div class="col-md-3 col-lg-2">

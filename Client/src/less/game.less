@@ -82,27 +82,19 @@ body {
     width: @gridSize;
     height:3.2em;
 }
-.red-score {
+.player-1-score {
     display: inline;
     padding-left: @gridSize / 7;
     float: left;
     font-size: 3em;
     font-weight: 900;
-    color: @red;
 }
-.blue-score {
+.player-2-score {
     float: right;
     padding-right: @gridSize / 7;
     display: inline;
     font-size: 3em;
     font-weight: 900;
-    color: @blue;
-}
-.player-name-red {
-    color: @red;
-}
-.player-name-blue {
-    color: @blue;
 }
 
 .tile-container {
@@ -119,6 +111,7 @@ body {
     transition: transform @gameTick ease-in-out;
     z-index: 3;
 }
+
 .tile-red {
     background-color: @red;
 }
