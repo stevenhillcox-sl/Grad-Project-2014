@@ -90,12 +90,14 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
 
         // Collapses the grid, merging together tiles of the same type in the same cell
         var collapse = function() {
+            var hasMerged = false;
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
                     var gridCell = grid[i][j];
                     var mergedTiles = [];
                     while (gridCell.length > 1) {
                         mergedTiles.push(gridCell.pop());
+                        hasMerged = true;
                     }
                     if (mergedTiles.length > 0) {
                         if (self.onTileMerge) {
@@ -104,6 +106,8 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                     }
                 }
             }
+
+            return hasMerged;
         };
 
         // Checks if the grid is full
@@ -225,7 +229,7 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
             }
 
             updateTiles();
-            collapse();
+            return collapse();
         };
     };
 });

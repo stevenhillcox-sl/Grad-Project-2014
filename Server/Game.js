@@ -28,7 +28,7 @@ function Game(server, webSocketServer, clients) {
         if (messageType === 'endGame') {
             self.close();
         }
-        self.broadcastToAllClientsExcept(webSocketServer.createSocketMessage(messageType, messageData), client);
+        self.broadcastToClients(webSocketServer.createSocketMessage(messageType, messageData));
     };
 
     // Gets a list of usernames for the game clients

@@ -27,14 +27,26 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		};
 
 		// Gets the current tile type to be added to the grid
-		var getCurrentTileType = function() {			
+		var getCurrentTileType = function() {
 			return tileOrder[currentTileType];
 		};
 
 		// Advances the turn counter
 		var advancePlayerTurn = function() {
 			currentPlayerTurn = (currentPlayerTurn + 1) % self.players.length;
+			viewModel.playerTurnName(getCurrentPlayer().playerName);
+		};
+
+		// Advances the tile type
+		var advanceTileType = function() {
 			currentTileType = (currentTileType + 1) % tileOrder.length;
+		};
+
+		// Moves the player's turn back by one
+		var resetPlayerTurn = function() {
+			currentPlayerTurn = currentPlayerTurn == 0 ? self.players.length : currentPlayerTurn;
+			currentPlayerTurn = (currentPlayerTurn - 1) % self.players.length;
+
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
 		};
 
@@ -66,7 +78,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				if (newTilePosition) {
 					var newTile = new Tile(tileType, newTilePosition);
 
-					self.addTile(newTile);
+					//self.addTile(newTile);
 					viewModel.sendTile(newTile);
 				} else {
 					viewModel.endGame();
@@ -168,9 +180,15 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Move the grid and update the game state/UI
 		self.move = function(direction) {
-			grid.move(direction, getCurrentPlayer().tileType);
+			var hasMerged = grid.move(direction, getCurrentPlayer().tileType, hasMerged);
 			gui.updateUI();
-			advancePlayerTurn();
+
+			advanceTileType();
+
+			if(!hasMerged) {
+				advancePlayerTurn();
+			}
+
 			if (getCurrentPlayer() == gamePlayer) {
 				startTurn();
 			}
@@ -180,7 +198,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		self.makeMove = function(direction) {
 			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() && !gameWait) {
 				gameWait = true;
-				self.move(direction);
+				//self.move(direction);
 				viewModel.sendMove(direction);
 				setTimeout(function() {
 					gameWait = false;
