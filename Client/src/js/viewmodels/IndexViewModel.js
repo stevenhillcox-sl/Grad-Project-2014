@@ -30,6 +30,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
 
         var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
         
+        
         self.toggleStats = function(user) {
             if (self.statsDisplay() == user.userName) {
                 self.statsDisplay(false);

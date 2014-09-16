@@ -1,16 +1,22 @@
 @pallete-3: #8D7966;
 
+
+@-webkit-keyframes titleFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
 * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 body {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     cursor: default;
     color: @pallete-3;
@@ -20,24 +26,46 @@ table {
     margin-top: 30px;
 }
 
+
+.game-title {
+    animation: titleFadeIn 1500ms;
+    animation-fill-mode: backwards;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 900;
+    flex-grow: 10;
+}
+
 .game-title span {
     text-align: center;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     font-size: 2em;
     position: relative;
-    top: 12px;
+    top: 18px;
 }
 
 .logo {
-    width: 1.2em;
-    height: 1.6em;
+     width: 1.6em;
+     height: 1.6em;
 }
 
 .panel-title {
     color: @pallete-3;
+    font-weight: bold;
 }
 
+.not-connected  {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+}
 
 .chat-window-lobby-wrapper { 
     height: 200px;
@@ -74,8 +102,17 @@ table {
     overflow-x: hidden;
  }
 
+.user-bar {
+    display: flex;
+    flex-grow: 16;
+    align-items: flex-start;
+}
+
+
 .username-input {
-    width: 100%;
+    flex-grow: 1;
+    margin-right: 2px;
+    width: auto;
 }
 
 .footer {
