@@ -44,7 +44,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Moves the player's turn back by one
 		var resetPlayerTurn = function() {
-			currentPlayerTurn = currentPlayerTurn == 0 ? self.players.length : currentPlayerTurn;
+			currentPlayerTurn = currentPlayerTurn === 0 ? self.players.length : currentPlayerTurn;
 			currentPlayerTurn = (currentPlayerTurn - 1) % self.players.length;
 
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
@@ -180,18 +180,24 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 
 		// Move the grid and update the game state/UI
 		self.move = function(direction) {
-			var hasMerged = grid.move(direction, getCurrentPlayer().tileType, hasMerged);
-			gui.updateUI();
+			var moveResult = grid.move(direction, getCurrentPlayer().tileType, hasMerged);
+			var hasMoved = moveResult.hasMoved;
+			var hasMerged = moveResult.hasMerged;
 
-			advanceTileType();
+			if (hasMoved) {
+				gui.updateUI();
 
-			if(!hasMerged) {
-				advancePlayerTurn();
+				advanceTileType();
+
+				if (!hasMerged) {
+					advancePlayerTurn();
+				}
+
+				if (getCurrentPlayer() == gamePlayer) {
+					startTurn();
+				}
 			}
 
-			if (getCurrentPlayer() == gamePlayer) {
-				startTurn();
-			}
 		};
 
 		// Send a move to the server

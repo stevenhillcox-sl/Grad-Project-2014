@@ -41,7 +41,10 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
 
         // Pushes tiles in a row, moving tiles into the furthest empty one or
         // adding it to a cell if that cell contains same typed tiles
-        var pushRow = function(row) {
+        var pushLine = function(row) {
+
+            var movedTilesCount = 0;
+
             for (var i = row.length - 2; i >= 0; i--) {
                 var currentCell = row[i];
 
@@ -51,8 +54,10 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                         var candidateCell = row[j];
                         if (candidateCell.length === 0) {
                             nextOpenCell = candidateCell;
+                            movedTilesCount ++;
                         } else if (candidateCell[0].tileType == currentCell[0].tileType) {
                             nextOpenCell = candidateCell;
+                            movedTilesCount ++;
                             break;
                         } else {
                             break;
@@ -66,13 +71,16 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                     }
                 }
             }
+
+            return movedTilesCount;
         };
 
         // Pulls a row by pushing in the opposite direction
-        var pullRow = function(row) {
+        var pullLine = function(row) {
             row.reverse();
-            pushRow(row);
+            var movedTilesCount = pushLine(row);
             row.reverse();
+            return movedTilesCount;
         };
 
 
@@ -194,11 +202,14 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
 
         // Shunts the grid in a given direction
         self.move = function(direction) {
+
+            var movedTilesCount = 0;
+
             switch (direction) {
                 case Direction.RIGHT:
                     for (var i = 0; i < grid.length; i++) {
                         var pushedRow = getRow(i);
-                        pushRow(pushedRow);
+                        movedTilesCount += pushLine(pushedRow);
                         setRow(i, pushedRow);
                     }
                     break;
@@ -206,7 +217,7 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                 case Direction.DOWN:
                     for (var j = 0; j < grid.length; j++) {
                         var pushedColumn = getColumn(j);
-                        pushRow(pushedColumn);
+                         movedTilesCount += pushLine(pushedColumn);
                         setColumn(j, pushedColumn);
                     }
                     break;
@@ -214,7 +225,7 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                 case Direction.LEFT:
                     for (var k = 0; k < grid.length; k++) {
                         var pulledRow = getRow(k);
-                        pullRow(pulledRow);
+                         movedTilesCount += pullLine(pulledRow);
                         setRow(k, pulledRow);
                     }
                     break;
@@ -222,14 +233,16 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
                 case Direction.UP:
                     for (var l = 0; l < grid.length; l++) {
                         var pulledColumn = getColumn(l);
-                        pullRow(pulledColumn);
+                        movedTilesCount +=  pullLine(pulledColumn);
                         setColumn(l, pulledColumn);
                     }
                     break;
             }
 
             updateTiles();
-            return collapse();
+            var hasMerged = collapse();
+            var hasMoved =  movedTilesCount > 0;
+            return { 'hasMerged' : hasMerged, 'hasMoved' : hasMoved};
         };
     };
 });
