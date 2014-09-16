@@ -4,3 +4,4 @@ Server/data/
 Client/build/*
 Client/src/css/*
 .grunt/*
+_SpecRunner.html

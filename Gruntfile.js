@@ -26,7 +26,8 @@ module.exports = function(grunt) {
             client: {
                 options: {
                     specs: 'Client/src/js/spec/**/*.js',
-                    template: require('grunt-template-jasmine-requirejs')
+                    template: require('grunt-template-jasmine-requirejs'),
+                    keepRunner: true
                 }
             }
         },
@@ -98,6 +99,26 @@ module.exports = function(grunt) {
                     args: ['Client/src']
                 }
             }
+        },
+        autoprefixer: {
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: 'Client/build/css',
+                    src: '**/*.css',
+                    dest: 'Client/build/css',
+                    ext: '.css'
+                }]
+            },
+            debug: {
+                files: [{
+                    expand: true,
+                    cwd: 'Client/src/css',
+                    src: '**/*.css',
+                    dest: 'Client/src/css',
+                    ext: '.css'
+                }]
+            }
         }
     });
 
@@ -108,15 +129,16 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-jasmine-node');
     grunt.loadNpmTasks('grunt-execute');
+    grunt.loadNpmTasks('grunt-autoprefixer');
 
     grunt.registerTask('default', ['jshint']);
 
-    grunt.registerTask('build-client', ['jshint:client', 'jasmine:client', 'less:build', 'requirejs:build', 'copy:build']);
+    grunt.registerTask('build-client', ['jshint:client', 'jasmine:client', 'less:build', 'autoprefixer:build', 'requirejs:build', 'copy:build']);
     grunt.registerTask('build-server', ['jshint:server', 'jasmine_node:server']);
     grunt.registerTask('build', ['build-client', 'build-server']);
 
     grunt.registerTask('deploy', ['build', 'execute:serverBuild']);
 
-    grunt.registerTask('debug-client-less', ['less:debug']);
-    grunt.registerTask('debug-deploy', ['debug-client-less', 'execute:serverDebug']);
+    grunt.registerTask('debug-client-css', ['less:debug', 'autoprefixer:debug']);
+    grunt.registerTask('debug-deploy', ['debug-client-css', 'execute:serverDebug']);
 };

@@ -80,7 +80,6 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			var scoreChange = tiles.length;
 			setScore(tilePlayer, tilePlayer.score - scoreChange);
 			gui.addScorePopUp(tiles[0], scoreChange);
-			//}
 
 			tiles.forEach(function(tile) {
 				gui.removeTile(tile);
@@ -161,6 +160,10 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			var newTile = new Tile(TileType[tileTypeKey], tile.position);
 			grid.addTile(newTile);
 			gui.addTile(newTile);
+
+			if (grid.isGridLocked()) {
+				viewModel.endGame();
+			}
 		};
 
 		// Move the grid and update the game state/UI

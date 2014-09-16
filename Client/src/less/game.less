@@ -100,8 +100,6 @@ body {
     width: @tileSize;
     height: @tileSize;
     border-radius: 5px;
-    -webkit-transition: -webkit-transform @gameTick ease-in-out;
-    -moz-transition: -moz-transform @gameTick ease-in-out;
     transition: transform @gameTick ease-in-out;
     z-index: 3;
 }
@@ -121,8 +119,6 @@ body {
 
 .generate-columns(@x, @y) when (@y < @gridCount) {
     .tile-position-@{x}-@{y} {
-        -webkit-transform: translate(((@y * @tileSize) + (@y * @gridSpacing)), ((@x * @tileSize) + (@x * @gridSpacing)));
-        -moz-transform: translate(((@y * @tileSize) + (@y * @gridSpacing)), ((@x * @tileSize) + (@x * @gridSpacing)));
         transform: translate(((@y * @tileSize) + (@y * @gridSpacing)), ((@x * @tileSize) + (@x * @gridSpacing)));         
     }
     .generate-columns(@x, @y + 1)
@@ -136,11 +132,7 @@ body {
 .generate-rows(0);
 
 .tile-new {
-    -webkit-animation: newTileFadeIn @gameTick ease @gameTick/2;
-    -moz-animation: newTileFadeIn @gameTick ease @gameTick/2;
     animation: newTileFadeIn @gameTick ease @gameTick/2;
-    -webkit-animation-fill-mode: backwards;
-    -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
 }
 
@@ -160,11 +152,7 @@ body {
     line-height: @tileSize;
     text-shadow: black 1px 1px;
     
-    -webkit-animation: scoreFadeOut @gameTick * 5;
-    -moz-animation: scoreFadeOut @gameTick * 5;
     animation: scoreFadeOut @gameTick * 5;
-    -webkit-animation-fill-mode: forwards;
-    -moz-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
 }
 
@@ -189,11 +177,7 @@ body {
     line-height: @gridSize / 5;
     text-shadow: black 1px 1px;
 
-    -webkit-animation: overlayFloatUp @gameTick * 5;
-    -moz-animation: overlayFloatUp @gameTick * 5;
     animation: overlayFloatUp @gameTick * 5;
-    -webkit-animation-fill-mode: forwards;
-    -moz-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
 }
 
@@ -209,23 +193,6 @@ body {
     margin-right: auto;
     margin-left: auto;
 }
-
-@-webkit-keyframes newTileFadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@-moz-keyframes newTileFadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
 @keyframes newTileFadeIn {
     0% {
         opacity: 0;
@@ -234,26 +201,7 @@ body {
         opacity: 1;
     }
 }
-@-webkit-keyframes scoreFadeOut {
-    0% {
-        opacity: 1;
-        font-size: 2.5em;
-    }
-    100% {
-        opacity: 0;
-        font-size: 5em;
-    }
-}
-@-moz-keyframes scoreFadeOut {
-    0% {
-        opacity: 1;
-        font-size: 2.5em;
-    }
-    100% {
-        opacity: 0;
-        font-size: 5em;
-    }
-}
+
 @keyframes scoreFadeOut {
     0% {
         opacity: 1;
@@ -265,22 +213,6 @@ body {
     }
 }
 
-@-webkit-keyframes overlayFloatUp {
-    0% {
-        transform: translateY(@gridSize * 3 / 5);
-    }
-    100% {
-        transform: translateY(@gridSize * 2 / 5);
-    }
-}
-@-moz-keyframes overlayFloatUp {
-    0% {
-        transform: translateY(@gridSize * 3 / 5);
-    }
-    100% {
-        transform: translateY(@gridSize * 2 / 5);
-    }
-}
 @keyframes overlayFloatUp {
     0% {
         transform: translateY(@gridSize * 3 / 5);
