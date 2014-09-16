@@ -27,7 +27,7 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 			});
 
 			$newScorePopUp.addClass('tile-position-' + tile.position.row + '-' + tile.position.column);
-			$newScorePopUp.text("-" + score);
+			$newScorePopUp.text(score);
 
 			setTimeout(function() {
 				$tileContainer.append($newScorePopUp);
