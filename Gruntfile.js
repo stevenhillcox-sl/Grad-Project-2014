@@ -26,7 +26,8 @@ module.exports = function(grunt) {
             client: {
                 options: {
                     specs: 'Client/src/js/spec/**/*.js',
-                    template: require('grunt-template-jasmine-requirejs')
+                    template: require('grunt-template-jasmine-requirejs'),
+                    keepRunner: true
                 }
             }
         },
