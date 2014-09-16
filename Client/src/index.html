@@ -10,16 +10,17 @@
     </head>
     <body>
         <div class="not-connected" data-bind="visible: !connected()">
-            <div class="game-title">
-                <img class='logo' src="img/tiler_logo.png"/>
-                <span>Tiler</span>
-            </div>
-                    
-            <form class="user-bar">
-                <input class="username-input form-control" type="text" data-bind="value: userName"/>
-                <button type="submit" class="btn btn-primary" data-bind="click: connectWebSocket">Join Lobby</button>
-            </form>
-            
+            <div class="game-login">
+                <div class="game-title-login">
+                    <img class='logo' src="img/tiler_logo.png"/>
+                    <span class="game-title">Tiler</span>
+                </div>
+                        
+                <form class="user-bar">
+                    <input class="username-input form-control" type="text" data-bind="value: userName, valueUpdate: 'afterkeydown'" placeholder="Please log in"/>
+                    <button type="submit" class="btn btn-primary" data-bind="click: connectWebSocket, enable: userName">Join Lobby</button>
+                </form>
+           </div>     
         </div>
         
         <div class="connected" data-bind="visible: connected" style="display: none">
@@ -53,9 +54,9 @@
                 </div>
     
                 <div class="col-md-6 col-lg-6">
-                    <div class="game-title">
+                    <div class="game-title-lobby">
                         <img class='logo' src="img/tiler_logo.png"/>
-                        <span>Tiler</span>
+                        <span class="game-title">Tiler</span>
                     </div>
                                     
                                     

@@ -3,7 +3,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         var self = this;
 
         // Create observables
-        self.userName = ko.observable('User' + Math.floor(Math.random() * 1000));
+        self.userName = ko.observable();
         self.serverMessages = ko.observableArray();
         self.players = ko.observableArray();
         self.gameActive = ko.observable(false);

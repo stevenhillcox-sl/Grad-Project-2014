@@ -4,12 +4,13 @@
 @-webkit-keyframes titleFadeIn {
     0% {
         opacity: 0;
+        // transform : translateY(250px);
     }
     100% {
         opacity: 1;
+        // transform : translateY(250px);
     }
 }
-
 
 * {
     box-sizing: border-box;
@@ -25,20 +26,31 @@ table {
     margin-top: 30px;
 }
 
+.game-login {
+    display: flex;
+    flex-direction: column;
+    
+}
 
-.game-title {
-    animation: titleFadeIn 1500ms;
+.game-title-lobby {
+    text-align: center;
+    font-size: 2.5em;
+}
+
+.game-title-login {
+    animation: titleFadeIn 2000ms;
     animation-fill-mode: backwards;
     text-align: center;
     font-size: 2.5em;
-    font-weight: 900;
-    flex-grow: 10;
+    align-items: flex-end;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 50px;
+    flex-grow: 8;
 }
 
-.game-title span {
-    text-align: center;
+.game-title {
     font-family: 'Roboto', sans-serif;
-    font-weight: bold;
     font-size: 2em;
     position: relative;
     top: 18px;
@@ -57,12 +69,10 @@ table {
 .not-connected  {
     display: flex;
     position: absolute;
-    flex-direction: column;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    align-items: center;
     justify-content: center;
 }
 
