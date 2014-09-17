@@ -118,6 +118,18 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
             return true;
         };
 
+        // Checks if the grid is empty
+        self.isEmpty = function() {
+            for (var i = 0; i < grid.length; i++) {
+                for (var j = 0; j < grid[i].length; j++) {
+                    if (grid[i][j].length !== 0) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
         // Checks if the grid id gridlocked
         self.isGridLocked = function() {
             if (!self.isFull()) {

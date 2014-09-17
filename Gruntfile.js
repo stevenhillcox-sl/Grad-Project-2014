@@ -25,8 +25,11 @@ module.exports = function(grunt) {
         jasmine: {
             client: {
                 options: {
-                    specs: 'Client/src/js/spec/**/*.js',
+                    specs: 'Client/src/js/spec/**/*-spec.js',
                     template: require('grunt-template-jasmine-requirejs'),
+                    templateOptions: {
+                        requireConfigFile: ['Client/src/js/spec/spec-config.js']
+                    },
                     keepRunner: true
                 }
             }

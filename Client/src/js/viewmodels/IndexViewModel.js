@@ -1,4 +1,4 @@
-define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], function($, ko, WebSocketClient, Game) {
+define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GUI'], function($, ko, WebSocketClient, Game, GUI) {
     return function IndexViewModel() {
         var self = this;
 
@@ -106,7 +106,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                     self.gameActive(true);
                     self.players(message.messageData);
                     if (!self.game) {
-                        self.game = new Game(self, $('.game-container'));
+                        self.createGame();
                     }
                     self.game.initalise(self.players());
                     break;
@@ -183,6 +183,17 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
                 'userName': self.userName()
             }));
             self.lobbyChatMessage('');
+        };
+
+        self.createGame = function(){
+            var gameTick = 200;
+
+            var gui = new GUI(gameTick);
+            self.game = new Game(self, gui, gameTick);
+           
+            gui.onInput = function(direction){
+                self.game.makeMove(direction);
+            };
         };
     };
 });

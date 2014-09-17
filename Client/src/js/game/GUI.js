@@ -1,10 +1,12 @@
-define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileType) {
+define(['jQuery', './Tile', './TileType', './Position', './Direction'], function($, Tile, TileType, Position, Direction) {
 	return function GUI(gameTick) {
 		var self = this;
 
 		var tileMaps = [];
 		var $tileContainer = $(".tile-container");
 		var $gameContainer = $('.game-container');
+
+		self.onInput = null;
 
 		gameTick = gameTick || 200;
 
@@ -47,7 +49,7 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 
 			var statusString = "";
 
-			if(gridFull){
+			if (gridFull) {
 				statusString += "The grid is full! ";
 			}
 
@@ -123,5 +125,60 @@ define(['jQuery', './Tile', './TileType', './Position'], function($, Tile, TileT
 				tileMap.$uiTile.addClass('tile-position-' + tileMap.gameTile.position.row + '-' + tileMap.gameTile.position.column);
 			});
 		};
+
+		$($gameContainer).swipe({
+			swipeLeft: function() {
+				if (self.onInput) {
+					self.onInput(Direction.LEFT);
+				}
+			},
+			swipeRight: function() {
+				if (self.onInput) {
+					self.onInput(Direction.RIGHT);
+				}
+			},
+			swipeDown: function() {
+				if (self.onInput) {
+					self.onInput(Direction.DOWN);
+				}
+			},
+			swipeUp: function() {
+				if (self.onInput) {
+					self.onInput(Direction.UP);
+				}
+			}
+		});
+
+		$(window).keyup(function(event) {
+			var KEYLEFT = 37;
+			var KEYUP = 38;
+			var KEYRIGHT = 39;
+			var KEYDOWN = 40;
+
+			var direction = null;
+
+			switch (event.keyCode) {
+				case KEYLEFT:
+					direction = Direction.LEFT;
+					break;
+
+				case KEYRIGHT:
+					direction = Direction.RIGHT;
+					break;
+
+				case KEYDOWN:
+					direction = Direction.DOWN;
+					break;
+
+				case KEYUP:
+					direction = Direction.UP;
+					break;
+			}
+			if (direction !== null) {
+				if (self.onInput) {
+					self.onInput(direction);
+				}
+			}
+		});
 	};
 });
