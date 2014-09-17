@@ -3,13 +3,12 @@
     <head>
         <title>Graduate Project 2014</title>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link href='http://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Roboto:100,300,400' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="css/index.css"></link>
-        <link rel="stylesheet" type="text/css" href="css/game.css"></link>       
-        
+        <link rel="stylesheet" type="text/css" href="css/game.css"></link>
     </head>
     <body>
-        <div class="not-connected" data-bind="visible: !connected()">
+        <div class="login-container" data-bind="css: {'login-container-hidden' : connected()}">
             <div class="game-login">
                 <div class="game-title-login">
                     <img class='logo' src="img/tiler_logo.png"/>
@@ -22,31 +21,31 @@
            </div>     
         </div>
         
-        <div class="connected" data-bind="visible: connected" style="display: none">
+        <div class="main-container" data-bind="css: {'main-container-visible' : connected()}">
             <div class="row-fluid">
                 <div class="col-lg-1 show-lg"></div>
                 <div class="col-md-3 col-lg-2 hidden-xs hidden-sm">
-                   <table class="table table-striped table-hover">
-                        <thead>
+                   <table class="table table-hover leaderboard">
+                        <thead style="background-color: #F8F1E9">
                             <tr>
-                                <th id="leaderboardHeader" colspan="2">Leaderboard</th>
+                                <th id="leaderboardHeader" colspan="3">Leaderboard</th>
                             </tr>
                             <tr>
                                 <th>Rank</th><th>User</th><th>Win %</th>
                             </tr>
                         </thead>
                         <tbody data-bind="foreach: leaderBoard">
-    
-                            <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10 || (userName === $parent.userName() && $parent.connected())">
-                                <td><span data-bind="text: $index() + 1"></span> <span data-bind="if: ($index() < 3)"><img data-bind="attr: { src: 'img/trophy-'+($index()+1)+'.png' }"></img></span></td>
+                            <tr data-bind="event: {mouseover: $parent.toggleStats, mouseout: $parent.toggleStats }, visible: $index() < 10 || (userName === $parent.userName() && $parent.connected()), attr: {'title': 'Games Played: ' + gamesPlayed }"
+                                data-toggle="tooltip"
+                                data-placement="right">
+                                <td>
+                                    <span data-bind="text: $index() + 1"></span>
+                                    <span data-bind="if: ($index() < 3)">
+                                        <img data-bind="attr: { src: 'img/trophy-'+($index()+1)+'.png' }"></img>
+                                    </span>
+                                </td>
                                 <td data-bind="text: userName, style: { 'font-weight': (userName === $parent.userName() && $parent.connected()) ? 'bold' : 'normal' }"></td>
                                 <td data-bind="text: gamesPlayed === 0 ? 0 : parseInt(100 * wins / gamesPlayed)"></td>
-                            </tr>
-                            <tr data-bind="visible: $parent.statsDisplay() == userName">
-                                <td colspan="2">
-                                    <div>Games Played: <span data-bind="text: gamesPlayed"></span></div>
-                                    <div>Wins: <span data-bind="text: wins"></span></div>
-                                </td>
                             </tr>
                         </tbody>
                     </table> 

@@ -4,11 +4,36 @@
 @-webkit-keyframes titleFadeIn {
     0% {
         opacity: 0;
-        // transform : translateY(250px);
+       
     }
     100% {
         opacity: 1;
-        // transform : translateY(250px);
+    }
+}
+
+
+@-webkit-keyframes titleFadeOut {
+    0% {
+        opacity: 1;
+       
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+@-webkit-keyframes pageFadeIn {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+        visibility: visible;
+    }
+    100% {
+        opacity: 1;
+        visibility: visible;
     }
 }
 
@@ -16,20 +41,59 @@
     box-sizing: border-box;
 }
 body {
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: 'Roboto', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     user-select: none;
     cursor: default;
     color: @pallete-3;
+    font-weight: 300;
+}
+
+.leaderboard {
+    background-color: white ;
+}
+
+#leaderboardHeader {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
 }
 
 table {
     margin-top: 30px;
 }
 
+.login-container {
+    display: flex;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+}
+
+.login-container-hidden {
+    animation: titleFadeOut 1000ms;
+    animation-fill-mode: forwards;
+}
+
+.main-container {
+    visibility: hidden;
+}
+
+.main-container-visible {
+    animation: pageFadeIn 2000ms;
+    animation-fill-mode: forwards;
+}
+
 .game-login {
     display: flex;
     flex-direction: column;
     
+}
+
+.fade-in-game-elements {
+    visibility: visible ;
+    animation-fill-mode: forwards;
 }
 
 .game-title-lobby {
@@ -54,6 +118,7 @@ table {
     font-size: 2em;
     position: relative;
     top: 18px;
+    font-weight: 100;
 }
 
 .logo {
@@ -64,16 +129,6 @@ table {
 .panel-title {
     color: @pallete-3;
     font-weight: bold;
-}
-
-.not-connected  {
-    display: flex;
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    justify-content: center;
 }
 
 .chat-window-lobby-wrapper { 

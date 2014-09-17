@@ -25,8 +25,13 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game'], functio
         self.chatSelected = ko.computed( function() {
             return self.lobbyChatSelected();
         });
+        
 
         self.game = null;
+        
+        $(document).ready(function() {
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+});
 
         var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
         
