@@ -8,12 +8,13 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 			grid = new Grid(gridSize);
 		});
 
-		it("is not full when created", function() {
-			expect(grid.isFull()).toBe(false);
-			expect(grid.isEmpty()).toBe(true);
+		describe("isEmpty", function() {
+			it("is not full when created", function() {
+				expect(grid.isEmpty()).toBe(true);
+			});
 		});
 
-		describe("isGridLocked", function() {
+		describe("isFull", function() {
 			it("correctly identifies a full grid", function() {
 				grid.addTile(new Tile(TileType.RED, {
 					row: 0,
@@ -191,7 +192,7 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 				});
 				grid.addTile(tileRed2);
 				var mergedTiles = [];
-				grid.onTileMerge = function(tiles){
+				grid.onTileMerge = function(tiles) {
 					mergedTiles = tiles;
 				};
 
@@ -226,7 +227,7 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 				grid.addTile(tileRed3);
 
 				var mergedTiles = [];
-				grid.onTileMerge = function(tiles){
+				grid.onTileMerge = function(tiles) {
 					mergedTiles = tiles;
 				};
 

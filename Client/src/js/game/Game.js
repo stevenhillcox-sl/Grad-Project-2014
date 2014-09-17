@@ -1,18 +1,17 @@
-define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/Direction', 'game/GUI', 'TouchSwipe'], function($, ko, Tile, TileType, Grid, Direction, GUI) {
-	return function Game(viewModel, $gameContainer) {
+define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], function($, ko, Tile, TileType, Grid) {
+	return function Game(viewModel, gui, gameTick) {
 
 		var self = this;
 		var scoreLimit = 10;
 		var gameWait = false;
-		var gameTick = 200;
 		var gamePlayer = null;
 		var currentPlayerTurn = 0;
-		var gui = new GUI(gameTick);
 		var grid = new Grid(4);
 		var tileOrder = [TileType.RED, TileType.BLUE, TileType.GREEN, TileType.YELLOW];
 		var currentTileType = 0;
 
 		self.players = null;
+		self.gui = gui;
 
 		// Gets the player whoes turn it is
 		var getCurrentPlayer = function() {
@@ -79,10 +78,10 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			var tilePlayer = getCurrentPlayer();
 			var scoreChange = tiles.length;
 			setScore(tilePlayer, tilePlayer.score - scoreChange);
-			gui.addScorePopUp(tiles[0], scoreChange);
+			self.gui.addScorePopUp(tiles[0], scoreChange);
 
 			tiles.forEach(function(tile) {
-				gui.removeTile(tile);
+				self.gui.removeTile(tile);
 			});
 		};
 
@@ -98,7 +97,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				}
 			}
 			if (draw) {
-				gui.displayEndGameOverlay("draw", gridFull);
+				self.gui.displayEndGameOverlay("draw", gridFull);
 			} else {
 				var sortedPlayers = self.players.slice(0);
 				sortedPlayers.sort(function(a, b) {
@@ -106,16 +105,16 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				});
 				if (gamePlayer == sortedPlayers[0]) {
 					viewModel.updateUserStats(gamePlayer.playerName, 1);
-					gui.displayEndGameOverlay("win", gridFull);
+					self.gui.displayEndGameOverlay("win", gridFull);
 				} else {
-					gui.displayEndGameOverlay("loss", gridFull);
+					self.gui.displayEndGameOverlay("loss", gridFull);
 				}
 			}
 		};
 
 		// Resets the state of the game
 		self.clear = function() {
-			gui.clear();
+			self.gui.clear();
 			grid.clear();
 
 			self.players.forEach(function(player) {
@@ -159,7 +158,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 			})[0];
 			var newTile = new Tile(TileType[tileTypeKey], tile.position);
 			grid.addTile(newTile);
-			gui.addTile(newTile);
+			self.gui.addTile(newTile);
 
 			if (grid.isGridLocked()) {
 				viewModel.endGame();
@@ -169,7 +168,7 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 		// Move the grid and update the game state/UI
 		self.move = function(direction) {
 			grid.move(direction, getCurrentPlayer().tileType);
-			gui.updateUI();
+			self.gui.updateUI();
 			advancePlayerTurn();
 			if (getCurrentPlayer() == gamePlayer) {
 				startTurn();
@@ -187,50 +186,5 @@ define(['jQuery', 'knockout', 'game/Tile', 'game/TileType', 'game/Grid', 'game/D
 				}, gameTick);
 			}
 		};
-
-		$($gameContainer).swipe({
-			swipeLeft: function() {
-				self.makeMove(Direction.LEFT);
-			},
-			swipeRight: function() {
-				self.makeMove(Direction.RIGHT);
-			},
-			swipeDown: function() {
-				self.makeMove(Direction.DOWN);
-			},
-			swipeUp: function() {
-				self.makeMove(Direction.UP);
-			}
-		});
-
-		$(window).keyup(function(event) {
-			var KEYLEFT = 37;
-			var KEYUP = 38;
-			var KEYRIGHT = 39;
-			var KEYDOWN = 40;
-
-			var direction = null;
-
-			switch (event.keyCode) {
-				case KEYLEFT:
-					direction = Direction.LEFT;
-					break;
-
-				case KEYRIGHT:
-					direction = Direction.RIGHT;
-					break;
-
-				case KEYDOWN:
-					direction = Direction.DOWN;
-					break;
-
-				case KEYUP:
-					direction = Direction.UP;
-					break;
-			}
-			if (direction !== null) {
-				self.makeMove(direction);
-			}
-		});
 	};
 });
