@@ -26,14 +26,26 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 		};
 
 		// Gets the current tile type to be added to the grid
-		var getCurrentTileType = function() {			
+		var getCurrentTileType = function() {
 			return tileOrder[currentTileType];
 		};
 
 		// Advances the turn counter
 		var advancePlayerTurn = function() {
 			currentPlayerTurn = (currentPlayerTurn + 1) % self.players.length;
+			viewModel.playerTurnName(getCurrentPlayer().playerName);
+		};
+
+		// Advances the tile type
+		var advanceTileType = function() {
 			currentTileType = (currentTileType + 1) % tileOrder.length;
+		};
+
+		// Moves the player's turn back by one
+		var resetPlayerTurn = function() {
+			currentPlayerTurn = currentPlayerTurn === 0 ? self.players.length : currentPlayerTurn;
+			currentPlayerTurn = (currentPlayerTurn - 1) % self.players.length;
+
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
 		};
 
@@ -43,10 +55,8 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 			player.viewModelScore(score);
 		};
 
-		// Adds a new tile for each player and checks for end game conditions 
-		var startTurn = function() {
-			var newTiles = [];
-			var newTilePositions = [];
+		// Checks for end game conditions and optionally adds a new tile
+		var startTurn = function(addTile) {
 			var scoreLimitReached = false;
 
 			self.players.forEach(function(player) {
@@ -58,17 +68,18 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 			if (scoreLimitReached) {
 				viewModel.endGame();
 			} else {
+				if (addTile) {
+					var newTilePosition = grid.getRandomEmptyCell();
+					var tileType = getCurrentTileType();
 
-				var newTilePosition = grid.getRandomEmptyCell();
-				var tileType = getCurrentTileType();
+					if (newTilePosition) {
+						var newTile = new Tile(tileType, newTilePosition);
 
-				if (newTilePosition) {
-					var newTile = new Tile(tileType, newTilePosition);
-
-					self.addTile(newTile);
-					viewModel.sendTile(newTile);
-				} else {
-					viewModel.endGame();
+						//self.addTile(newTile);
+						viewModel.sendTile(newTile);
+					} else {
+						viewModel.endGame();
+					}
 				}
 			}
 		};
@@ -147,7 +158,7 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 			gamePlayer = getPlayerByPlayerName(viewModel.userName());
 
 			if (getCurrentPlayer() == gamePlayer) {
-				startTurn();
+				startTurn(true);
 			}
 		};
 
@@ -167,19 +178,37 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 
 		// Move the grid and update the game state/UI
 		self.move = function(direction) {
-			grid.move(direction, getCurrentPlayer().tileType);
-			self.gui.updateUI();
-			advancePlayerTurn();
-			if (getCurrentPlayer() == gamePlayer) {
-				startTurn();
+// <<<<<<< HEAD
+// 			grid.move(direction, getCurrentPlayer().tileType);
+// 			self.gui.updateUI();
+// 			advancePlayerTurn();
+// 			if (getCurrentPlayer() == gamePlayer) {
+// 				startTurn();
+// =======
+			var moveResult = grid.move(direction, getCurrentPlayer().tileType, hasMerged);
+			var hasMoved = moveResult.hasMoved;
+			var hasMerged = moveResult.hasMerged;
+
+			if (hasMoved) {
+				gui.updateUI();
+				advanceTileType();
+
+				if (!hasMerged) {
+					advancePlayerTurn();
+				}
+
+				if (getCurrentPlayer() == gamePlayer) {
+					startTurn(!hasMerged);
+				}
 			}
+
 		};
 
 		// Send a move to the server
 		self.makeMove = function(direction) {
 			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() && !gameWait) {
 				gameWait = true;
-				self.move(direction);
+				//self.move(direction);
 				viewModel.sendMove(direction);
 				setTimeout(function() {
 					gameWait = false;

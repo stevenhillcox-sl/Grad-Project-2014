@@ -173,7 +173,6 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
         };
 
         self.endGame = function() {
-            self.game.checkWinStatus();
             webSocketClient.sendMessage(webSocketClient.createMessage('endGame', ''));
         };
 
