@@ -49,16 +49,13 @@ body {
 }
 
 .leaderboard {
+    margin-top: 30px;
     background-color: white ;
 }
 
 #leaderboardHeader {
     font-family: 'Roboto', sans-serif;
     text-align: center;
-}
-
-table {
-    margin-top: 30px;
 }
 
 .login-container {
@@ -89,6 +86,10 @@ table {
     display: flex;
     flex-direction: column;
     
+}
+
+.table td {
+    border-bottom: 1px solid #ddd;
 }
 
 .fade-in-game-elements {
@@ -157,11 +158,26 @@ table {
 
 .user-info-container{
     height: 450px;
+    background-color: white;
+    margin-bottom: 30px;
   
  }
- 
- .user-info {
-    max-height: 450px;
+
+.panel {
+    border: none;
+}
+.panel-heading {
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    background-color: #F8F1E9;
+}
+
+.panel-footer {
+    background-color: #F8F1E9;
+}
+
+.user-info {
+    max-height: 352px;
     overflow: auto;
     overflow-x: hidden;
  }
@@ -189,10 +205,14 @@ table {
 .username-display {
     font-size: 1.4em;
     text-align: center;
+    padding-bottom: 30px;
 }
 
 .user-list-header {
     font-weight: bold;
-    border-bottom: 1px solid black;
-    text-align:center;
+    border-bottom: 1px solid #ddd;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 40px;
 }
