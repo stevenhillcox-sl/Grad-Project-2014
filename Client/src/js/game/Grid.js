@@ -106,16 +106,23 @@ define(['./Tile', './TileType', './Direction', './Position'], function(Tile, Til
             }
         };
 
-        // Returns the grid structure (for testing purposes)
-        self._getGridStructure = function() {
-            return grid;
-        };
-
         // Checks if the grid is full
         self.isFull = function() {
             for (var i = 0; i < grid.length; i++) {
                 for (var j = 0; j < grid[i].length; j++) {
                     if (grid[i][j].length === 0) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
+        // Checks if the grid is empty
+        self.isEmpty = function() {
+            for (var i = 0; i < grid.length; i++) {
+                for (var j = 0; j < grid[i].length; j++) {
+                    if (grid[i][j].length !== 0) {
                         return false;
                     }
                 }

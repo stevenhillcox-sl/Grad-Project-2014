@@ -8,11 +8,12 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 			grid = new Grid(gridSize);
 		});
 
-		describe("isGridLocked", function() {
-			it("is not full when created", function() {
-				expect(grid.isFull()).toBe(false);
-			});
+		it("is not full when created", function() {
+			expect(grid.isFull()).toBe(false);
+			expect(grid.isEmpty()).toBe(true);
+		});
 
+		describe("isGridLocked", function() {
 			it("correctly identifies a full grid", function() {
 				grid.addTile(new Tile(TileType.RED, {
 					row: 0,
@@ -102,17 +103,7 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 				expect(grid.isFull()).toBe(true);
 				grid.clear();
 				expect(grid.isFull()).toBe(false);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[],
-						[]
-					],
-					[
-						[],
-						[]
-					]
-				]);
+				expect(grid.isEmpty()).toBe(true);
 			});
 		});
 
@@ -149,27 +140,6 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 			});
 		});
 
-		describe("addTile", function() {
-			it("correctly adds a tile to the grid", function() {
-				var newTile = new Tile(TileType.RED, {
-					row: 0,
-					column: 0
-				});
-				grid.addTile(newTile);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[newTile],
-						[]
-					],
-					[
-						[],
-						[]
-					]
-				]);
-			});
-		});
-
 		describe("move", function() {
 
 			var tileRed = null;
@@ -192,62 +162,26 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 
 			it("correctly moves a grid to the right", function() {
 				grid.move(Direction.RIGHT);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[],
-						[tileRed]
-					],
-					[
-						[],
-						[tileBlue]
-					]
-				]);
+				expect(tileRed.position).toEqual(new Position(0, 1));
+				expect(tileBlue.position).toEqual(new Position(1, 1));
 			});
 
 			it("correctly moves a grid to the left", function() {
 				grid.move(Direction.LEFT);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[tileRed],
-						[]
-					],
-					[
-						[tileBlue],
-						[]
-					]
-				]);
+				expect(tileRed.position).toEqual(new Position(0, 0));
+				expect(tileBlue.position).toEqual(new Position(1, 0));
 			});
 
 			it("correctly moves a grid down", function() {
 				grid.move(Direction.DOWN);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[],
-						[]
-					],
-					[
-						[tileRed],
-						[tileBlue]
-					]
-				]);
+				expect(tileRed.position).toEqual(new Position(1, 0));
+				expect(tileBlue.position).toEqual(new Position(1, 1));
 			});
 
 			it("correctly moves a grid up", function() {
 				grid.move(Direction.UP);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[tileRed],
-						[tileBlue]
-					],
-					[
-						[],
-						[]
-					]
-				]);
+				expect(tileRed.position).toEqual(new Position(0, 0));
+				expect(tileBlue.position).toEqual(new Position(0, 1));
 			});
 
 			it("correctly merges tiles together", function() {
@@ -256,18 +190,18 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 					column: 1
 				});
 				grid.addTile(tileRed2);
+				var mergedTiles = [];
+				grid.onTileMerge = function(tiles){
+					mergedTiles = tiles;
+				};
+
 				grid.move(Direction.RIGHT);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[],
-						[tileRed2]
-					],
-					[
-						[],
-						[tileBlue]
-					]
-				]);
+				expect(tileRed2.position).toEqual(new Position(0, 1));
+				expect(tileBlue.position).toEqual(new Position(1, 1));
+				expect(tileRed.position).toEqual(new Position(0, 1));
+
+				expect(mergedTiles.length).toBe(1);
+				expect(mergedTiles[0]).toEqual(tileRed);
 			});
 
 			it("correctly merges multiple tiles together", function() {
@@ -291,29 +225,19 @@ define(['../game/Grid', '../game/Tile', '../game/TileType', '../game/Position', 
 				grid.addTile(tileRed2);
 				grid.addTile(tileRed3);
 
+				var mergedTiles = [];
+				grid.onTileMerge = function(tiles){
+					mergedTiles = tiles;
+				};
+
 				grid.move(Direction.RIGHT);
-				var gridStructure = grid._getGridStructure();
-				expect(gridStructure).toEqual([
-					[
-						[],
-						[],
-						[tileRed3]
-					],
-					[
-						[],
-						[],
-						[]
-					],
-					[
-						[],
-						[],
-						[]
-					]
-				]);
-			});
+				expect(tileRed1.position).toEqual(new Position(0, 2));
+				expect(tileRed2.position).toEqual(new Position(0, 2));
+				expect(tileRed3.position).toEqual(new Position(0, 2));
 
-			it("correctly updates tile positions", function(){
-
+				expect(mergedTiles.length).toBe(2);
+				expect(mergedTiles[0]).toEqual(tileRed1);
+				expect(mergedTiles[1]).toEqual(tileRed2);
 			});
 		});
 	});
