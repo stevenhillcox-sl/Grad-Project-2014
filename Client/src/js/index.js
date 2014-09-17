@@ -3,7 +3,8 @@ require.config({
     paths: {
         'jQuery': 'lib/jquery-2.1.1.min',
         'knockout': 'lib/knockout-3.2.0',
-        'TouchSwipe': 'lib/jquery.touchSwipe.min'
+        'TouchSwipe': 'lib/jquery.touchSwipe.min',
+        'bootstrap': 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min'
     },
     shim: {
         'jQuery': {
@@ -12,12 +13,13 @@ require.config({
         'knockout': {
             exports: 'ko'
         },
+        'bootstrap': ['jQuery'],
         'TouchSwipe': ['jQuery']
     }
 });
 
 
-require(['jQuery', 'knockout', 'viewmodels/IndexViewModel'], function($, ko, IndexViewModel) {
+require(['jQuery', 'knockout', 'viewmodels/IndexViewModel', 'bootstrap'], function($, ko, IndexViewModel) {
 
     var self = this;
 
