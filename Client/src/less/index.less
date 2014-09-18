@@ -1,42 +1,4 @@
 @pallete-3: #8D7966;
-
-
-@-webkit-keyframes titleFadeIn {
-    0% {
-        opacity: 0;
-       
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-
-@-webkit-keyframes titleFadeOut {
-    0% {
-        opacity: 1;
-       
-    }
-    100% {
-        opacity: 0;
-        display: none;
-    }
-}
-
-@-webkit-keyframes pageFadeIn {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 0;
-        visibility: visible;
-    }
-    100% {
-        opacity: 1;
-        visibility: visible;
-    }
-}
-
 * {
     box-sizing: border-box;
 }
@@ -85,7 +47,6 @@ body {
 .game-login {
     display: flex;
     flex-direction: column;
-    
 }
 
 .table td {
@@ -215,4 +176,39 @@ body {
     align-items: center;
     display: flex;
     height: 40px;
+}
+
+@keyframes titleFadeIn {
+    0% {
+        opacity: 0;
+       
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes titleFadeOut {
+    0% {
+        opacity: 1;
+       
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+@keyframes pageFadeIn {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+        visibility: visible;
+    }
+    100% {
+        opacity: 1;
+        visibility: visible;
+    }
 }
