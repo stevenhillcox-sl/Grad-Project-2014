@@ -200,7 +200,7 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 
 		// Send a move to the server
 		self.makeMove = function(direction) {
-			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() && !gameWait) {
+			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !gameWait) {
 				gameWait = true;
 				viewModel.sendMove(direction);
 				setTimeout(function() {

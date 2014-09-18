@@ -17,12 +17,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
         self.nextTileClass = ko.observable('');
         self.lobbyChatMessage = ko.observable();
         self.lobbyChatWindow = ko.observableArray();
-        self.lobbyChatSelected = ko.observable(false);
-        self.chatSelected = ko.computed(function() {
-            return self.lobbyChatSelected();
-        });
-
-
+        
         self.game = null;
 
         $(document).ready(function() {
