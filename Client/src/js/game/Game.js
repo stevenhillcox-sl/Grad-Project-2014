@@ -178,13 +178,6 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 
 		// Move the grid and update the game state/UI
 		self.move = function(direction) {
-// <<<<<<< HEAD
-// 			grid.move(direction, getCurrentPlayer().tileType);
-// 			self.gui.updateUI();
-// 			advancePlayerTurn();
-// 			if (getCurrentPlayer() == gamePlayer) {
-// 				startTurn();
-// =======
 			var moveResult = grid.move(direction, getCurrentPlayer().tileType, hasMerged);
 			var hasMoved = moveResult.hasMoved;
 			var hasMerged = moveResult.hasMerged;
@@ -208,7 +201,6 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 		self.makeMove = function(direction) {
 			if (getCurrentPlayer() == gamePlayer && viewModel.gameActive() && !viewModel.chatSelected() && !gameWait) {
 				gameWait = true;
-				//self.move(direction);
 				viewModel.sendMove(direction);
 				setTimeout(function() {
 					gameWait = false;
