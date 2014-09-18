@@ -2,7 +2,7 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 	return function Game(viewModel, gui, gameTick) {
 
 		var self = this;
-		var scoreLimit = 10;
+		var scoreLimit = 5;
 		var gameWait = false;
 		var gamePlayer = null;
 		var currentPlayerTurn = 0;

@@ -16,9 +16,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
         self.player2Score = ko.observable(0);
 
         self.playerTurnName = ko.observable('');
-        self.playerTurnString = ko.computed(function() {
-            return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
-        });
+        // self.playerTurnString = ko.computed(function() {
+        //     return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
+        // });
         self.lobbyChatMessage = ko.observable();
         self.lobbyChatWindow = ko.observableArray();
         self.lobbyChatSelected = ko.observable(false);
