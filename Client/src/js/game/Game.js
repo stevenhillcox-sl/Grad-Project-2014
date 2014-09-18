@@ -39,6 +39,7 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 		// Advances the tile type
 		var advanceTileType = function() {
 			currentTileType = (currentTileType + 1) % tileOrder.length;
+			viewModel.nextTileClass = tileOrder[(currentTileType + 1) % tileOrder.length].classString;
 		};
 
 		// Moves the player's turn back by one
