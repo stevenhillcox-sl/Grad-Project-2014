@@ -2,21 +2,21 @@ function WebSocketServer(httpServer){
     
     var self = this;
     
-    this.ws = require('ws').Server;
+    self.ws = require('ws').Server;
     
-    this.onNewClient = null;
-    this.onClientClose = null;
-    this.onClientJoin = null;
-    this.onMessage = null;
-    this.onClientChallenge = null;
+    self.onNewClient = null;
+    self.onClientClose = null;
+    self.onClientJoin = null;
+    self.onMessage = null;
+    self.onClientChallenge = null;
     
     // Start the web socket server
-    this.startServer = function(){
+    self.startServer = function(){
         console.log("Websocket server starting");
-        this.webSocketServer = new this.ws({'server' : httpServer});
+        self.webSocketServer = new self.ws({'server' : httpServer});
         
-             // Listen for socket connections
-        this.webSocketServer.on('connection', function(socket) {
+        // Listen for socket connections
+        self.webSocketServer.on('connection', function(socket) {
             
             // New client joins
             var newClient = {
@@ -42,12 +42,12 @@ function WebSocketServer(httpServer){
     };
     
     // Create a JSON message to be sent to the user
-    this.createSocketMessage = function(messageType, messageData) {
+    self.createSocketMessage = function(messageType, messageData) {
         return JSON.stringify({'messageType': messageType, 'messageData' : messageData});
     };
     
     // Send a message to all clients
-    this.broadcastMessage = function(message, clients)
+    self.broadcastMessage = function(message, clients)
     {
         clients.forEach(function(client)
         {
@@ -55,12 +55,12 @@ function WebSocketServer(httpServer){
         });
     };
     
-    this.sendMessage = function(message, client){
+    self.sendMessage = function(message, client){
         client.socket.send(message);
     };
     
     // Handle an incoming message
-    this.handleMessage = function(socketMessage, socket) {
+    self.handleMessage = function(socketMessage, socket) {
         var message = JSON.parse(""+socketMessage);
         var messageType = message.messageType;
         
@@ -72,7 +72,8 @@ function WebSocketServer(httpServer){
                 self.onClientChallenge(socket, message.messageData);
                 break;
             default:
-                 self.onMessage(socket, message);
+                self.onMessage(socket, message);
+                break;
         }
     };
 }

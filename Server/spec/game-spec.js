@@ -11,8 +11,12 @@ describe("Game", function() {
             });
         }
     };
+
+    var closedGames = [];
     var httpServer = {
-        closeGame: function() {}
+        closeGame: function(game) {
+            closedGames.push(game);
+        }
     };
 
     var messages = [];
@@ -22,14 +26,19 @@ describe("Game", function() {
         }
     };
 
-    var clients = [{
+    var clients = null;
+    var client1 = {
         'socket': mocket
-    }, {
+    };
+    var client2 = {
         'socket': mocket
-    }];
+    };
 
     beforeEach(function() {
         messages = [];
+        closedGames = [];
+
+        clients = [client1, client2];
         game = new g(httpServer, webSocketServer, clients);
     });
 
@@ -55,6 +64,25 @@ describe("Game", function() {
             game.handleMessage("endGame");
 
             expect(messages).toEqual(['{"messageType":"gameClose","messageData":""}', '{"messageType":"gameClose","messageData":""}', '{"messageType":"endGame"}', '{"messageType":"endGame"}']);
+        });
+    });
+
+    describe("killGame", function() {
+        it("will end the game and remove the dropped client", function() {
+            game.killGame(clients[0]);
+
+            expect(game.clients.length).toBe(1);
+            expect(game.clients[0].gameServer).toBeNull();
+        });
+    });
+
+    describe("close", function() {
+        it("will send a gameclose message to all clients and close the game", function(){
+            game.close();
+
+            expect(messages).toEqual([ '{"messageType":"gameClose","messageData":""}', '{"messageType":"gameClose","messageData":""}' ]);
+            expect(closedGames.length).toBe(1);
+            expect(closedGames[0]).toBe(game);
         });
     });
 });
