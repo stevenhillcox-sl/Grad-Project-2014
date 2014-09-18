@@ -46,6 +46,10 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 			var $endGameOverlay = $("<div>", {
 				class: "end-game-overlay"
 			});
+			
+			var $endGameOverlayContainer = $("<div>", {
+				class: "end-game-overlay-container"
+			})
 
 			var statusString = "";
 
@@ -66,7 +70,8 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 			}
 
 			$endGameOverlay.text(statusString);
-			$gameContainer.append($endGameOverlay);
+			$endGameOverlayContainer.insertAfter($('.middle-column .game-title-lobby'));
+			$endGameOverlayContainer.append($endGameOverlay);
 		};
 
 		// Creates a new gui tile and maps it to a given game tile
