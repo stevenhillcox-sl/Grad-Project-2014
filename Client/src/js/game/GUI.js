@@ -131,7 +131,7 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 			});
 		};
 
-		$($gameContainer).swipe({
+		$(window).swipe({
 			swipeLeft: function() {
 				if (self.onInput) {
 					self.onInput(Direction.LEFT);

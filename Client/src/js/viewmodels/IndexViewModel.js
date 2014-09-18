@@ -11,31 +11,24 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
         self.userList = ko.observable();
         self.leaderBoard = ko.observable();
         self.statsDisplay = ko.observable();
-
         self.player1Score = ko.observable(0);
         self.player2Score = ko.observable(0);
-
         self.playerTurnName = ko.observable('');
-        // self.playerTurnString = ko.computed(function() {
-        //     return self.playerTurnName() !== '' ? self.playerTurnName() + '\'s Turn' : '';
-        // });
+        self.nextTileClass = ko.observable('');
         self.lobbyChatMessage = ko.observable();
         self.lobbyChatWindow = ko.observableArray();
-        self.lobbyChatSelected = ko.observable(false);
-        self.chatSelected = ko.computed( function() {
-            return self.lobbyChatSelected();
-        });
         
-
         self.game = null;
-        
+
         $(document).ready(function() {
-    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
-});
+            $("body").tooltip({
+                selector: '[data-toggle=tooltip]'
+            });
+        });
 
         var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
-        
-        
+
+
         self.toggleStats = function(user) {
             if (self.statsDisplay() == user.userName) {
                 self.statsDisplay(false);
@@ -49,29 +42,29 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
                 url: baseURI + '/stats',
                 type: 'GET',
                 success: function(data) {
-                    data.sort( function(a, b) {
+                    data.sort(function(a, b) {
                         var bPercent;
                         var aPercent;
-                        
+
                         bPercent = 100 * b.wins / b.gamesPlayed;
                         aPercent = 100 * a.wins / a.gamesPlayed;
-                        
+
                         aPercent = aPercent || 0;
                         bPercent = bPercent || 0;
-                        
+
                         if (aPercent === bPercent) {
                             return b.wins - a.wins;
                         }
-                        
-                       return bPercent - aPercent; 
+
+                        return bPercent - aPercent;
                     });
                     self.leaderBoard(data);
                 }
             });
-        }; 
-        
+        };
+
         self.getLeaderboard();
-        
+
         self.updateUserStats = function(userName, winIncrement) {
             $.ajax({
                 url: baseURI + '/stats/' + userName + '/' + winIncrement,
@@ -80,9 +73,9 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
                     console.log(data);
                 }
             });
-            
+
         };
-        
+
         self.getUserList = function() {
             $.ajax({
                 url: baseURI + '/users',
@@ -94,9 +87,11 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
         };
 
         setInterval(self.getUserList, 5000);
-        
+
         self.scrollChatWindow = function() {
-            $(".chat-window-lobby-wrapper").animate({ scrollTop: $(document).height() }, "fast");
+            $(".chat-window-lobby-wrapper").animate({
+                scrollTop: $(document).height()
+            }, "fast");
             return false;
         };
 
@@ -184,13 +179,13 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
             self.lobbyChatMessage('');
         };
 
-        self.createGame = function(){
+        self.createGame = function() {
             var gameTick = 200;
 
             var gui = new GUI(gameTick);
             self.game = new Game(self, gui, gameTick);
-           
-            gui.onInput = function(direction){
+
+            gui.onInput = function(direction) {
                 self.game.makeMove(direction);
             };
         };
