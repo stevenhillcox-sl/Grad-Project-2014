@@ -184,10 +184,10 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 
 			if (hasMoved) {
 				gui.updateUI();
-				advanceTileType();
 
 				if (!hasMerged) {
 					advancePlayerTurn();
+					advanceTileType();
 				}
 
 				if (getCurrentPlayer() == gamePlayer) {

@@ -149,11 +149,21 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 			}
 		});
 
+		var KEYLEFT = 37;
+		var KEYUP = 38;
+		var KEYRIGHT = 39;
+		var KEYDOWN = 40;
+
+		$(window).keydown(function(event) {
+			if (event.keyCode == KEYLEFT ||
+				event.keyCode == KEYUP ||
+				event.keyCode == KEYRIGHT ||
+				event.keyCode == KEYDOWN)
+				event.preventDefault();
+		});
+
 		$(window).keyup(function(event) {
-			var KEYLEFT = 37;
-			var KEYUP = 38;
-			var KEYRIGHT = 39;
-			var KEYDOWN = 40;
+
 
 			var direction = null;
 
