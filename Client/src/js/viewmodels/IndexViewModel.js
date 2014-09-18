@@ -92,6 +92,8 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
                 }
             });
         };
+
+        setInterval(self.getUserList, 5000);
         
         self.scrollChatWindow = function() {
             $(".chat-window-lobby-wrapper").animate({ scrollTop: $(document).height() }, "fast");
