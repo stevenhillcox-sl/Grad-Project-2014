@@ -13,7 +13,8 @@ define(['../game/Game'], function(Game) {
 				player2Score: function() {},
 				playerTurnName: function() {},
 				sendTile: function(){},
-				updateUserStats: function(){}
+				updateUserStats: function(){},
+				nextTileClass : function(){}
 			}, {
 				clear: function() {},
 				addTile: function() {}
@@ -24,6 +25,9 @@ define(['../game/Game'], function(Game) {
 		describe("checkWinStatus", function() {
 			it("Detects a win", function() {
 				var winStatus = null;
+				// var viewModel ={};
+				
+				
 				game.gui.displayEndGameOverlay = function(status) {
 					winStatus = status;
 				};
