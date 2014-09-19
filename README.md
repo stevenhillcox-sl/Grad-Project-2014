@@ -1,3 +1,5 @@
+![Build Status](https://travis-ci.org/stevenhillcox/Grad-Project-2014.svg?branch=master)
+
 # README
 
 ## Installation
