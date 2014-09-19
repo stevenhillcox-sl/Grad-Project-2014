@@ -18,7 +18,7 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 			return self.players[currentPlayerTurn];
 		};
 
-		// Gets a player by thier name
+		// Gets a player by their name
 		var getPlayerByPlayerName = function(playerName) {
 			return self.players.filter(function(player) {
 				return player.playerName == playerName;
@@ -39,7 +39,7 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 		// Advances the tile type
 		var advanceTileType = function() {
 			currentTileType = (currentTileType + 1) % tileOrder.length;
-			viewModel.nextTileClass = tileOrder[(currentTileType + 1) % tileOrder.length].classString;
+			viewModel.nextTileClass(tileOrder[(currentTileType + 1) % tileOrder.length].classString);
 		};
 
 		// Moves the player's turn back by one
@@ -157,6 +157,7 @@ define(['jQuery', 'knockout', './Tile', './TileType', './Grid', 'TouchSwipe'], f
 			viewModel.playerTurnName(getCurrentPlayer().playerName);
 
 			gamePlayer = getPlayerByPlayerName(viewModel.userName());
+			viewModel.nextTileClass(tileOrder[1].classString);
 
 			if (getCurrentPlayer() == gamePlayer) {
 				startTurn(true);
