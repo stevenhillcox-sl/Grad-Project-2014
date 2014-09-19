@@ -17,17 +17,45 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
         self.nextTileClass = ko.observable('');
         self.lobbyChatMessage = ko.observable();
         self.lobbyChatWindow = ko.observableArray();
-        
+
         self.game = null;
+
+        var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
+
+        var i = 0;
 
         $(document).ready(function() {
             $("body").tooltip({
                 selector: '[data-toggle=tooltip]'
             });
+
+            $('#serverHealthLink').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: "/health",
+
+                    success: function(data) {
+
+                        var popover = $('#serverHealthLink').data('bs.popover');
+                        popover.options.content = data;
+                    }
+                });
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: "/health",
+
+                success: function(data) {
+
+                    $('#serverHealthLink').popover({
+                        html: true,
+                        content: data
+                    });
+                }
+            });
+
         });
-
-        var baseURI = 'http://' + window.location.hostname + (window.location.hostname == "localhost" ? ":8080" : "");
-
 
         self.toggleStats = function(user) {
             if (self.statsDisplay() == user.userName) {
