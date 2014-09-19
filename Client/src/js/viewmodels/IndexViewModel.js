@@ -29,7 +29,7 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
                 selector: '[data-toggle=tooltip]'
             });
 
-            $('#serverHealthLink').click(function() {
+            $('#serverHealthLink').hover(function() {
                 $.ajax({
                     type: 'GET',
                     url: "/health",
