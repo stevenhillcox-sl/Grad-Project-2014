@@ -52,11 +52,11 @@ define(['jQuery', 'knockout', 'websocket/WebSocketClient', 'game/Game', 'game/GU
                         aPercent = aPercent || 0;
                         bPercent = bPercent || 0;
 
-                        if (aPercent === bPercent) {
-                            return b.wins - a.wins;
+                        if (a.wins === b.wins) {
+                            return bPercent - aPercent;
                         }
 
-                        return bPercent - aPercent;
+                        return b.wins - a.wins;
                     });
                     self.leaderBoard(data);
                 }

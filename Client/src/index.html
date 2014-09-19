@@ -31,7 +31,7 @@
                                 <th id="leaderboardHeader" colspan="3">Leaderboard</th>
                             </tr>
                             <tr>
-                                <th>Rank</th><th>User</th><th>Win %</th>
+                                <th>Rank</th><th>User</th><th>Wins</th>
                             </tr>
                         </thead>
                         <tbody data-bind="foreach: leaderBoard">
@@ -45,7 +45,7 @@
                                     </span>
                                 </td>
                                 <td data-bind="text: userName, style: { 'font-weight': (userName === $parent.userName() && $parent.connected()) ? 'bold' : 'normal' }"></td>
-                                <td data-bind="text: gamesPlayed === 0 ? 0 : parseInt(100 * wins / gamesPlayed)"></td>
+                                <td data-bind="text: wins"></td>
                             </tr>
                         </tbody>
                     </table> 
