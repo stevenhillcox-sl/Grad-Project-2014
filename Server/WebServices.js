@@ -24,7 +24,7 @@ function WebServices(httpServer, lobby, repository) {
     });
     
     httpServer.app.get('/health', function( req, res) {
-        res.send('Number of active connections: ' + lobby.clients.length + '\n Server has been running for: ' + httpServer.uptime() + 'seconds.');
+        res.send('<p>Number of active connections: ' + lobby.clients.length + '</p><p> Server has been running for: ' + httpServer.uptime() + ' seconds.</p>');
     });
     
 
