@@ -49,7 +49,7 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 			
 			var $endGameOverlayContainer = $("<div>", {
 				class: "end-game-overlay-container"
-			})
+			});
 
 			var statusString = "";
 
