@@ -30,6 +30,7 @@ body {
     margin-right: auto;
     border-radius: 5px;
     background-color: @pallete-1;
+    position: relative;
 }
 .grid-container {
     z-index: 1;
@@ -66,6 +67,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
+    width: 475px;
 }
 
 .player { 
@@ -182,7 +184,7 @@ body {
     z-index: 5;
     opacity: 0.8;
     border-radius: 5px;
-    width: 45%;
+    width: 75%;
     height:  @gridSize / 5;
     font-size: 2em;
     font-weight: 900;
@@ -198,16 +200,16 @@ body {
 .end-game-overlay-container {
     display: flex;
     align-items: center;
-    margin-top: 25px;
-    height: 475px;
-    width: 930px;
     justify-content: center;
     position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 .game-rules {
-    /*width: @gridSize;*/
-    margin-top: 130px;
+    margin-top: 30px;
     margin-bottom: 50px;
     font-size: 1.2em;
     text-align: center;
