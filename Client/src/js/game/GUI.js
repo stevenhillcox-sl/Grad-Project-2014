@@ -62,7 +62,7 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 					statusString += "You win!";
 					break;
 				case "loss":
-					statusString += "You lose";
+					statusString += "You lose!";
 					break;
 				case "draw":
 					statusString += "It's a Draw";
@@ -70,8 +70,9 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 			}
 
 			$endGameOverlay.text(statusString);
-			$endGameOverlayContainer.insertAfter($('.middle-column .game-title-lobby'));
 			$endGameOverlayContainer.append($endGameOverlay);
+			$gameContainer.prepend($endGameOverlayContainer);
+			
 		};
 
 		// Creates a new gui tile and maps it to a given game tile

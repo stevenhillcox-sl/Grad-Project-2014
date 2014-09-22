@@ -63,16 +63,16 @@
                                 <div class="grid-cell"></div>
                             </div>
                         </div>
-                        <div class="game-info-container" data-bind="visible:gameActive">
-                            <div class="player">
-                                <div class="player-name" data-bind="text: players()[0], style: {opacity: playerTurnName() == players()[0] ? 1 : 0.5  } "></div>
-                                <div class="player-1-score" data-bind="text: player1Score, style: {opacity: playerTurnName() == players()[0] ? 1 : 0.5}"></div>
-                            </div>
-                            <div class="next-tile tile " data-bind="css: nextTileClass">Next Tile</div>
-                            <div class="player">   
-                                <div class="player-name" data-bind="text: players()[1], style: {opacity: playerTurnName() == players()[1] ? 1 : 0.5  } "></div>
-                                <div class="player-2-score" data-bind="text: player2Score, style: {opacity: playerTurnName() == players()[1] ? 1 : 0.5}"></div>
-                            </div>
+                    </div>
+                    <div class="game-info-container" data-bind="visible:gameActive">
+                        <div class="player">
+                            <div class="player-name" data-bind="text: players()[0], style: {opacity: playerTurnName() == players()[0] ? 1 : 0.5  } "></div>
+                            <div class="player-1-score" data-bind="text: player1Score, style: {opacity: playerTurnName() == players()[0] ? 1 : 0.5}"></div>
+                        </div>
+                        <div class="next-tile tile " data-bind="css: nextTileClass">Next Tile</div>
+                        <div class="player">   
+                            <div class="player-name" data-bind="text: players()[1], style: {opacity: playerTurnName() == players()[1] ? 1 : 0.5  } "></div>
+                            <div class="player-2-score" data-bind="text: player2Score, style: {opacity: playerTurnName() == players()[1] ? 1 : 0.5}"></div>
                         </div>
                     </div>
                     <div class="game-rules">
