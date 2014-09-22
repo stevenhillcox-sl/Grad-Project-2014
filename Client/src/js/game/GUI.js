@@ -62,7 +62,7 @@ define(['jQuery', './Tile', './TileType', './Position', './Direction'], function
 					statusString += "You win!";
 					break;
 				case "loss":
-					statusString += "You lose";
+					statusString += "You lose!";
 					break;
 				case "draw":
 					statusString += "It's a Draw";
