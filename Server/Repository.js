@@ -25,7 +25,9 @@ function Repository(){
             self.addUser = function(user, callBack){
                 db.collection('Users').insert(user, function(err, records){
                     if (callBack) {
-                        callBack(records);
+                         try {
+                            callBack(records);
+                         } catch(e) {}
                     }
                 });
             };
@@ -33,23 +35,29 @@ function Repository(){
             self.getLeaderboard = function(callback) {
                 db.collection('Users').find(function(err, records) {
                     records.toArray(function(err, sortedRecords) {
-                       callback(sortedRecords); 
+                        try {
+                            callback(sortedRecords); 
+                        } catch(e) {}
                     });
                 });
             };
             
             self.getUser = function(userName, callback){
-                db.collection('Users').findOne({'userName' : userName}, function(err, records) {
-                     if (callback) {
-                        callback(records);
-                    }
-                });
+                    db.collection('Users').findOne({'userName' : userName}, function(err, records) {
+                         if (callback) {
+                            try {
+                                callback(records);
+                            } catch(e){
+                        }
+                    }});
             };
             
             self.persistUser = function(user, callback){
                 db.collection('Users').update({'userName' : user.userName}, user, function(err, records){
                     if (callback) {
-                        callback(); 
+                        try {
+                            callback(); 
+                        } catch(e) {}
                     }
                 });
             };
